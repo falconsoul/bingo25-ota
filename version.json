@@ -1,7 +1,7 @@
 {
-    "version":  "1.1.9",
-    "zipUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/www-v1.1.9.zip",
-    "checksum":  "9c1be4a9a40fff25500e286a07b82f0d3b6aaa4d244344005b64d06ae3eb9118",
-    "notes":  "Capgo CLI formatted bundle v1.1.9 with 2-5 player online rooms",
-    "releasedAt":  "2026-11-25T17:11:05Z"
+    "version":  "1.1.10",
+    "zipUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/www-v1.1.10.zip",
+    "checksum":  "4abbab614561d88bb250f457e1f0d50140c43ce4cb0d675e229d5296d036d137",
+    "notes":  "10th OTA confirmation update v1.1.10",
+    "releasedAt":  "2026-11-25T17:23:04Z"
 }
