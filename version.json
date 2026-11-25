@@ -1,6 +1,6 @@
 {
-    "version":  "1.1.4",
-    "zipUrl":  "https://github.com/falconsoul/bingo25-ota/raw/main/www-v1.1.4.zip",
-    "notes":  "Added 2-5 player Pass \u0026 Play / Bot setup screen and Terms \u0026 Conditions by Ashutosh Singh",
-    "releasedAt":  "2026-11-25T14:58:57Z"
+    "version":  "1.1.5",
+    "zipUrl":  "https://falconsoul.github.io/bingo25-ota/www-v1.1.5.zip",
+    "notes":  "Switch OTA manifest \u0026 zip downloads to GitHub Pages with fallback \u0026 full error reporting",
+    "releasedAt":  "2026-11-25T15:10:48Z"
 }
