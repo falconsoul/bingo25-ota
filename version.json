@@ -1,6 +1,6 @@
 {
-    "version":  "1.1.0",
-    "zipUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/www-v1.1.0.zip",
-    "notes":  "Initial OTA-enabled release",
-    "releasedAt":  "2026-11-25T10:48:52Z"
+    "version":  "1.1.1",
+    "zipUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/www-v1.1.1.zip",
+    "notes":  "First live OTA test",
+    "releasedAt":  "2026-11-25T11:03:13Z"
 }
