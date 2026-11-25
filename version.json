@@ -1,6 +1,6 @@
 {
-    "version":  "1.1.8",
-    "zipUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/www-v1.1.8.zip",
-    "notes":  "Clean forward-slash OTA bundle v1.1.8 with 2-5 player online rooms",
-    "releasedAt":  "2026-11-25T16:19:51Z"
+    "version":  "1.1.9",
+    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/index.html",
+    "notes":  "Direct single-file HTML OTA hot-swap via jsDelivr",
+    "releasedAt":  "2026-11-25T16:28:42Z"
 }
