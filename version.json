@@ -1,6 +1,6 @@
 {
-    "version":  "1.1.5",
-    "zipUrl":  "https://falconsoul.github.io/bingo25-ota/www-v1.1.5.zip",
-    "notes":  "Switch OTA manifest \u0026 zip downloads to GitHub Pages with fallback \u0026 full error reporting",
-    "releasedAt":  "2026-11-25T15:10:48Z"
+    "version":  "1.1.6",
+    "zipUrl":  "https://falconsoul.github.io/bingo25-ota/www-v1.1.6.zip",
+    "notes":  "Slash-safe OTA zip + native downloadFailed error diagnostics",
+    "releasedAt":  "2026-11-25T15:22:20Z"
 }
