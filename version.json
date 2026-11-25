@@ -1,6 +1,6 @@
 {
     "version":  "1.1.1",
     "zipUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/www-v1.1.1.zip",
-    "notes":  "First live OTA test",
-    "releasedAt":  "2026-11-25T11:03:13Z"
+    "notes":  "UI polish: clickable BINGO home logo, cleaner header, and fixed bottom banner spacing",
+    "releasedAt":  "2026-11-25T11:24:19Z"
 }
