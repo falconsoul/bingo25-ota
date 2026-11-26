@@ -8,42 +8,19 @@
   <meta name="theme-color" content="#4f46e5" />
   <title>B-I-N-G-O | 4-Player Offline &amp; Online Arcade</title>
   <script>
-    const OTA_CONFIG = {
+    var OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.2.7",
+      currentVersion: "1.2.8",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
       ...(window.BINGO_OTA_CONFIG || {})
     };
-    window.__bingoOtaSwapHtml = async function (html) {
-      var cap = window.Capacitor;
-      var fs = cap && cap.Plugins && cap.Plugins.Filesystem;
-      if (fs && typeof fs.writeFile === 'function' && typeof fs.getUri === 'function' &&
-          typeof cap.convertFileSrc === 'function' &&
-          !String(window.location.href || '').includes('/ota/index.html')) {
-        try {
-          await fs.writeFile({
-            path: 'ota/index.html',
-            data: html,
-            directory: 'DATA',
-            encoding: 'utf8',
-            recursive: true
-          });
-          var uriRes = await fs.getUri({
-            path: 'ota/index.html',
-            directory: 'DATA'
-          });
-          if (uriRes && uriRes.uri) {
-            window.location.replace(cap.convertFileSrc(uriRes.uri));
-            return true;
-          }
-        } catch (fsErr) {
-          console.warn('[BingoOtaUpdater] Filesystem swap fallback to DOMParser:', fsErr);
-        }
-      }
+    window.__bingoOtaSwapHtml = function (html) {
       var newDoc = new DOMParser().parseFromString(html, 'text/html');
       window.__BINGO_OTA_HOTSWAPPED__ = true;
+      window.__BINGO_OTA_SWAPPING__ = false;
+      window.__BINGO_OTA_ONLOAD_RAN__ = false;
       document.replaceChild(document.importNode(newDoc.documentElement, true), document.documentElement);
       var hideEl = document.getElementById('ota-boot-hide');
       if (hideEl && hideEl.parentNode) hideEl.parentNode.removeChild(hideEl);
@@ -71,6 +48,14 @@
         var el = document.getElementById('ota-boot-hide');
         if (el && el.parentNode) el.parentNode.removeChild(el);
       };
+      try {
+        var cap = window.Capacitor;
+        var cu = cap && cap.Plugins && cap.Plugins.CapacitorUpdater;
+        if (cu && typeof cu.reset === 'function' && !localStorage.getItem('bingo25_capgo_reset_v1')) {
+          localStorage.setItem('bingo25_capgo_reset_v1', '1');
+          Promise.resolve(cu.reset({ toLastSuccessful: false })).catch(function () {});
+        }
+      } catch (capErr) {}
       if (window.__BINGO_OTA_HOTSWAPPED__) {
         removeHide();
         return;
@@ -80,12 +65,6 @@
         var bundle = null;
         if (raw) {
           try { bundle = JSON.parse(raw); } catch (parseErr) {}
-        }
-        var isOtaFile = String(window.location.href || '').includes('/ota/index.html');
-        if (isOtaFile && (!bundle || bundle.version === OTA_CONFIG.currentVersion)) {
-          localStorage.removeItem('bingo25_ota_booting');
-          removeHide();
-          return;
         }
         if (localStorage.getItem('bingo25_ota_booting') === '1') {
           localStorage.removeItem('bingo25_ota_booting');
@@ -112,6 +91,7 @@
           if ((pa[i] || 0) < (pb[i] || 0)) break;
         }
         if (isNewer) {
+          window.__BINGO_OTA_SWAPPING__ = true;
           var hideStyle = document.createElement('style');
           hideStyle.id = 'ota-boot-hide';
           hideStyle.textContent = 'html { visibility: hidden !important; }';
@@ -119,15 +99,15 @@
           document.addEventListener('DOMContentLoaded', function () {
             try {
               localStorage.setItem('bingo25_ota_booting', '1');
-              Promise.resolve(window.__bingoOtaSwapHtml(bundle.html)).catch(function () {
-                removeHide();
-              });
+              window.__bingoOtaSwapHtml(bundle.html);
             } catch (err) {
+              window.__BINGO_OTA_SWAPPING__ = false;
               removeHide();
             }
           }, { once: true });
         }
       } catch (e) {
+        window.__BINGO_OTA_SWAPPING__ = false;
         removeHide();
       }
     })();
@@ -2656,6 +2636,7 @@
   </div>
 
   <script>
+    if (!window.__BINGO_OTA_SWAPPING__) {
     /**
      * Mobile-First 4-Player 5x5 Indian-Style Bingo (Numbers 1-25)
      * 100% Offline, Zero External Dependencies, Portrait Mobile Shell,
@@ -6939,12 +6920,13 @@
           return false;
         }
         try {
-          localStorage.removeItem(this.BOOTING_FLAG_KEY);
+          localStorage.setItem(this.BOOTING_FLAG_KEY, '1');
           if (typeof window.__bingoOtaSwapHtml === 'function') {
-            return await window.__bingoOtaSwapHtml(cached.html);
+            return window.__bingoOtaSwapHtml(cached.html);
           }
           return false;
         } catch (e) {
+          localStorage.removeItem(this.BOOTING_FLAG_KEY);
           console.error('[BingoOtaUpdater] applyStagedUpdate error:', e);
           showToast('❌ Failed to apply update: ' + (e && e.message ? e.message : String(e)));
           return false;
@@ -6956,6 +6938,8 @@
       }
     };
     window.BingoOtaUpdater = BingoOtaUpdater;
+    window.BingoAuth = BingoAuth;
+    window.BingoAdMob = BingoAdMob;
 
     window.onload = function () {
       window.__BINGO_OTA_ONLOAD_RAN__ = true;
@@ -6993,6 +6977,7 @@
         openAuthModal('signin');
       }
     };
+    }
   </script>
 </body>
 </html>
