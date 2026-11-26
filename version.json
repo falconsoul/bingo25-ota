@@ -1,7 +1,7 @@
 {
-    "version":  "1.2.5",
-    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.2.5/index.html",
-    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.2.5/index.html",
-    "notes":  "Instant uncached OTA updates via GitHub API + tagged jsDelivr",
-    "releasedAt":  "2026-11-26T01:41:50Z"
+    "version":  "1.2.6",
+    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.2.6/index.html",
+    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.2.6/index.html",
+    "notes":  "Verified instant uncached OTA update v1.2.6",
+    "releasedAt":  "2026-11-26T01:49:33Z"
 }
