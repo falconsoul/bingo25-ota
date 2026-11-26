@@ -7,6 +7,54 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#4f46e5" />
   <title>B-I-N-G-O | 4-Player Offline &amp; Online Arcade</title>
+  <script>
+    const OTA_CONFIG = {
+      enabled: true,
+      currentVersion: "1.2.0",
+      manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
+      autoUpdate: true,
+      autoApplyOnNextLaunch: true,
+      ...(window.BINGO_OTA_CONFIG || {})
+    };
+    (function () {
+      if (window.__BINGO_OTA_HOTSWAPPED__) return;
+      try {
+        if (localStorage.getItem('bingo25_ota_booting') === '1') {
+          localStorage.removeItem('bingo25_ota_booting');
+          localStorage.removeItem('bingo25_ota_bundle');
+          window.__BINGO_OTA_REVERTED__ = true;
+          return;
+        }
+        var raw = localStorage.getItem('bingo25_ota_bundle');
+        if (!raw) return;
+        var bundle = JSON.parse(raw);
+        if (!bundle || !bundle.version || typeof bundle.html !== 'string' ||
+            bundle.html.length <= 5000 || bundle.html.indexOf('</html>') === -1 ||
+            bundle.html.indexOf('OTA_CONFIG') === -1) {
+          return;
+        }
+        var parseVer = function (v) {
+          return String(v || '0.0.0').replace(/^v/i, '').split('-')[0].split('.').map(function (n) {
+            return parseInt(n, 10) || 0;
+          });
+        };
+        var pa = parseVer(bundle.version);
+        var pb = parseVer(OTA_CONFIG.currentVersion);
+        var isNewer = false;
+        for (var i = 0; i < 3; i++) {
+          if ((pa[i] || 0) > (pb[i] || 0)) { isNewer = true; break; }
+          if ((pa[i] || 0) < (pb[i] || 0)) break;
+        }
+        if (isNewer) {
+          localStorage.setItem('bingo25_ota_booting', '1');
+          window.__BINGO_OTA_HOTSWAPPED__ = true;
+          document.open();
+          document.write(bundle.html);
+          document.close();
+        }
+      } catch (e) {}
+    })();
+  </script>
   <style>
     /* ==========================================================================
        NATIVE MOBILE PORTRAIT APP SHELL & DESIGN TOKENS (OFFLINE + ONLINE READY)
@@ -2550,14 +2598,6 @@
     };
     const GOOGLE_AUTH_CONFIG = {
       webClientId: window.BINGO_GOOGLE_CLIENT_ID || FIREBASE_CONFIG.webClientId
-    };
-    const OTA_CONFIG = {
-      enabled: true,
-      currentVersion: "1.1.9",
-      manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
-      autoUpdate: true,
-      autoApplyOnNextLaunch: true,
-      ...(window.BINGO_OTA_CONFIG || {})
     };
     const BINGO_LETTERS = ['B', 'I', 'N', 'G', 'O'];
     const AVATAR_POOL = ['🦁', '🐯', '🦊', '🐼', '🚀', '👑', '⚡', '🍀', '🐉', '🦄', '🎯', '🔥'];
@@ -6434,7 +6474,7 @@
     // ==========================================================================
     const BingoOtaUpdater = {
       AUTO_UPDATE_STORAGE_KEY: 'bingo25_ota_auto_update',
-      CACHED_HTML_STORAGE_KEY: 'bingo25_ota_cached_html',
+      CACHED_HTML_STORAGE_KEY: 'bingo25_ota_bundle',
       BOOTING_FLAG_KEY: 'bingo25_ota_booting',
       FALLBACK_MANIFEST_URL: 'https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/version.json',
       FALLBACK_HTML_URL: 'https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/index.html',
@@ -6447,6 +6487,7 @@
       lastCheckedAt: 0,
       pendingBundle: null,
       stagedVersion: null,
+      remoteVersion: null,
       statusMessage: '',
 
       getPlugin() {
@@ -6476,6 +6517,10 @@
       },
 
       tryBootCachedBundle() {
+        if (window.__BINGO_OTA_REVERTED__) {
+          this.statusMessage = 'Reverted unstable OTA bundle';
+          return false;
+        }
         if (window.__BINGO_OTA_HOTSWAPPED__) return false;
         try {
           if (localStorage.getItem(this.BOOTING_FLAG_KEY) === '1') {
@@ -6624,17 +6669,21 @@
         const installBtn = document.getElementById('ota-install-btn');
         const autoToggleBtn = document.getElementById('ota-auto-toggle-btn');
         if (subEl) {
-          if (this.statusMessage === 'Up to date') {
-            subEl.textContent = `Up to date (v${OTA_CONFIG.currentVersion})`;
+          if (this.statusMessage && this.statusMessage.startsWith('Error:')) {
+            subEl.textContent = `Local v${OTA_CONFIG.currentVersion} • ${this.statusMessage}`;
+          } else if (this.remoteVersion && !this.stagedVersion && this.statusMessage === 'Up to date') {
+            subEl.textContent = `Local v${OTA_CONFIG.currentVersion} • Server v${this.remoteVersion}`;
           } else {
-            const suffix = this.statusMessage
-              ? ` • ${this.statusMessage}`
-              : this.stagedVersion
-              ? ` • v${this.stagedVersion} ready`
-              : !this.isConfigured()
-              ? ' • Set GitHub URL in OTA_CONFIG'
-              : '';
-            subEl.textContent = `Version v${OTA_CONFIG.currentVersion}${suffix}`;
+            const parts = [`Local v${OTA_CONFIG.currentVersion}`];
+            if (this.remoteVersion) parts.push(`Server v${this.remoteVersion}`);
+            if (this.statusMessage) {
+              parts.push(this.statusMessage);
+            } else if (this.stagedVersion) {
+              parts.push(`v${this.stagedVersion} ready`);
+            } else if (!this.isConfigured()) {
+              parts.push('Set GitHub URL in OTA_CONFIG');
+            }
+            subEl.textContent = parts.join(' • ');
           }
         }
         if (btnEl) {
@@ -6694,16 +6743,18 @@
             'json'
           );
           this.lastCheckedAt = Date.now();
+          this.remoteVersion = remote && remote.version ? String(remote.version) : null;
 
           if (!remote || !remote.version || this.compareSemver(remote.version, OTA_CONFIG.currentVersion) <= 0) {
             this.statusMessage = 'Up to date';
             this.checking = false;
             this.updateSettingsUI();
-            if (manual) showToast(`✅ Up to date (v${OTA_CONFIG.currentVersion})`);
+            if (manual) showToast(`✅ Up to date (Local v${OTA_CONFIG.currentVersion}${this.remoteVersion ? ` • Server v${this.remoteVersion}` : ''})`);
             return { status: 'up-to-date', version: OTA_CONFIG.currentVersion };
           }
 
           const targetHtmlUrl = remote.htmlUrl || remote.zipUrl || this.FALLBACK_HTML_URL;
+          const fallbackHtmlUrl = remote.fallbackUrl || this.FALLBACK_HTML_URL;
           if (!/^https?:\/\//i.test(targetHtmlUrl)) {
             this.statusMessage = 'Invalid manifest htmlUrl';
             this.checking = false;
@@ -6728,7 +6779,7 @@
             showToast(`⬇️ Downloading v${remote.version}...`);
           }
 
-          const html = await this.fetchWithFallback(targetHtmlUrl, this.FALLBACK_HTML_URL, 'text');
+          const html = await this.fetchWithFallback(targetHtmlUrl, fallbackHtmlUrl, 'text');
           if (!this.isValidHtmlBundle(html)) {
             throw new Error('Downloaded HTML bundle failed integrity check');
           }
@@ -6741,7 +6792,7 @@
 
           this.pendingBundle = bundle;
           this.stagedVersion = remote.version;
-          this.statusMessage = `v${remote.version} ready (tap Install Now)`;
+          this.statusMessage = `v${remote.version} ready`;
           this.checking = false;
           this.updateSettingsUI();
 
@@ -6787,15 +6838,15 @@
           return false;
         }
         try {
-          localStorage.setItem(this.BOOTING_FLAG_KEY, '1');
-          window.__BINGO_OTA_HOTSWAPPED__ = true;
-          document.open();
-          document.write(cached.html);
-          document.close();
+          window.location.reload();
           return true;
         } catch (e) {
           try {
-            window.location.reload();
+            localStorage.setItem(this.BOOTING_FLAG_KEY, '1');
+            window.__BINGO_OTA_HOTSWAPPED__ = true;
+            document.open();
+            document.write(cached.html);
+            document.close();
             return true;
           } catch (_) {}
           return false;

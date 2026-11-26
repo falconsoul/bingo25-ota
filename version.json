@@ -1,7 +1,7 @@
 {
-    "version":  "1.1.10",
-    "zipUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/www-v1.1.10.zip",
-    "checksum":  "4abbab614561d88bb250f457e1f0d50140c43ce4cb0d675e229d5296d036d137",
-    "notes":  "10th OTA confirmation update v1.1.10",
-    "releasedAt":  "2026-11-25T17:23:04Z"
+    "version":  "1.2.0",
+    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/index.html",
+    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/index.html",
+    "notes":  "Single-file HTML OTA hot-swap via jsDelivr",
+    "releasedAt":  "2026-11-26T00:59:49Z"
 }
