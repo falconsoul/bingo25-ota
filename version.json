@@ -1,7 +1,7 @@
 {
-    "version":  "1.2.4",
+    "version":  "1.2.5",
     "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/index.html",
     "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/index.html",
-    "notes":  "Clean single-column OTA hot-swap without document.write split-screen",
-    "releasedAt":  "2026-11-26T01:25:00Z"
+    "notes":  "...",
+    "releasedAt":  "2026-11-26T01:32:02Z"
 }
