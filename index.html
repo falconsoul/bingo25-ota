@@ -10,7 +10,55 @@
   <script>
     const OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.2.0",
+      currentVersion: "1.2.1",
+      manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
+      autoUpdate: true,
+      autoApplyOnNextLaunch: true,
+      ...(window.BINGO_OTA_CONFIG || {})
+    };
+    (function () {
+      if (window.__BINGO_OTA_HOTSWAPPED__) return;
+      try {
+        if (localStorage.getItem('bingo25_ota_booting') === '1') {
+          localStorage.removeItem('bingo25_ota_booting');
+          localStorage.removeItem('bingo25_ota_bundle');
+          window.__BINGO_OTA_REVERTED__ = true;
+          return;
+        }
+        var raw = localStorage.getItem('bingo25_ota_bundle');
+        if (!raw) return;
+        var bundle = JSON.parse(raw);
+        if (!bundle || !bundle.version || typeof bundle.html !== 'string' ||
+            bundle.html.length <= 5000 || bundle.html.indexOf('</html>') === -1 ||
+            bundle.html.indexOf('OTA_CONFIG') === -1) {
+          return;
+        }
+        var parseVer = function (v) {
+          return String(v || '0.0.0').replace(/^v/i, '').split('-')[0].split('.').map(function (n) {
+            return parseInt(n, 10) || 0;
+          });
+        };
+        var pa = parseVer(bundle.version);
+        var pb = parseVer(OTA_CONFIG.currentVersion);
+        var isNewer = false;
+        for (var i = 0; i < 3; i++) {
+          if ((pa[i] || 0) > (pb[i] || 0)) { isNewer = true; break; }
+          if ((pa[i] || 0) < (pb[i] || 0)) break;
+        }
+        if (isNewer) {
+          localStorage.setItem('bingo25_ota_booting', '1');
+          window.__BINGO_OTA_HOTSWAPPED__ = true;
+          document.open();
+          document.write(bundle.html);
+          document.close();
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <script>
+    const OTA_CONFIG = {
+      enabled: true,
+      currentVersion: "1.2.1",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
