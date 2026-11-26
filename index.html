@@ -10,15 +10,64 @@
   <script>
     const OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.2.3",
+      currentVersion: "1.2.4",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
       ...(window.BINGO_OTA_CONFIG || {})
     };
+    window.__bingoOtaSwapHtml = async function (html) {
+      var cap = window.Capacitor;
+      var fs = cap && cap.Plugins && cap.Plugins.Filesystem;
+      if (fs && typeof fs.writeFile === 'function' && typeof cap.convertFileSrc === 'function' &&
+          !String(window.location.href || '').endsWith('/ota/index.html')) {
+        try {
+          var res = await fs.writeFile({
+            path: 'ota/index.html',
+            data: html,
+            directory: 'DATA',
+            encoding: 'utf8',
+            recursive: true
+          });
+          if (res && res.uri) {
+            window.location.replace(cap.convertFileSrc(res.uri));
+            return true;
+          }
+        } catch (fsErr) {
+          console.warn('[BingoOtaUpdater] Filesystem swap fallback to DOMParser:', fsErr);
+        }
+      }
+      var newDoc = new DOMParser().parseFromString(html, 'text/html');
+      window.__BINGO_OTA_HOTSWAPPED__ = true;
+      document.replaceChild(document.importNode(newDoc.documentElement, true), document.documentElement);
+      var hideEl = document.getElementById('ota-boot-hide');
+      if (hideEl && hideEl.parentNode) hideEl.parentNode.removeChild(hideEl);
+      var scripts = Array.prototype.slice.call(document.querySelectorAll('script'));
+      for (var i = 0; i < scripts.length; i++) {
+        var oldScript = scripts[i];
+        var fresh = document.createElement('script');
+        for (var a = 0; a < oldScript.attributes.length; a++) {
+          var attr = oldScript.attributes[a];
+          fresh.setAttribute(attr.name, attr.value);
+        }
+        fresh.textContent = oldScript.textContent;
+        if (oldScript.parentNode) {
+          oldScript.parentNode.replaceChild(fresh, oldScript);
+        }
+      }
+      if (typeof window.onload === 'function' && !window.__BINGO_OTA_ONLOAD_RAN__) {
+        window.__BINGO_OTA_ONLOAD_RAN__ = true;
+        window.onload();
+      }
+      return true;
+    };
     (function () {
+      var removeHide = function () {
+        var el = document.getElementById('ota-boot-hide');
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+      };
       if (window.__BINGO_OTA_HOTSWAPPED__) {
-        document.documentElement.style.visibility = 'visible';
+        removeHide();
         return;
       }
       try {
@@ -26,19 +75,15 @@
           localStorage.removeItem('bingo25_ota_booting');
           localStorage.removeItem('bingo25_ota_bundle');
           window.__BINGO_OTA_REVERTED__ = true;
-          document.documentElement.style.visibility = 'visible';
+          removeHide();
           return;
         }
         var raw = localStorage.getItem('bingo25_ota_bundle');
-        if (!raw) {
-          document.documentElement.style.visibility = 'visible';
-          return;
-        }
+        if (!raw) return;
         var bundle = JSON.parse(raw);
         if (!bundle || !bundle.version || typeof bundle.html !== 'string' ||
             bundle.html.length <= 5000 || bundle.html.indexOf('</html>') === -1 ||
             bundle.html.indexOf('OTA_CONFIG') === -1) {
-          document.documentElement.style.visibility = 'visible';
           return;
         }
         var parseVer = function (v) {
@@ -54,25 +99,23 @@
           if ((pa[i] || 0) < (pb[i] || 0)) break;
         }
         if (isNewer) {
-          document.documentElement.style.visibility = 'hidden';
+          var hideStyle = document.createElement('style');
+          hideStyle.id = 'ota-boot-hide';
+          hideStyle.textContent = 'html { visibility: hidden !important; }';
+          (document.head || document.documentElement).appendChild(hideStyle);
           document.addEventListener('DOMContentLoaded', function () {
             try {
               localStorage.setItem('bingo25_ota_booting', '1');
-              window.__BINGO_OTA_HOTSWAPPED__ = true;
-              if (typeof window.stop === 'function') window.stop();
-              if (document.body) document.body.innerHTML = '';
-              document.open('text/html', 'replace');
-              document.write(bundle.html);
-              document.close();
+              Promise.resolve(window.__bingoOtaSwapHtml(bundle.html)).catch(function () {
+                removeHide();
+              });
             } catch (err) {
-              document.documentElement.style.visibility = 'visible';
+              removeHide();
             }
           }, { once: true });
-        } else {
-          document.documentElement.style.visibility = 'visible';
         }
       } catch (e) {
-        document.documentElement.style.visibility = 'visible';
+        removeHide();
       }
     })();
   </script>
@@ -174,16 +217,17 @@
     }
 
     body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: block !important;
     }
+    body > .mobile-shell ~ .mobile-shell { display: none !important; }
+    body > #home-screen ~ #home-screen { display: none !important; }
 
     /* Native Mobile Device Frame on Desktop, Full Edge-to-Edge on Mobile */
     .mobile-shell {
       width: 100%;
       max-width: 480px;
       height: 100dvh;
+      margin: 0 auto;
       background: var(--app-bg);
       display: flex;
       flex-direction: column;
@@ -201,6 +245,7 @@
     @media (min-width: 520px) {
       .mobile-shell {
         height: min(94dvh, 880px);
+        margin: 3dvh auto;
         border-radius: 34px;
         border: 5px solid #1e293b;
         box-shadow: 0 28px 70px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.12);
@@ -1796,7 +1841,7 @@
         </button>
       </div>
 
-      <button type="button" id="home-ota-banner" onclick="BingoOtaUpdater.applyPendingUpdate()" class="btn btn-primary" style="display:none; position:relative; z-index:10; margin:10px 0 14px; width:100%; box-sizing:border-box; padding:8px 12px; font-size:0.78rem; justify-content:space-between;">
+      <button type="button" id="home-ota-banner" onclick="BingoOtaUpdater.applyPendingUpdate()" class="btn btn-primary" style="position:static !important; display:none; margin:8px 0 12px; width:100%; box-sizing:border-box; padding:8px 12px; font-size:0.78rem; justify-content:space-between;">
         <span id="home-ota-banner-text">✨ Update ready — Tap to reload</span>
         <span>↻</span>
       </button>
@@ -6554,12 +6599,9 @@
           const cached = this.readCachedBundle();
           if (cached && this.compareSemver(cached.version, OTA_CONFIG.currentVersion) > 0) {
             localStorage.setItem(this.BOOTING_FLAG_KEY, '1');
-            window.__BINGO_OTA_HOTSWAPPED__ = true;
-            if (typeof window.stop === 'function') window.stop();
-            if (document.body) document.body.innerHTML = '';
-            document.open('text/html', 'replace');
-            document.write(cached.html);
-            document.close();
+            if (typeof window.__bingoOtaSwapHtml === 'function') {
+              window.__bingoOtaSwapHtml(cached.html);
+            }
             return true;
           }
         } catch (e) {}
@@ -6570,7 +6612,8 @@
         if (this.readyNotified) return;
         this.readyNotified = true;
         try {
-          document.documentElement.style.visibility = 'visible';
+          var hideEl = document.getElementById('ota-boot-hide');
+          if (hideEl && hideEl.parentNode) hideEl.parentNode.removeChild(hideEl);
           localStorage.removeItem(this.BOOTING_FLAG_KEY);
         } catch (e) {}
         const plugin = this.getPlugin();
@@ -6727,7 +6770,7 @@
         const bannerText = document.getElementById('home-ota-banner-text');
         if (banner && bannerText) {
           if (this.stagedVersion) {
-            banner.style.display = 'inline-flex';
+            banner.style.display = 'flex';
             bannerText.textContent = `✨ Update v${this.stagedVersion} ready — Tap to reload`;
           } else {
             banner.style.display = 'none';
@@ -6868,13 +6911,10 @@
         } catch (e) {
           try {
             localStorage.setItem(this.BOOTING_FLAG_KEY, '1');
-            window.__BINGO_OTA_HOTSWAPPED__ = true;
-            if (typeof window.stop === 'function') window.stop();
-            if (document.body) document.body.innerHTML = '';
-            document.open('text/html', 'replace');
-            document.write(cached.html);
-            document.close();
-            return true;
+            if (typeof window.__bingoOtaSwapHtml === 'function') {
+              window.__bingoOtaSwapHtml(cached.html);
+              return true;
+            }
           } catch (_) {}
           return false;
         }
@@ -6883,6 +6923,7 @@
     window.BingoOtaUpdater = BingoOtaUpdater;
 
     window.onload = function () {
+      window.__BINGO_OTA_ONLOAD_RAN__ = true;
       if (BingoOtaUpdater.tryBootCachedBundle()) return;
       BingoOtaUpdater.notifyReady();
       BingoAuth.init();
