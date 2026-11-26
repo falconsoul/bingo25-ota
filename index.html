@@ -7,11 +7,11 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#1E1052" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fde047'/%3E%3Cstop offset='1' stop-color='%23f59e0b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='%231E1052' stroke='%23ffffff' stroke-width='4'/%3E%3Ccircle cx='32' cy='16' r='8' fill='%238b5cf6' stroke='%23fde68a' stroke-width='2'/%3E%3Ctext x='32' y='19' font-family='sans-serif' font-size='8' font-weight='900' text-anchor='middle' fill='%23fff'%3E25%3C/text%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='15' font-weight='900' text-anchor='middle' fill='url(%23g)' stroke='%23ffffff' stroke-width='2' paint-order='stroke fill'%3EBINGO%3C/text%3E%3Crect x='14' y='46' width='36' height='12' rx='6' fill='%235b21b6' stroke='%23fbbf24' stroke-width='1.5'/%3E%3Ctext x='32' y='55' font-family='sans-serif' font-size='9' font-weight='900' text-anchor='middle' fill='%23fde68a'%3E25%3C/text%3E%3C/svg%3E" />
-  <title>B-I-N-G-O | 4-Player Offline &amp; Online Arcade</title>
+  <title>Falcon Games</title>
   <script>
     var OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.3.3",
+      currentVersion: "1.4.0",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
@@ -1811,6 +1811,261 @@
       0%, 100% { transform: translateY(0) scale(0.8); opacity: 0.35; }
       50% { transform: translateY(-8px) scale(1.35); opacity: 0.9; }
     }
+    .game-select-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      flex-shrink: 0;
+    }
+    .game-select-card {
+      width: 100%;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 10px 13px;
+      background: var(--surface-card);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.24), 0 8px 18px rgba(0, 0, 0, 0.16);
+      transition: transform 0.1s ease, border-color 0.15s ease;
+    }
+    .game-select-card:active { transform: translateY(2px) scale(0.985); }
+    .game-select-card.primary-game {
+      background: linear-gradient(180deg, #FBBF24 0%, #F59E0B 58%, #D97706 100%);
+      color: #1E1052;
+      border-color: #FDE68A;
+      box-shadow: 0 4px 0 #92400E, 0 10px 22px rgba(0, 0, 0, 0.26);
+    }
+    html[data-theme="daylight"] .game-select-card.primary-game {
+      background: linear-gradient(180deg, #0f766e 0%, #065f46 100%);
+      color: #ffffff;
+      border-color: #14b8a6;
+      box-shadow: 0 4px 0 #042f2e, 0 8px 18px rgba(6, 95, 70, 0.22);
+    }
+    .game-card-ico {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    html[data-theme="daylight"] .game-select-card:not(.primary-game) .game-card-ico {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #0f766e;
+    }
+
+    /* LUDO & SNAKES SHARED ARCADE STYLES */
+    .ludo-pods-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .ludo-pod {
+      background: var(--surface-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .ludo-pod.active-turn {
+      border-color: #fbbf24;
+      box-shadow: 0 0 14px rgba(251, 191, 36, 0.45);
+      transform: scale(1.02);
+    }
+    .ludo-pod.inactive-seat { opacity: 0.35; }
+    .ludo-color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1.5px solid rgba(255, 255, 255, 0.7);
+    }
+    .ludo-dice-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1.5px solid #fde68a;
+      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+      color: #1e1052;
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #d97706;
+      flex-shrink: 0;
+    }
+    .ludo-dice-btn:disabled { opacity: 0.45; cursor: default; box-shadow: none; }
+    .ludo-dice-btn.rolling { animation: diceRollSpin 0.36s ease; }
+    @keyframes diceRollSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      45% { transform: rotate(190deg) scale(1.18); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    .ludo-board-wrap {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .ludo-board-box {
+      width: 100%;
+      max-width: min(100%, 380px);
+      aspect-ratio: 1 / 1;
+      max-height: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      border: 3px solid var(--border-subtle);
+      padding: 4px;
+      position: relative;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+    .ludo-grid {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(15, 1fr);
+      grid-template-rows: repeat(15, 1fr);
+      gap: 1px;
+      background: #cbd5e1;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .ludo-cell {
+      position: relative;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.55rem;
+      font-weight: 900;
+    }
+    .ludo-cell.safe-star::after {
+      content: "★";
+      font-size: 0.65rem;
+      color: rgba(15, 23, 42, 0.32);
+      position: absolute;
+      pointer-events: none;
+    }
+    .ludo-cell.yard-red { background: #ef4444; }
+    .ludo-cell.yard-green { background: #22c55e; }
+    .ludo-cell.yard-yellow { background: #eab308; }
+    .ludo-cell.yard-blue { background: #3b82f6; }
+    .ludo-cell.yard-inner { background: #ffffff; }
+    .ludo-cell.home-red { background: #fecaca; }
+    .ludo-cell.home-green { background: #bbf7d0; }
+    .ludo-cell.home-yellow { background: #fef08a; }
+    .ludo-cell.home-blue { background: #bfdbfe; }
+    .ludo-cell.center-goal { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e1052; }
+    .ludo-tokens-stack {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      width: 100%;
+      height: 100%;
+    }
+    .ludo-token {
+      width: 78%;
+      height: 78%;
+      max-width: 16px;
+      max-height: 16px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.45);
+      cursor: default;
+      padding: 0;
+      transition: transform 0.14s ease;
+    }
+    .ludo-token.mini { width: 44%; height: 44%; max-width: 10px; max-height: 10px; border-width: 1px; }
+    .ludo-token.movable {
+      cursor: pointer;
+      box-shadow: 0 0 0 2.5px #fbbf24, 0 3px 6px rgba(0, 0, 0, 0.55);
+      animation: pulseGold 0.9s infinite;
+      z-index: 6;
+    }
+
+    /* SNAKES & LADDERS */
+    .snakes-board-box {
+      width: 100%;
+      max-width: min(100%, 380px);
+      aspect-ratio: 1 / 1;
+      max-height: 100%;
+      background: var(--surface-card);
+      border-radius: 16px;
+      border: 2px solid var(--border-subtle);
+      padding: 5px;
+      position: relative;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+    }
+    .snakes-grid {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      gap: 1px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(148, 163, 184, 0.25);
+    }
+    .snakes-cell {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 2px;
+      font-size: 0.52rem;
+      font-weight: 800;
+      color: var(--text-secondary);
+      background: var(--tile-bg);
+    }
+    .snakes-cell.alt { filter: brightness(1.12); }
+    .snakes-cell.goal-100 { background: linear-gradient(135deg, #fbbf24, #d97706); color: #1e1052; font-weight: 900; }
+    .snakes-svg {
+      position: absolute;
+      inset: 5px;
+      width: calc(100% - 10px);
+      height: calc(100% - 10px);
+      pointer-events: none;
+      z-index: 3;
+    }
+    .snakes-tokens-layer {
+      position: absolute;
+      inset: 5px;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .snakes-token {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      transform: translate(-50%, -50%);
+      transition: left 0.14s ease, top 0.14s ease;
+    }
     .bingo-saga-logo {
       position: relative;
       z-index: 2;
@@ -2321,13 +2576,13 @@
         </div>
       </div>
 
-      <!-- Glossy 3D Die-Cut Sticker BINGO 25 Emblem -->
-      <div class="bingo-emblem-card">
+      <!-- Glossy 3D Die-Cut Sticker FALCON GAMES Emblem -->
+      <div class="bingo-emblem-card" style="padding:10px 12px 9px;">
         <button type="button" onclick="openRulesSheet()" class="emblem-rules-btn" title="How to Play" aria-label="How to Play">?</button>
         <div class="emblem-lasers" aria-hidden="true">
           <span></span><span></span><span></span><span></span><span></span>
         </div>
-        <svg class="bingo-saga-logo" viewBox="0 0 320 116" role="img" aria-label="BINGO 25">
+        <svg class="bingo-saga-logo" style="width:min(255px, 80%);" viewBox="0 0 340 104" role="img" aria-label="Falcon Games">
           <defs>
             <linearGradient id="sagaGoldGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#FFFBEB"/>
@@ -2346,29 +2601,20 @@
               <stop offset="100%" stop-color="#3B1D8F"/>
             </linearGradient>
           </defs>
-          <!-- Die-cut sticker white contour -->
-          <text x="160" y="70" text-anchor="middle" font-family="ui-rounded, Trebuchet MS, sans-serif" font-size="56" font-weight="900" letter-spacing="4" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="14" stroke-linejoin="round">BINGO</text>
-          <!-- Royal purple 3D extrusion -->
-          <text x="160" y="75" text-anchor="middle" font-family="ui-rounded, Trebuchet MS, sans-serif" font-size="56" font-weight="900" letter-spacing="4" fill="#2E1065" stroke="#2E1065" stroke-width="5" stroke-linejoin="round">BINGO</text>
-          <!-- Golden glossy letter face -->
-          <text x="160" y="70" text-anchor="middle" font-family="ui-rounded, Trebuchet MS, sans-serif" font-size="56" font-weight="900" letter-spacing="4" fill="url(#sagaGoldGrad)" stroke="#78350F" stroke-width="1.5">BINGO</text>
-          <!-- Glossy violet 25 bingo ball above the I -->
-          <circle cx="111" cy="21" r="15" fill="#FFFFFF"/>
-          <circle cx="111" cy="21" r="12.5" fill="url(#sagaBallGrad)" stroke="#FDE047" stroke-width="1.8"/>
-          <ellipse cx="107" cy="16" rx="4.5" ry="2.5" fill="rgba(255,255,255,0.55)" transform="rotate(-25 107 16)"/>
-          <text x="111" y="25" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="11" font-weight="900" fill="#FFFBEB">25</text>
-          <!-- Curled royal-purple satin ribbon reading 25 -->
-          <path d="M98 84 L82 97 L98 103 L104 92 Z" fill="#2E1065" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"/>
-          <path d="M222 84 L238 97 L222 103 L216 92 Z" fill="#2E1065" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"/>
-          <rect x="96" y="78" width="128" height="28" rx="14" fill="url(#sagaRibbonGrad)" stroke="#FFFFFF" stroke-width="3"/>
-          <rect x="98" y="80" width="124" height="24" rx="12" fill="none" stroke="#FBBF24" stroke-width="1.5"/>
-          <text x="160" y="97" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="16" font-weight="900" letter-spacing="2" fill="#FDE047">25</text>
+          <text x="170" y="60" text-anchor="middle" font-family="ui-rounded, Trebuchet MS, sans-serif" font-size="48" font-weight="900" letter-spacing="3" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="13" stroke-linejoin="round">FALCON</text>
+          <text x="170" y="65" text-anchor="middle" font-family="ui-rounded, Trebuchet MS, sans-serif" font-size="48" font-weight="900" letter-spacing="3" fill="#2E1065" stroke="#2E1065" stroke-width="5" stroke-linejoin="round">FALCON</text>
+          <text x="170" y="60" text-anchor="middle" font-family="ui-rounded, Trebuchet MS, sans-serif" font-size="48" font-weight="900" letter-spacing="3" fill="url(#sagaGoldGrad)" stroke="#78350F" stroke-width="1.4">FALCON</text>
+          <circle cx="170" cy="18" r="13" fill="#FFFFFF"/>
+          <circle cx="170" cy="18" r="10.5" fill="url(#sagaBallGrad)" stroke="#FDE047" stroke-width="1.6"/>
+          <path d="M170 11l2.1 4.4 4.8.7-3.5 3.4.8 4.8-4.2-2.2-4.2 2.2.8-4.8-3.5-3.4 4.8-.7z" fill="#FDE047"/>
+          <path d="M92 72 L76 85 L92 91 L98 80 Z" fill="#2E1065" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M248 72 L264 85 L248 91 L242 80 Z" fill="#2E1065" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"/>
+          <rect x="90" y="66" width="160" height="27" rx="13.5" fill="url(#sagaRibbonGrad)" stroke="#FFFFFF" stroke-width="3"/>
+          <rect x="92" y="68" width="156" height="23" rx="11.5" fill="none" stroke="#FBBF24" stroke-width="1.5"/>
+          <text x="170" y="84" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="14" font-weight="900" letter-spacing="3" fill="#FDE047">GAMES</text>
         </svg>
-        <p style="position:relative; z-index:2; font-size:0.71rem; font-weight:700; color:var(--text-secondary); margin-top:1px;">
-          5×5 Indian Arcade • Offline &amp; Online
-        </p>
 
-        <button type="button" id="home-resume-btn" onclick="resumeSavedMatchFromHome()" class="btn btn-amber" style="position:relative; z-index:2; display:none; width:100%; margin-top:8px; padding:8px 12px; font-size:0.78rem;">
+        <button type="button" id="home-resume-btn" onclick="resumeSavedMatchFromHome()" class="btn btn-amber" style="position:relative; z-index:2; display:none; width:100%; margin-top:6px; padding:7px 12px; font-size:0.76rem;">
           Resume Saved Match
         </button>
       </div>
@@ -2378,12 +2624,12 @@
         <span>↻</span>
       </button>
 
-      <!-- Daily B-I-N-G-O 5-Win Streak Tracker -->
+      <!-- Daily Streak 5-Win Tracker -->
       <div class="daily-bingo-card" id="daily-bingo-card">
         <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
           <div style="display:flex; align-items:center; gap:6px;">
             <svg class="ico-svg" style="color:var(--accent-secondary);" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-            <span style="font-size:0.72rem; font-weight:900; letter-spacing:0.06em; color:var(--text-primary);">DAILY B-I-N-G-O</span>
+            <span style="font-size:0.72rem; font-weight:900; letter-spacing:0.06em; color:var(--text-primary);">DAILY STREAK</span>
             <span id="daily-streak-count" style="font-size:0.66rem; font-weight:800; color:var(--accent-primary);">0/5 Wins</span>
           </div>
           <button type="button" id="daily-claim-btn" onclick="DailyBingoStreak.claimReward()" class="daily-claim-btn">CLAIM</button>
@@ -2397,39 +2643,58 @@
         </div>
       </div>
 
-      <!-- Hero Primary Card + Dual Quick-Action Row -->
-      <div class="home-modes-stack">
-        <button type="button" onclick="openMatchSetup('local')" class="home-play-3d home-hero-cta">
-          <div style="text-align:left; min-width:0;">
-            <div style="font-family:var(--font-display); font-size:1.12rem; font-weight:900; letter-spacing:0.03em;">PLAY MATCH</div>
-            <div style="font-size:0.7rem; opacity:0.9; font-weight:700; margin-top:2px;">2–5 Players • Smart AI, Pass &amp; Play, Online</div>
+      <!-- 3-Game Selection Stack + Join Room Pill -->
+      <div class="game-select-stack">
+        <button type="button" onclick="openMatchSetup('local', 'bingo')" class="game-select-card primary-game">
+          <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+            <div class="game-card-ico">
+              <svg class="ico-svg" style="width:20px; height:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+            </div>
+            <div style="text-align:left; min-width:0;">
+              <div style="font-family:var(--font-display); font-size:1rem; font-weight:900;">BINGO 25</div>
+              <div style="font-size:0.67rem; opacity:0.88; font-weight:700;">5×5 Indian Strategy Arcade • 2–5 Players</div>
+            </div>
           </div>
-          <svg class="ico-svg" style="width:20px; height:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </button>
 
-        <div class="home-dual-row">
-          <button type="button" onclick="openMatchSetup('online-join')" class="home-quick-glass">
-            <span style="display:inline-flex; align-items:center; gap:5px; font-family:var(--font-display); font-size:0.84rem; font-weight:900; color:var(--accent-secondary);">
-              <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3"/></svg>
-              JOIN ROOM
-            </span>
-            <span style="font-size:0.66rem; color:var(--text-secondary);">Enter 6-char code</span>
-          </button>
-          <button type="button" onclick="launchQuickBlitz()" class="home-quick-glass">
-            <span style="display:inline-flex; align-items:center; gap:5px; font-family:var(--font-display); font-size:0.84rem; font-weight:900; color:var(--accent-primary);">
-              <svg class="ico-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-              QUICK BLITZ
-            </span>
-            <span style="font-size:0.66rem; color:var(--text-secondary);">1-tap 2P vs Smart AI</span>
-          </button>
-        </div>
+        <button type="button" onclick="openMatchSetup('local', 'ludo')" class="game-select-card" id="home-card-ludo">
+          <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+            <div class="game-card-ico">
+              <svg class="ico-svg" style="width:20px; height:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+            </div>
+            <div style="text-align:left; min-width:0;">
+              <div style="font-family:var(--font-display); font-size:0.96rem; font-weight:900;">LUDO</div>
+              <div style="font-size:0.67rem; color:var(--text-secondary); font-weight:700;">4-House Classic Board Battle • 2–4 Players</div>
+            </div>
+          </div>
+          <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+
+        <button type="button" onclick="openMatchSetup('local', 'snakes')" class="game-select-card" id="home-card-snakes">
+          <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+            <div class="game-card-ico">
+              <svg class="ico-svg" style="width:20px; height:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 3v18M18 3v18M6 7h12M6 12h12M6 17h12"/></svg>
+            </div>
+            <div style="text-align:left; min-width:0;">
+              <div style="font-family:var(--font-display); font-size:0.96rem; font-weight:900;">SNAKES &amp; LADDERS</div>
+              <div style="font-size:0.67rem; color:var(--text-secondary); font-weight:700;">1–100 Climb &amp; Slide Race • 2–4 Players</div>
+            </div>
+          </div>
+          <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+
+        <button type="button" onclick="openMatchSetup('online-join')" class="home-quick-glass" style="flex-direction:row; align-items:center; justify-content:center; gap:7px; padding:9px 12px;">
+          <svg class="ico-svg" style="color:var(--accent-primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3"/></svg>
+          <span style="font-family:var(--font-display); font-size:0.82rem; font-weight:900;">JOIN ONLINE ROOM WITH CODE</span>
+        </button>
       </div>
 
       <!-- Floating Rounded Bottom Pill Dock -->
       <div class="home-pill-dock" role="navigation" aria-label="Home Navigation">
-        <button type="button" onclick="openMatchSetup('local')" class="home-dock-btn active">
+        <button type="button" onclick="openMatchSetup('local', 'bingo')" class="home-dock-btn active">
           <svg class="ico-svg" style="width:17px; height:17px;" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          <span>PLAY</span>
+          <span>GAMES</span>
         </button>
         <button type="button" onclick="openStatsSheet()" class="home-dock-btn">
           <svg class="ico-svg" style="width:17px; height:17px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4a2 2 0 0 1-2-2V5h4M18 9h2a2 2 0 0 0 2-2V5h-4M6 4h12v6a6 6 0 0 1-12 0V4zM12 16v4M8 20h8"/></svg>
@@ -2446,7 +2711,7 @@
       </div>
 
       <button type="button" onclick="openTermsSheet()" class="home-footer-link" style="color:var(--text-muted);">
-        Terms &amp; Conditions • Built by Ashutosh Singh
+        Terms &amp; Conditions • Falcon Games by Ashutosh Singh
       </button>
     </section>
 
@@ -2458,7 +2723,7 @@
         <button type="button" onclick="showScreen('home')" class="btn btn-ghost" style="padding:7px 12px; font-size:0.78rem;">
           ← Back
         </button>
-        <div style="font-family:var(--font-display); font-size:0.98rem; font-weight:900;">Match Setup</div>
+        <div id="setup-screen-title" style="font-family:var(--font-display); font-size:0.98rem; font-weight:900;">Match Setup</div>
         <div style="width:62px;"></div>
       </div>
 
@@ -2563,13 +2828,13 @@
     <!-- 1. TOP COMPACT MOBILE HUD BAR -->
     <header class="mobile-hud">
       <div class="hud-brand">
-        <button type="button" id="hud-home-logo" onclick="confirmReturnHome()" class="mini-logo" title="Return to Home Menu" aria-label="Return to Home Menu">
-          <svg class="bingo-saga-logo-mini" viewBox="0 0 156 44" aria-hidden="true">
-            <text x="58" y="30" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="25" font-weight="900" letter-spacing="1.5" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-linejoin="round">BINGO</text>
-            <text x="58" y="32" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="25" font-weight="900" letter-spacing="1.5" fill="#2E1065" stroke="#2E1065" stroke-width="2">BINGO</text>
-            <text x="58" y="30" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="25" font-weight="900" letter-spacing="1.5" fill="#FBBF24" stroke="#78350F" stroke-width="0.8">BINGO</text>
-            <rect x="112" y="10" width="38" height="22" rx="11" fill="#5B21B6" stroke="#FFFFFF" stroke-width="2"/>
-            <text x="131" y="25" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="12" font-weight="900" fill="#FDE047">25</text>
+        <button type="button" id="hud-home-logo" onclick="confirmReturnHome()" class="mini-logo" title="Return to Falcon Games Menu" aria-label="Return to Falcon Games Menu">
+          <svg class="bingo-saga-logo-mini" viewBox="0 0 170 44" aria-hidden="true">
+            <text x="64" y="28" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="22" font-weight="900" letter-spacing="1" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round">FALCON</text>
+            <text x="64" y="30" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="22" font-weight="900" letter-spacing="1" fill="#2E1065" stroke="#2E1065" stroke-width="2">FALCON</text>
+            <text x="64" y="28" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="22" font-weight="900" letter-spacing="1" fill="#FBBF24" stroke="#78350F" stroke-width="0.8">FALCON</text>
+            <rect x="112" y="10" width="54" height="22" rx="11" fill="#5B21B6" stroke="#FFFFFF" stroke-width="2"/>
+            <text x="139" y="25" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="10" font-weight="900" fill="#FDE047">GAMES</text>
           </svg>
         </button>
         <div id="xp-chip" class="xp-chip">
@@ -2681,6 +2946,101 @@
       </button>
     </nav>
     </section><!-- /#game-screen -->
+
+    <!-- ========================================================================
+         LUDO GAME SCREEN (#ludo-screen)
+         ======================================================================== -->
+    <section id="ludo-screen" class="app-screen" aria-label="Ludo Board">
+      <header class="mobile-hud">
+        <div class="hud-brand">
+          <button type="button" onclick="LudoEngine.exitToHome()" class="mini-logo" title="Return to Falcon Games Menu">
+            <svg class="bingo-saga-logo-mini" viewBox="0 0 170 44" aria-hidden="true">
+              <text x="64" y="28" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="22" font-weight="900" letter-spacing="1" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round">FALCON</text>
+              <text x="64" y="30" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="22" font-weight="900" letter-spacing="1" fill="#2E1065" stroke="#2E1065" stroke-width="2">FALCON</text>
+              <text x="64" y="28" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="22" font-weight="900" letter-spacing="1" fill="#FBBF24" stroke="#78350F" stroke-width="0.8">FALCON</text>
+              <rect x="112" y="10" width="54" height="22" rx="11" fill="#5B21B6" stroke="#FFFFFF" stroke-width="2"/>
+              <text x="139" y="25" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="10" font-weight="900" fill="#FDE047">GAMES</text>
+            </svg>
+          </button>
+          <span class="seat-badge live" style="font-size:0.65rem;">LUDO</span>
+        </div>
+        <div class="hud-actions">
+          <button type="button" onclick="toggleSound()" class="icon-btn" title="Sound">
+            <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+          <button type="button" onclick="openSettingsSheet()" class="icon-btn" title="Themes">
+            <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+          <button type="button" onclick="openRulesSheet()" class="icon-btn" title="Rules">?</button>
+          <button type="button" onclick="LudoEngine.exitToHome()" class="icon-btn" title="Exit">✕</button>
+        </div>
+      </header>
+
+      <div class="ludo-pods-row">
+        <div class="ludo-pod" id="ludo-pod-0"></div>
+        <div class="ludo-pod" id="ludo-pod-1"></div>
+      </div>
+
+      <div class="ludo-board-wrap">
+        <div class="ludo-board-box" id="ludo-board-box">
+          <div class="ludo-grid" id="ludo-board-grid"></div>
+        </div>
+      </div>
+
+      <div class="ludo-pods-row">
+        <div class="ludo-pod" id="ludo-pod-3"></div>
+        <div class="ludo-pod" id="ludo-pod-2"></div>
+      </div>
+      <div id="ludo-status-bar" style="text-align:center; font-size:0.74rem; font-weight:800; color:var(--text-secondary); padding:2px 0;">Roll the dice to begin!</div>
+    </section>
+
+    <!-- ========================================================================
+         SNAKES & LADDERS SCREEN (#snakes-screen)
+         ======================================================================== -->
+    <section id="snakes-screen" class="app-screen" aria-label="Snakes and Ladders Board">
+      <header class="mobile-hud">
+        <div class="hud-brand">
+          <button type="button" onclick="SnakesEngine.exitToHome()" class="mini-logo" title="Return to Falcon Games Menu">
+            <svg class="bingo-saga-logo-mini" viewBox="0 0 170 44" aria-hidden="true">
+              <text x="64" y="28" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="22" font-weight="900" letter-spacing="1" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round">FALCON</text>
+              <text x="64" y="30" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="22" font-weight="900" letter-spacing="1" fill="#2E1065" stroke="#2E1065" stroke-width="2">FALCON</text>
+              <text x="64" y="28" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="22" font-weight="900" letter-spacing="1" fill="#FBBF24" stroke="#78350F" stroke-width="0.8">FALCON</text>
+              <rect x="112" y="10" width="54" height="22" rx="11" fill="#5B21B6" stroke="#FFFFFF" stroke-width="2"/>
+              <text x="139" y="25" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="10" font-weight="900" fill="#FDE047">GAMES</text>
+            </svg>
+          </button>
+          <span class="seat-badge live" style="font-size:0.65rem;">SNAKES</span>
+        </div>
+        <div class="hud-actions">
+          <button type="button" onclick="toggleSound()" class="icon-btn" title="Sound">
+            <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+          <button type="button" onclick="openSettingsSheet()" class="icon-btn" title="Themes">
+            <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+          <button type="button" onclick="openRulesSheet()" class="icon-btn" title="Rules">?</button>
+          <button type="button" onclick="SnakesEngine.exitToHome()" class="icon-btn" title="Exit">✕</button>
+        </div>
+      </header>
+
+      <div id="snakes-players-row" class="ludo-pods-row" style="grid-template-columns:repeat(4, 1fr);"></div>
+
+      <div class="ludo-board-wrap">
+        <div class="snakes-board-box" id="snakes-board-box">
+          <div class="snakes-grid" id="snakes-board-grid"></div>
+          <svg class="snakes-svg" id="snakes-svg-overlay" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+          <div class="snakes-tokens-layer" id="snakes-tokens-layer"></div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--surface-card); border:1px solid var(--border-subtle); border-radius:18px; padding:8px 12px; flex-shrink:0;">
+        <div style="min-width:0; flex:1;">
+          <div id="snakes-turn-label" style="font-family:var(--font-display); font-size:0.86rem; font-weight:900;">Player 1's Turn</div>
+          <div id="snakes-status-sub" style="font-size:0.7rem; color:var(--text-secondary);">Tap dice to roll (1–6)</div>
+        </div>
+        <button type="button" id="snakes-dice-btn" onclick="SnakesEngine.rollDice()" class="ludo-dice-btn" style="width:48px; height:46px; font-size:0.86rem; letter-spacing:0.04em;">ROLL</button>
+      </div>
+    </section>
 
     <!-- ========================================================================
          PASS & PLAY DEVICE HANDOFF INTERSTITIAL SHEET
@@ -6749,18 +7109,32 @@
     window.BingoAuth = BingoAuth;
 
     function showScreen(screenName) {
-      activeScreen = screenName === 'game' ? 'game' : (screenName === 'setup' ? 'setup' : 'home');
-      const homeEl = document.getElementById('home-screen');
-      const setupEl = document.getElementById('match-setup-screen');
-      const gameEl = document.getElementById('game-screen');
-      if (homeEl) homeEl.classList.toggle('active', activeScreen === 'home');
-      if (setupEl) setupEl.classList.toggle('active', activeScreen === 'setup');
-      if (gameEl) gameEl.classList.toggle('active', activeScreen === 'game');
+      const valid = ['home', 'setup', 'game', 'ludo', 'snakes'];
+      activeScreen = valid.includes(screenName) ? screenName : 'home';
+      const map = {
+        home: 'home-screen',
+        setup: 'match-setup-screen',
+        game: 'game-screen',
+        ludo: 'ludo-screen',
+        snakes: 'snakes-screen'
+      };
+      Object.entries(map).forEach(([k, id]) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('active', activeScreen === k);
+      });
 
       if (activeScreen === 'home') {
         if (state.botTimer) {
           clearTimeout(state.botTimer);
           state.botTimer = null;
+        }
+        if (typeof LudoEngine !== 'undefined' && LudoEngine.botTimer) {
+          clearTimeout(LudoEngine.botTimer);
+          LudoEngine.botTimer = null;
+        }
+        if (typeof SnakesEngine !== 'undefined' && SnakesEngine.botTimer) {
+          clearTimeout(SnakesEngine.botTimer);
+          SnakesEngine.botTimer = null;
         }
         refreshHomeUI();
         if (typeof BingoOtaUpdater !== 'undefined') {
@@ -6918,12 +7292,14 @@
     }
 
     const MatchSetup = {
+      gameType: 'bingo',
       playerCount: 2,
       modeTab: 'local',
       onlineSubTab: 'create',
       slots: [],
 
-      init(preset = 'local') {
+      init(preset = 'local', gameType = 'bingo') {
+        this.gameType = ['bingo', 'ludo', 'snakes'].includes(gameType) ? gameType : 'bingo';
         const p1Name = (BingoAuth && BingoAuth.currentUser && BingoAuth.currentUser.name)
           ? BingoAuth.currentUser.name
           : (state.players && state.players[0] ? state.players[0].name : 'Player 1');
@@ -6983,8 +7359,16 @@
         joinOnlineRoomFromInput();
       },
 
+      setGameType(gameType) {
+        this.gameType = ['bingo', 'ludo', 'snakes'].includes(gameType) ? gameType : 'bingo';
+        const maxP = this.gameType === 'bingo' ? 5 : 4;
+        if (this.playerCount > maxP) this.playerCount = maxP;
+        this.render();
+      },
+
       setPlayerCount(count) {
-        const next = Math.min(5, Math.max(2, parseInt(count, 10) || 2));
+        const maxP = this.gameType === 'bingo' ? 5 : 4;
+        const next = Math.min(maxP, Math.max(2, parseInt(count, 10) || 2));
         this.playerCount = next;
         // Ensure at least 1 human exists in active slice
         const active = this.slots.slice(0, this.playerCount);
@@ -7065,6 +7449,19 @@
         if (joinBox) joinBox.style.display = isJoin ? 'flex' : 'none';
         if (typeof setOnlineMaxPlayers === 'function') setOnlineMaxPlayers(online.maxPlayers || 4);
 
+        const titleEl = document.getElementById('setup-screen-title');
+        if (titleEl) {
+          titleEl.textContent = this.gameType === 'ludo'
+            ? 'Ludo Match Setup'
+            : this.gameType === 'snakes'
+            ? 'Snakes & Ladders Setup'
+            : 'Bingo 25 Setup';
+        }
+        const cnt5 = document.getElementById('setup-cnt-5');
+        if (cnt5) cnt5.style.display = this.gameType === 'bingo' ? 'block' : 'none';
+        const maxP = this.gameType === 'bingo' ? 5 : 4;
+        if (this.playerCount > maxP) this.playerCount = maxP;
+
         [2, 3, 4, 5].forEach(n => {
           const btn = document.getElementById(`setup-cnt-${n}`);
           if (btn) btn.classList.toggle('active', this.playerCount === n);
@@ -7129,7 +7526,15 @@
         const active = this.slots.slice(0, this.playerCount);
         const humans = active.filter(s => !s.isBot).length;
         if (humans < 1) {
-          showToast('⚠️ At least 1 Human player is required!');
+          showToast('At least 1 Human player is required!');
+          return;
+        }
+        if (this.gameType === 'ludo') {
+          LudoEngine.startFromSetup(active);
+          return;
+        }
+        if (this.gameType === 'snakes') {
+          SnakesEngine.startFromSetup(active);
           return;
         }
         if (state.playMode === 'online') leaveOnlineRoom(false);
@@ -7182,8 +7587,8 @@
     };
     window.MatchSetup = MatchSetup;
 
-    function openMatchSetup(preset = 'local') {
-      MatchSetup.init(preset);
+    function openMatchSetup(preset = 'local', gameType = 'bingo') {
+      MatchSetup.init(preset, gameType);
       showScreen('setup');
       if (preset === 'online-join') {
         setTimeout(() => {
@@ -7873,6 +8278,541 @@
     window.BingoOtaUpdater = BingoOtaUpdater;
     window.BingoAuth = BingoAuth;
     window.BingoAdMob = BingoAdMob;
+
+    function recordArcadeWin(gameLabel, winnerName, winnerIsHuman) {
+      offlineStats.gamesPlayed += 1;
+      offlineStats.xp += winnerIsHuman ? 140 : 40;
+      if (winnerIsHuman) {
+        offlineStats.wins[0] = (offlineStats.wins[0] || 0) + 1;
+        offlineStats.streaks[0] = (offlineStats.streaks[0] || 0) + 1;
+        if (offlineStats.streaks[0] > offlineStats.bestStreak) offlineStats.bestStreak = offlineStats.streaks[0];
+        if (typeof DailyBingoStreak !== 'undefined') DailyBingoStreak.recordWin();
+      } else {
+        offlineStats.streaks[0] = 0;
+      }
+      offlineStats.history.unshift({
+        date: new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+        winnerNames: `${gameLabel}: ${winnerName}`,
+        turns: 1
+      });
+      if (offlineStats.history.length > 8) offlineStats.history.pop();
+      saveOfflineStats();
+      updateXPBar();
+    }
+
+    // ========================================================================
+    // LUDO GAME ENGINE (15x15 BOARD, 4 CORNER PODS, SMART AI)
+    // ========================================================================
+    const LUDO_TRACK = [
+      [6,1],[6,2],[6,3],[6,4],[6,5],[5,6],[4,6],[3,6],[2,6],[1,6],[0,6],[0,7],[0,8],
+      [1,8],[2,8],[3,8],[4,8],[5,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[7,14],[8,14],
+      [8,13],[8,12],[8,11],[8,10],[8,9],[9,8],[10,8],[11,8],[12,8],[13,8],[14,8],[14,7],[14,6],
+      [13,6],[12,6],[11,6],[10,6],[9,6],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0],[7,0],[6,0]
+    ];
+    const LUDO_SAFE_INDICES = new Set([0, 8, 13, 21, 26, 34, 39, 47]);
+    const LUDO_HOUSES = [
+      { id: 0, name: 'Red', color: '#ef4444', startIdx: 0, homeCells: [[7,1],[7,2],[7,3],[7,4],[7,5],[7,6]], yardCells: [[1,1],[1,4],[4,1],[4,4]] },
+      { id: 1, name: 'Green', color: '#22c55e', startIdx: 13, homeCells: [[1,7],[2,7],[3,7],[4,7],[5,7],[6,7]], yardCells: [[1,10],[1,13],[4,10],[4,13]] },
+      { id: 2, name: 'Yellow', color: '#eab308', startIdx: 26, homeCells: [[7,13],[7,12],[7,11],[7,10],[7,9],[7,8]], yardCells: [[10,10],[10,13],[13,10],[13,13]] },
+      { id: 3, name: 'Blue', color: '#3b82f6', startIdx: 39, homeCells: [[13,7],[12,7],[11,7],[10,7],[9,7],[8,7]], yardCells: [[10,1],[10,4],[13,1],[13,4]] }
+    ];
+
+    const LudoEngine = {
+      players: [],
+      turnIdx: 0,
+      diceVal: null,
+      phase: 'roll',
+      sixCount: 0,
+      gameOver: false,
+      botTimer: null,
+      animating: false,
+
+      startFromSetup(slots) {
+        if (this.botTimer) { clearTimeout(this.botTimer); this.botTimer = null; }
+        stopConfetti();
+        const seatMap = slots.length === 2 ? [0, 2] : slots.length === 3 ? [0, 1, 2] : [0, 1, 2, 3];
+        this.players = slots.map((s, i) => {
+          const house = LUDO_HOUSES[seatMap[i]];
+          return {
+            slotIdx: i,
+            houseId: house.id,
+            name: (s.name || '').trim() || (s.isBot ? `Bot ${i + 1}` : house.name),
+            color: house.color,
+            isBot: Boolean(s.isBot),
+            tokens: [-1, -1, -1, -1]
+          };
+        });
+        this.turnIdx = 0;
+        this.diceVal = null;
+        this.phase = 'roll';
+        this.sixCount = 0;
+        this.gameOver = false;
+        this.animating = false;
+        showScreen('ludo');
+        this.render();
+        this.scheduleBot();
+      },
+
+      exitToHome() {
+        if (this.botTimer) { clearTimeout(this.botTimer); this.botTimer = null; }
+        showScreen('home');
+      },
+
+      getTrackIndex(houseId, progress) {
+        if (progress < 0 || progress > 50) return -1;
+        return (LUDO_HOUSES[houseId].startIdx + progress) % 52;
+      },
+
+      getTokenCoords(houseId, tokenIdx, progress) {
+        const house = LUDO_HOUSES[houseId];
+        if (progress < 0) return house.yardCells[tokenIdx];
+        if (progress <= 50) return LUDO_TRACK[this.getTrackIndex(houseId, progress)];
+        const hIdx = Math.min(5, progress - 51);
+        return house.homeCells[hIdx];
+      },
+
+      getMovableTokens(player, roll) {
+        const res = [];
+        player.tokens.forEach((prog, idx) => {
+          if (prog === -1 && roll === 6) res.push(idx);
+          else if (prog >= 0 && prog + roll <= 56) res.push(idx);
+        });
+        return res;
+      },
+
+      rollDice() {
+        if (this.gameOver || this.animating || this.phase !== 'roll') return;
+        const cur = this.players[this.turnIdx];
+        if (!cur) return;
+        const roll = Math.floor(Math.random() * 6) + 1;
+        this.diceVal = roll;
+        BingoAudioFX.playDaub(roll - 1);
+
+        const diceBtn = document.getElementById(`ludo-dice-${cur.houseId}`);
+        if (diceBtn) {
+          diceBtn.classList.remove('rolling');
+          void diceBtn.offsetWidth;
+          diceBtn.classList.add('rolling');
+        }
+
+        if (roll === 6) {
+          this.sixCount += 1;
+          if (this.sixCount >= 3) {
+            this.sixCount = 0;
+            this.setStatus(`${cur.name} rolled three 6s — turn forfeited!`);
+            setTimeout(() => this.advanceTurn(), 650);
+            this.render();
+            return;
+          }
+        } else {
+          this.sixCount = 0;
+        }
+
+        const movable = this.getMovableTokens(cur, roll);
+        if (movable.length === 0) {
+          this.setStatus(`${cur.name} rolled ${roll} — no valid moves.`);
+          this.render();
+          setTimeout(() => this.advanceTurn(), 650);
+          return;
+        }
+
+        if (roll === 6) this.setStatus(`${cur.name} rolled a 6! Pick a token.`);
+        else this.setStatus(`${cur.name} rolled ${roll}. Select a token.`);
+
+        this.phase = 'move';
+        this.render();
+
+        if (cur.isBot) {
+          const chosen = this.pickBestBotMove(cur, movable, roll);
+          setTimeout(() => this.moveToken(chosen), 360);
+        } else if (movable.length === 1) {
+          setTimeout(() => this.moveToken(movable[0]), 280);
+        }
+      },
+
+      pickBestBotMove(player, movable, roll) {
+        let bestIdx = movable[0];
+        let bestScore = -999;
+        movable.forEach(tIdx => {
+          const prog = player.tokens[tIdx];
+          let score = prog;
+          if (prog === -1 && roll === 6) score = 45;
+          else {
+            const nextProg = prog + roll;
+            if (nextProg === 56) score += 120;
+            else if (nextProg >= 51) score += 60;
+            const trackIdx = this.getTrackIndex(player.houseId, nextProg);
+            if (trackIdx >= 0) {
+              if (LUDO_SAFE_INDICES.has(trackIdx)) score += 45;
+              else {
+                const hits = this.players.some(op => op.houseId !== player.houseId && op.tokens.some(opP => this.getTrackIndex(op.houseId, opP) === trackIdx));
+                if (hits) score += 100;
+              }
+            }
+          }
+          if (score > bestScore) { bestScore = score; bestIdx = tIdx; }
+        });
+        return bestIdx;
+      },
+
+      async moveToken(tokenIdx) {
+        if (this.gameOver || this.animating || this.phase !== 'move') return;
+        const cur = this.players[this.turnIdx];
+        const roll = this.diceVal;
+        if (!cur || !this.getMovableTokens(cur, roll).includes(tokenIdx)) return;
+
+        this.animating = true;
+        if (cur.tokens[tokenIdx] === -1) {
+          cur.tokens[tokenIdx] = 0;
+          BingoAudioFX.playDaub(2);
+          this.render();
+        } else {
+          for (let s = 0; s < roll; s++) {
+            cur.tokens[tokenIdx] += 1;
+            BingoAudioFX.playDaub(Math.min(5, s));
+            this.render();
+            await new Promise(r => setTimeout(r, 95));
+          }
+        }
+
+        let bonusTurn = roll === 6;
+        const finalProg = cur.tokens[tokenIdx];
+        if (finalProg === 56) {
+          bonusTurn = true;
+          BingoAudioFX.playLineCombo(1, 3);
+          showToast(`${cur.name} reached HOME!`);
+        } else {
+          const trackIdx = this.getTrackIndex(cur.houseId, finalProg);
+          if (trackIdx >= 0 && !LUDO_SAFE_INDICES.has(trackIdx)) {
+            this.players.forEach(op => {
+              if (op.houseId === cur.houseId) return;
+              op.tokens.forEach((opP, opT) => {
+                if (this.getTrackIndex(op.houseId, opP) === trackIdx) {
+                  op.tokens[opT] = -1;
+                  bonusTurn = true;
+                  BingoAudioFX.playLineCombo(2, 4);
+                  showToast(`${cur.name} CAPTURED ${op.name}!`, true);
+                }
+              });
+            });
+          }
+        }
+
+        if (cur.tokens.every(p => p === 56)) {
+          this.gameOver = true;
+          this.animating = false;
+          BingoAudioFX.playBingoJackpot();
+          startConfetti();
+          recordArcadeWin('Ludo', cur.name, !cur.isBot);
+          this.setStatus(`${cur.name} WINS LUDO!`);
+          this.render();
+          showToast(`${cur.name} WINS LUDO!`, true);
+          return;
+        }
+
+        this.animating = false;
+        if (bonusTurn) {
+          this.phase = 'roll';
+          this.diceVal = null;
+          this.setStatus(`${cur.name} gets a BONUS ROLL!`);
+          this.render();
+          this.scheduleBot();
+        } else {
+          this.advanceTurn();
+        }
+      },
+
+      advanceTurn() {
+        this.turnIdx = (this.turnIdx + 1) % this.players.length;
+        this.phase = 'roll';
+        this.diceVal = null;
+        this.sixCount = 0;
+        const cur = this.players[this.turnIdx];
+        this.setStatus(`${cur.name}'s Turn — Roll the dice`);
+        this.render();
+        this.scheduleBot();
+      },
+
+      scheduleBot() {
+        if (this.botTimer) clearTimeout(this.botTimer);
+        if (this.gameOver) return;
+        const cur = this.players[this.turnIdx];
+        if (cur && cur.isBot && this.phase === 'roll') {
+          this.botTimer = setTimeout(() => this.rollDice(), Math.max(400, state.botSpeed || 650));
+        }
+      },
+
+      setStatus(msg) {
+        const el = document.getElementById('ludo-status-bar');
+        if (el) el.textContent = msg;
+      },
+
+      render() {
+        const cur = this.players[this.turnIdx];
+        const movable = (this.phase === 'move' && cur && !cur.isBot) ? this.getMovableTokens(cur, this.diceVal) : [];
+
+        // Render 4 corner pods
+        [0, 1, 2, 3].forEach(hId => {
+          const pod = document.getElementById(`ludo-pod-${hId}`);
+          if (!pod) return;
+          const p = this.players.find(pl => pl.houseId === hId);
+          if (!p) {
+            pod.className = 'ludo-pod inactive-seat';
+            pod.innerHTML = `<div style="font-size:0.7rem; color:var(--text-muted); font-weight:800;">Empty</div>`;
+            return;
+          }
+          const isTurn = cur && cur.houseId === hId && !this.gameOver;
+          pod.className = `ludo-pod ${isTurn ? 'active-turn' : ''}`;
+          const doneCount = p.tokens.filter(t => t === 56).length;
+          const diceFace = isTurn && this.diceVal ? this.diceVal : '•';
+          pod.innerHTML = `
+            <div style="display:flex; align-items:center; gap:6px; min-width:0;">
+              <span class="ludo-color-dot" style="background:${p.color};"></span>
+              <div style="min-width:0;">
+                <div style="font-size:0.74rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(p.name)}</div>
+                <div style="font-size:0.62rem; color:var(--text-muted);">${p.isBot ? 'AI' : 'Human'} · ${doneCount}/4 Home</div>
+              </div>
+            </div>
+            <button type="button" id="ludo-dice-${hId}" onclick="LudoEngine.rollDice()" class="ludo-dice-btn" ${(!isTurn || p.isBot || this.phase !== 'roll') ? 'disabled' : ''}>${diceFace}</button>
+          `;
+        });
+
+        // Build token coordinate map
+        const cellTokens = new Map();
+        this.players.forEach(p => {
+          p.tokens.forEach((prog, tIdx) => {
+            const [r, c] = this.getTokenCoords(p.houseId, tIdx, prog);
+            const key = `${r},${c}`;
+            if (!cellTokens.has(key)) cellTokens.set(key, []);
+            cellTokens.get(key).push({ player: p, tokenIdx: tIdx, movable: cur && cur.houseId === p.houseId && movable.includes(tIdx) });
+          });
+        });
+
+        const grid = document.getElementById('ludo-board-grid');
+        if (!grid) return;
+        let html = '';
+        for (let r = 0; r < 15; r++) {
+          for (let c = 0; c < 15; c++) {
+            let cls = 'ludo-cell';
+            if (r < 6 && c < 6) cls += (r >= 1 && r <= 4 && c >= 1 && c <= 4) ? ' yard-inner' : ' yard-red';
+            else if (r < 6 && c > 8) cls += (r >= 1 && r <= 4 && c >= 10 && c <= 13) ? ' yard-inner' : ' yard-green';
+            else if (r > 8 && c > 8) cls += (r >= 10 && r <= 13 && c >= 10 && c <= 13) ? ' yard-inner' : ' yard-yellow';
+            else if (r > 8 && c < 6) cls += (r >= 10 && r <= 13 && c >= 1 && c <= 4) ? ' yard-inner' : ' yard-blue';
+            else if (r >= 6 && r <= 8 && c >= 6 && c <= 8) cls += ' center-goal';
+            else if (r === 7 && c >= 1 && c <= 5) cls += ' home-red';
+            else if (c === 7 && r >= 1 && r <= 5) cls += ' home-green';
+            else if (r === 7 && c >= 9 && c <= 13) cls += ' home-yellow';
+            else if (c === 7 && r >= 9 && r <= 13) cls += ' home-blue';
+            else if (r === 6 && c === 1) cls += ' home-red safe-star';
+            else if (r === 1 && c === 8) cls += ' home-green safe-star';
+            else if (r === 8 && c === 13) cls += ' home-yellow safe-star';
+            else if (r === 13 && c === 6) cls += ' home-blue safe-star';
+            else if ((r === 2 && c === 6) || (r === 6 && c === 12) || (r === 12 && c === 8) || (r === 8 && c === 2)) cls += ' safe-star';
+
+            const toks = cellTokens.get(`${r},${c}`) || [];
+            const miniCls = toks.length > 1 ? 'mini' : '';
+            const toksHtml = toks.length > 0
+              ? `<div class="ludo-tokens-stack">${toks.map(t => `<button type="button" ${t.movable ? `onclick="LudoEngine.moveToken(${t.tokenIdx})"` : ''} class="ludo-token ${miniCls} ${t.movable ? 'movable' : ''}" style="background:${t.player.color};"></button>`).join('')}</div>`
+              : '';
+            html += `<div class="${cls}">${toksHtml}</div>`;
+          }
+        }
+        grid.innerHTML = html;
+      }
+    };
+    window.LudoEngine = LudoEngine;
+
+    // ========================================================================
+    // SNAKES & LADDERS ENGINE (10x10 SERPENTINE 1-100 BOARD)
+    // ========================================================================
+    const SNAKES_LADDERS_MAP = {
+      4: 14, 9: 31, 20: 38, 28: 84, 40: 59, 51: 67, 63: 81, 71: 91,
+      17: 7, 54: 34, 62: 19, 64: 60, 87: 24, 93: 73, 95: 75, 99: 78
+    };
+    const SNAKES_COLORS = ['#ef4444', '#22c55e', '#3b82f6', '#eab308'];
+
+    const SnakesEngine = {
+      players: [],
+      turnIdx: 0,
+      gameOver: false,
+      animating: false,
+      botTimer: null,
+
+      startFromSetup(slots) {
+        if (this.botTimer) { clearTimeout(this.botTimer); this.botTimer = null; }
+        stopConfetti();
+        this.players = slots.map((s, i) => ({
+          id: i,
+          name: (s.name || '').trim() || (s.isBot ? `Bot ${i + 1}` : `Player ${i + 1}`),
+          color: SNAKES_COLORS[i],
+          isBot: Boolean(s.isBot),
+          pos: 1
+        }));
+        this.turnIdx = 0;
+        this.gameOver = false;
+        this.animating = false;
+        showScreen('snakes');
+        this.buildBoard();
+        this.render();
+        this.scheduleBot();
+      },
+
+      exitToHome() {
+        if (this.botTimer) { clearTimeout(this.botTimer); this.botTimer = null; }
+        showScreen('home');
+      },
+
+      getSquareCenterPct(sq) {
+        const zero = Math.max(0, Math.min(99, sq - 1));
+        const rowFromBottom = Math.floor(zero / 10);
+        const colInRow = zero % 10;
+        const col = rowFromBottom % 2 === 0 ? colInRow : (9 - colInRow);
+        const rowFromTop = 9 - rowFromBottom;
+        return { x: col * 10 + 5, y: rowFromTop * 10 + 5 };
+      },
+
+      buildBoard() {
+        const grid = document.getElementById('snakes-board-grid');
+        if (grid && !grid.dataset.built) {
+          let html = '';
+          for (let rTop = 0; rTop < 10; rTop++) {
+            const rowFromBottom = 9 - rTop;
+            for (let c = 0; c < 10; c++) {
+              const colInRow = rowFromBottom % 2 === 0 ? c : (9 - c);
+              const sq = rowFromBottom * 10 + colInRow + 1;
+              const alt = (rTop + c) % 2 === 1 ? 'alt' : '';
+              const goal = sq === 100 ? 'goal-100' : '';
+              html += `<div class="snakes-cell ${alt} ${goal}">${sq}</div>`;
+            }
+          }
+          grid.innerHTML = html;
+          grid.dataset.built = '1';
+        }
+        const svg = document.getElementById('snakes-svg-overlay');
+        if (svg && !svg.dataset.built) {
+          let lines = '';
+          Object.entries(SNAKES_LADDERS_MAP).forEach(([fromStr, to]) => {
+            const from = parseInt(fromStr, 10);
+            const p1 = this.getSquareCenterPct(from);
+            const p2 = this.getSquareCenterPct(to);
+            if (to > from) {
+              lines += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="#10b981" stroke-width="2.2" stroke-dasharray="1.8 1.4" opacity="0.85"/>`;
+            } else {
+              const cx = (p1.x + p2.x) / 2 + (p1.x < p2.x ? 7 : -7);
+              const cy = (p1.y + p2.y) / 2;
+              lines += `<path d="M ${p1.x} ${p1.y} Q ${cx} ${cy} ${p2.x} ${p2.y}" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" opacity="0.85"/>`;
+            }
+          });
+          svg.innerHTML = lines;
+          svg.dataset.built = '1';
+        }
+      },
+
+      async rollDice() {
+        if (this.gameOver || this.animating) return;
+        const cur = this.players[this.turnIdx];
+        if (!cur) return;
+        this.animating = true;
+
+        const roll = Math.floor(Math.random() * 6) + 1;
+        const diceBtn = document.getElementById('snakes-dice-btn');
+        if (diceBtn) {
+          diceBtn.textContent = String(roll);
+          diceBtn.classList.remove('rolling');
+          void diceBtn.offsetWidth;
+          diceBtn.classList.add('rolling');
+        }
+        BingoAudioFX.playDaub(roll - 1);
+
+        const subEl = document.getElementById('snakes-status-sub');
+        if (cur.pos + roll > 100) {
+          if (subEl) subEl.textContent = `Rolled ${roll} — need exact ${100 - cur.pos} to finish!`;
+          await new Promise(r => setTimeout(r, 600));
+        } else {
+          if (subEl) subEl.textContent = `${cur.name} rolled ${roll}!`;
+          for (let s = 0; s < roll; s++) {
+            cur.pos += 1;
+            BingoAudioFX.playDaub(Math.min(5, s));
+            this.render();
+            await new Promise(r => setTimeout(r, 90));
+          }
+          const jump = SNAKES_LADDERS_MAP[cur.pos];
+          if (jump) {
+            const isLadder = jump > cur.pos;
+            cur.pos = jump;
+            if (isLadder) {
+              BingoAudioFX.playLineCombo(2, 4);
+              showToast(`CLIMB UP to ${jump}!`, true);
+              if (subEl) subEl.textContent = `CLIMB UP! ${cur.name} jumped to ${jump}!`;
+            } else {
+              BingoAudioFX.playHotLineAlert();
+              showToast(`OOPS! Slid down to ${jump}`);
+              if (subEl) subEl.textContent = `OOPS! ${cur.name} slid down to ${jump}`;
+            }
+            this.render();
+            await new Promise(r => setTimeout(r, 420));
+          }
+        }
+
+        if (cur.pos === 100) {
+          this.gameOver = true;
+          this.animating = false;
+          BingoAudioFX.playBingoJackpot();
+          startConfetti();
+          recordArcadeWin('Snakes & Ladders', cur.name, !cur.isBot);
+          if (subEl) subEl.textContent = `VICTORY! ${cur.name} reached 100!`;
+          showToast(`VICTORY! ${cur.name} reached 100!`, true);
+          this.render();
+          return;
+        }
+
+        this.animating = false;
+        this.turnIdx = (this.turnIdx + 1) % this.players.length;
+        this.render();
+        this.scheduleBot();
+      },
+
+      scheduleBot() {
+        if (this.botTimer) clearTimeout(this.botTimer);
+        if (this.gameOver) return;
+        const cur = this.players[this.turnIdx];
+        if (cur && cur.isBot) {
+          this.botTimer = setTimeout(() => this.rollDice(), Math.max(450, state.botSpeed || 650));
+        }
+      },
+
+      render() {
+        const cur = this.players[this.turnIdx];
+        const row = document.getElementById('snakes-players-row');
+        if (row) {
+          row.style.gridTemplateColumns = `repeat(${this.players.length}, 1fr)`;
+          row.innerHTML = this.players.map((p, idx) => `
+            <div class="ludo-pod ${idx === this.turnIdx && !this.gameOver ? 'active-turn' : ''}" style="padding:5px 7px;">
+              <span class="ludo-color-dot" style="background:${p.color};"></span>
+              <div style="min-width:0;">
+                <div style="font-size:0.68rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(p.name)}</div>
+                <div style="font-size:0.6rem; color:var(--text-muted);">Sq ${p.pos}</div>
+              </div>
+            </div>
+          `).join('');
+        }
+        const turnLbl = document.getElementById('snakes-turn-label');
+        if (turnLbl && cur) turnLbl.textContent = `${cur.name}'s Turn`;
+        const diceBtn = document.getElementById('snakes-dice-btn');
+        if (diceBtn) diceBtn.disabled = this.gameOver || this.animating || (cur && cur.isBot);
+
+        const layer = document.getElementById('snakes-tokens-layer');
+        if (layer) {
+          const offsets = [[-1.8, -1.8], [1.8, -1.8], [-1.8, 1.8], [1.8, 1.8]];
+          layer.innerHTML = this.players.map((p, idx) => {
+            const pt = this.getSquareCenterPct(p.pos);
+            const [ox, oy] = offsets[idx % 4];
+            return `<div class="snakes-token" style="left:${pt.x + ox}%; top:${pt.y + oy}%; background:${p.color};"></div>`;
+          }).join('');
+        }
+      }
+    };
+    window.SnakesEngine = SnakesEngine;
 
     window.onload = function () {
       window.__BINGO_OTA_ONLOAD_RAN__ = true;
