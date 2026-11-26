@@ -1,7 +1,7 @@
 {
-    "version":  "1.4.3",
-    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.4.3/index.html",
-    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.4.3/index.html",
-    "notes":  "Clean project structure and full migration to Falcon Games",
-    "releasedAt":  "2026-11-26T10:36:54Z"
+    "version":  "1.4.4",
+    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.4.4/index.html",
+    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.4.4/index.html",
+    "notes":  "Upgraded Ludo 3D dice \u0026 hop animations, safe-tile token clustering, and fixed Online Multiplayer for Ludo and Snakes \u0026 Ladders",
+    "releasedAt":  "2026-11-26T13:34:13Z"
 }

@@ -11,7 +11,7 @@
   <script>
     var OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.4.3",
+      currentVersion: "1.4.4",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
@@ -1894,11 +1894,11 @@
       border: 1.5px solid rgba(255, 255, 255, 0.7);
     }
     .ludo-dice-btn {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
       border: 1.5px solid #fde68a;
-      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+      background: linear-gradient(145deg, #ffffff 0%, #fef3c7 65%, #fde68a 100%);
       color: #1e1052;
       font-family: var(--font-display);
       font-size: 1.05rem;
@@ -1907,15 +1907,23 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 3px 0 #d97706;
+      box-shadow: 0 3px 0 #d97706, inset 0 2px 2px rgba(255, 255, 255, 0.9);
       flex-shrink: 0;
+      position: relative;
+      z-index: 4;
+      transform-style: preserve-3d;
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
     }
     .ludo-dice-btn:disabled { opacity: 0.45; cursor: default; box-shadow: none; }
-    .ludo-dice-btn.rolling { animation: diceRollSpin 0.36s ease; }
-    @keyframes diceRollSpin {
-      0% { transform: rotate(0deg) scale(1); }
-      45% { transform: rotate(190deg) scale(1.18); }
-      100% { transform: rotate(360deg) scale(1); }
+    .ludo-dice-btn.rolling {
+      animation: dicePopTumble 0.44s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 20;
+    }
+    @keyframes dicePopTumble {
+      0% { transform: translateY(0) scale(1) rotate3d(1, 1, 0, 0deg); box-shadow: 0 3px 0 #d97706; }
+      38% { transform: translateY(-16px) scale(1.48) rotate3d(1, 1, 0, 195deg); box-shadow: 0 14px 24px rgba(0, 0, 0, 0.48), inset 0 2px 4px rgba(255, 255, 255, 0.95); }
+      72% { transform: translateY(-8px) scale(1.22) rotate3d(1, 1, 0, 330deg); box-shadow: 0 8px 14px rgba(0, 0, 0, 0.35); }
+      100% { transform: translateY(0) scale(1) rotate3d(1, 1, 0, 360deg); box-shadow: 0 3px 0 #d97706; }
     }
     .ludo-board-wrap {
       flex: 1;
@@ -1985,6 +1993,11 @@
       align-items: center;
       justify-content: center;
       box-sizing: border-box;
+      transition: opacity 0.22s ease, filter 0.22s ease;
+    }
+    .ludo-yard-overlay.dimmed {
+      opacity: 0.72;
+      filter: saturate(0.75);
     }
     .ludo-yard-overlay.red { top: 0; left: 0; background: #ef4444; border-top-left-radius: 10px; }
     .ludo-yard-overlay.green { top: 0; right: 0; background: #22c55e; border-top-right-radius: 10px; }
@@ -2035,6 +2048,17 @@
       z-index: 3;
       pointer-events: none;
     }
+    .ludo-tokens-stack {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      position: relative;
+      z-index: 5;
+    }
     .ludo-pin-btn {
       background: transparent;
       border: none;
@@ -2050,20 +2074,56 @@
       position: relative;
       transition: transform 0.12s ease;
     }
-    .ludo-pin-btn.mini { width: 46%; height: 46%; max-width: 12px; max-height: 12px; }
+    .ludo-pin-btn.mini { width: 47%; height: 47%; max-width: 13px; max-height: 13px; transform: scale(0.88); }
+    .ludo-pin-btn.micro { width: 44%; height: 44%; max-width: 11px; max-height: 11px; transform: scale(0.78); }
     .ludo-pin-btn.movable {
       cursor: pointer;
-      filter: drop-shadow(0 0 4px #fbbf24);
-      animation: pulseGold 0.85s infinite;
-      z-index: 8;
+      filter: drop-shadow(0 0 5px #fbbf24);
+      z-index: 9;
+    }
+    .ludo-pin-halo {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2.5px dashed #fbbf24;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.9), inset 0 0 4px rgba(251, 191, 36, 0.75);
+      pointer-events: none;
+      animation: spinHalo 1.35s linear infinite;
+    }
+    @keyframes spinHalo {
+      0% { transform: rotate(0deg) scale(0.96); }
+      50% { transform: rotate(180deg) scale(1.08); }
+      100% { transform: rotate(360deg) scale(0.96); }
     }
     .ludo-pin-btn.hopping {
-      animation: ludoHop 0.12s ease-out;
+      animation: ludoHop 0.095s ease-out;
+      z-index: 12;
     }
     @keyframes ludoHop {
-      0% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-14px) scale(1.18); }
-      100% { transform: translateY(0) scale(1); }
+      0% { transform: translateY(0) scale(1); filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25)); }
+      50% { transform: translateY(-16px) scale(1.24); filter: drop-shadow(0 12px 6px rgba(0, 0, 0, 0.38)); }
+      100% { transform: translateY(0) scale(1); filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25)); }
+    }
+    .ludo-capture-burst {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 3px solid #ef4444;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.85) 0%, rgba(239, 68, 68, 0.3) 60%, transparent 100%);
+      pointer-events: none;
+      z-index: 15;
+      animation: captureShockwave 0.45s ease-out forwards;
+    }
+    @keyframes captureShockwave {
+      0% { transform: scale(0.4); opacity: 1; }
+      100% { transform: scale(2.1); opacity: 0; }
+    }
+    .ludo-yard-pin-returning {
+      animation: yardZipReturn 0.36s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes yardZipReturn {
+      0% { transform: scale(0.25) translateY(-18px); opacity: 0.3; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
     }
     .ludo-turn-arrow {
       color: #fbbf24;
@@ -3115,7 +3175,7 @@
           <div class="ludo-yard-overlay green" id="ludo-yard-1"></div>
           <div class="ludo-yard-overlay blue" id="ludo-yard-3"></div>
           <div class="ludo-yard-overlay yellow" id="ludo-yard-2"></div>
-          <svg class="ludo-center-overlay" viewBox="0 0 100 100" aria-hidden="true">
+          <svg class="ludo-center-overlay" id="ludo-center-overlay" viewBox="0 0 100 100" aria-hidden="true">
             <polygon points="0,0 50,50 0,100" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
             <polygon points="0,0 100,0 50,50" fill="#22c55e" stroke="#ffffff" stroke-width="2"/>
             <polygon points="100,0 100,100 50,50" fill="#eab308" stroke="#ffffff" stroke-width="2"/>
@@ -5950,6 +6010,7 @@
 
     let online = {
       roomCode: '',
+      gameType: 'bingo',
       isHost: false,
       mySeat: null,
       status: 'idle',
@@ -6090,15 +6151,19 @@
       openProfileSheet(idx);
     }
 
-    function createOnlineRoom() {
+    function createOnlineRoom(gameTypeArg) {
       if (state.botTimer) { clearTimeout(state.botTimer); state.botTimer = null; }
       stopConfetti();
       closeWinnerModal();
 
       const prof = loadOnlineProfilePrefs();
       const code = generateRoomCode();
+      const resolvedGame = ['bingo', 'ludo', 'snakes'].includes(gameTypeArg)
+        ? gameTypeArg
+        : (['bingo', 'ludo', 'snakes'].includes(online.gameType) ? online.gameType : 'bingo');
 
       state.playMode = 'online';
+      online.gameType = resolvedGame;
       online.isHost = true;
       online.mySeat = 0;
       online.fillWithBots = true;
@@ -6106,7 +6171,8 @@
       online.lastSeq = 1;
       online.pendingCallNum = null;
 
-      const maxP = Math.min(5, Math.max(2, online.maxPlayers || 4));
+      const capMax = resolvedGame === 'bingo' ? 5 : 4;
+      const maxP = Math.min(capMax, Math.max(2, online.maxPlayers || 4));
       online.maxPlayers = maxP;
       online.seats = PLAYER_THEMES.slice(0, maxP).map((t, idx) => idx === 0 ? ({
         seat: 0,
@@ -6142,7 +6208,7 @@
 
       document.getElementById('online-entry-status').textContent = '';
       connectOnlineTransport(code, () => {
-        sendOnlineMessage({ type: 'room_info', maxPlayers: maxP, hostName: prof.name });
+        sendOnlineMessage({ type: 'room_info', gameType: online.gameType, maxPlayers: maxP, hostName: prof.name });
         broadcastOnlineStateSync();
       });
 
@@ -6152,7 +6218,8 @@
       syncMobileUI();
       renderAll(false);
       updateLobbyUI();
-      showToast(`✨ Room ${code} created! Share code with friends.`);
+      const gName = online.gameType === 'ludo' ? 'Ludo' : online.gameType === 'snakes' ? 'Snakes & Ladders' : 'Bingo 25';
+      showToast(`✨ ${gName} Room ${code} created! Share code with friends.`);
     }
 
     function joinOnlineRoomFromInput() {
@@ -6231,10 +6298,12 @@
     }
 
     function buildOnlineSyncPayload() {
-      return {
+      const capMax = online.gameType === 'bingo' ? 5 : 4;
+      const payload = {
         type: 'state_sync',
         seq: online.seq,
-        maxPlayers: Math.min(5, Math.max(2, online.maxPlayers || online.seats.length || 4)),
+        gameType: online.gameType || 'bingo',
+        maxPlayers: Math.min(capMax, Math.max(2, online.maxPlayers || online.seats.length || 4)),
         fillWithBots: online.fillWithBots,
         seats: online.seats.map((s, idx) => ({
           seat: idx,
@@ -6255,6 +6324,12 @@
           turnEffects: state.turnEffects
         }
       };
+      if (online.gameType === 'ludo' && typeof LudoEngine !== 'undefined') {
+        payload.ludoState = LudoEngine.exportOnlineState();
+      } else if (online.gameType === 'snakes' && typeof SnakesEngine !== 'undefined') {
+        payload.snakesState = SnakesEngine.exportOnlineState();
+      }
+      return payload;
     }
 
     function broadcastOnlineStateSync() {
@@ -6321,8 +6396,8 @@
           };
 
           applyOnlineSeatsToPlayers();
-          sendOnlineMessage({ type: 'join_ack', targetId: msg.senderId, seat: seatIdx, maxPlayers: maxP });
-          sendOnlineMessage({ type: 'room_info', maxPlayers: maxP });
+          sendOnlineMessage({ type: 'join_ack', targetId: msg.senderId, seat: seatIdx, gameType: online.gameType, maxPlayers: maxP });
+          sendOnlineMessage({ type: 'room_info', gameType: online.gameType, maxPlayers: maxP });
           broadcastOnlineStateSync();
           updateLobbyUI();
           syncMobileUI();
@@ -6346,6 +6421,27 @@
           seat.lastSeen = Date.now();
           seat.connected = true;
           executeCallNumber(msg.num, msg.seat);
+        } else if (msg.type === 'ludo_roll_intent') {
+          const seat = online.seats[msg.seat];
+          if (!seat || seat.clientId !== msg.senderId || online.gameType !== 'ludo') return;
+          seat.lastSeen = Date.now();
+          seat.connected = true;
+          const cur = LudoEngine.players[LudoEngine.turnIdx];
+          if (cur && cur.slotIdx === msg.seat) LudoEngine.rollDice(true);
+        } else if (msg.type === 'ludo_move_intent') {
+          const seat = online.seats[msg.seat];
+          if (!seat || seat.clientId !== msg.senderId || online.gameType !== 'ludo') return;
+          seat.lastSeen = Date.now();
+          seat.connected = true;
+          const cur = LudoEngine.players[LudoEngine.turnIdx];
+          if (cur && cur.slotIdx === msg.seat) LudoEngine.moveToken(msg.tokenIdx, true);
+        } else if (msg.type === 'snakes_roll_intent') {
+          const seat = online.seats[msg.seat];
+          if (!seat || seat.clientId !== msg.senderId || online.gameType !== 'snakes') return;
+          seat.lastSeen = Date.now();
+          seat.connected = true;
+          const cur = SnakesEngine.players[SnakesEngine.turnIdx];
+          if (cur && cur.id === msg.seat) SnakesEngine.rollDice(true);
         } else if (msg.type === 'ping_presence') {
           const seat = online.seats.find(s => s && s.clientId === msg.senderId);
           if (seat) {
@@ -6388,15 +6484,21 @@
       }
 
       // Guest message handling
-      if (msg.type === 'room_info' && typeof msg.maxPlayers === 'number') {
-        online.maxPlayers = Math.min(5, Math.max(2, msg.maxPlayers));
+      if (msg.type === 'room_info') {
+        if (['bingo', 'ludo', 'snakes'].includes(msg.gameType)) online.gameType = msg.gameType;
+        if (typeof msg.maxPlayers === 'number') {
+          const capMax = online.gameType === 'bingo' ? 5 : 4;
+          online.maxPlayers = Math.min(capMax, Math.max(2, msg.maxPlayers));
+        }
         updateLobbyUI();
       } else if (msg.type === 'join_ack' && msg.targetId === CLIENT_ID) {
         clearInterval(online.joinInterval);
         clearTimeout(online.joinTimeout);
         online.mySeat = msg.seat;
+        if (['bingo', 'ludo', 'snakes'].includes(msg.gameType)) online.gameType = msg.gameType;
         if (typeof msg.maxPlayers === 'number') {
-          online.maxPlayers = Math.min(5, Math.max(2, msg.maxPlayers));
+          const capMax = online.gameType === 'bingo' ? 5 : 4;
+          online.maxPlayers = Math.min(capMax, Math.max(2, msg.maxPlayers));
         }
         state.viewingPlayer = msg.seat;
         document.getElementById('online-entry-status').textContent = '';
@@ -6422,6 +6524,10 @@
       } else if (msg.type === 'room_closed') {
         showToast('Host closed the online room.');
         leaveOnlineRoom(true);
+      } else if (msg.type === 'ludo_event' && online.gameType === 'ludo') {
+        LudoEngine.handleRemoteEvent(msg);
+      } else if (msg.type === 'snakes_event' && online.gameType === 'snakes') {
+        SnakesEngine.handleRemoteEvent(msg);
       } else if (msg.type === 'state_sync') {
         if (typeof msg.seq === 'number' && msg.seq <= online.lastSeq) return;
         online.lastSeq = msg.seq || online.lastSeq;
@@ -6434,11 +6540,15 @@
       const wasGameOver = state.gameOver;
       const wasStarted = state.gameStarted;
 
+      if (['bingo', 'ludo', 'snakes'].includes(msg.gameType)) {
+        online.gameType = msg.gameType;
+      }
+      const capMax = online.gameType === 'bingo' ? 5 : 4;
       online.fillWithBots = Boolean(msg.fillWithBots);
       if (typeof msg.maxPlayers === 'number') {
-        online.maxPlayers = Math.min(5, Math.max(2, msg.maxPlayers));
+        online.maxPlayers = Math.min(capMax, Math.max(2, msg.maxPlayers));
       } else if (Array.isArray(msg.seats) && msg.seats.length >= 2 && msg.seats.length <= 5) {
-        online.maxPlayers = msg.seats.length;
+        online.maxPlayers = Math.min(capMax, msg.seats.length);
       }
       if (Array.isArray(msg.seats) && msg.seats.length >= 2 && msg.seats.length <= 5) {
         online.seats = msg.seats.map((s, idx) => ({
@@ -6462,6 +6572,32 @@
       state.gameOver = Boolean(g.gameOver);
       state.turnEffects = g.turnEffects || {};
       online.pendingCallNum = null;
+
+      if (online.gameType === 'ludo') {
+        updateLobbyUI();
+        if (state.gameStarted && !wasStarted) {
+          closeOnlineSheet();
+          showScreen('ludo');
+          showToast('🚀 Online Ludo Match Started!');
+        }
+        if (msg.ludoState && state.gameStarted) {
+          LudoEngine.applyOnlineState(msg.ludoState, online.mySeat, !wasStarted);
+        }
+        return;
+      }
+
+      if (online.gameType === 'snakes') {
+        updateLobbyUI();
+        if (state.gameStarted && !wasStarted) {
+          closeOnlineSheet();
+          showScreen('snakes');
+          showToast('🚀 Online Snakes & Ladders Started!');
+        }
+        if (msg.snakesState && state.gameStarted) {
+          SnakesEngine.applyOnlineState(msg.snakesState, online.mySeat, !wasStarted);
+        }
+        return;
+      }
 
       applyOnlineSeatsToPlayers();
       const winIds = Array.isArray(g.winnerIds) ? g.winnerIds : [];
@@ -6581,6 +6717,28 @@
           s.name = `Bot ${idx + 1}`;
         }
       });
+
+      if (online.gameType === 'ludo') {
+        state.gameStarted = true;
+        state.gameOver = false;
+        closeOnlineSheet();
+        LudoEngine.startOnline(online.seats, online.mySeat);
+        broadcastOnlineStateSync();
+        updateLobbyUI();
+        showToast(`🚀 Online ${online.seats.length}-Player Ludo Started!`);
+        return;
+      }
+
+      if (online.gameType === 'snakes') {
+        state.gameStarted = true;
+        state.gameOver = false;
+        closeOnlineSheet();
+        SnakesEngine.startOnline(online.seats, online.mySeat);
+        broadcastOnlineStateSync();
+        updateLobbyUI();
+        showToast(`🚀 Online ${online.seats.length}-Player Snakes & Ladders Started!`);
+        return;
+      }
 
       applyOnlineSeatsToPlayers();
       state.calledNumbers = [];
@@ -6703,20 +6861,25 @@
       document.getElementById('lobby-fill-bots-btn').textContent = online.fillWithBots ? 'ON' : 'OFF';
 
       const prepRow = document.getElementById('lobby-board-prep-row');
-      prepRow.style.display = !state.gameStarted ? 'grid' : 'none';
+      prepRow.style.display = (!state.gameStarted && online.gameType === 'bingo') ? 'grid' : 'none';
+
+      const gLabel = online.gameType === 'ludo' ? 'Ludo' : online.gameType === 'snakes' ? 'Snakes & Ladders' : 'Bingo 25';
+      if (capBadge) {
+        capBadge.textContent = `${gLabel} • ${joinedHumans} / ${maxP} Players`;
+      }
 
       const startBtn = document.getElementById('lobby-start-btn');
       if (online.isHost) {
         const canStart = online.fillWithBots || joinedHumans >= 2;
         startBtn.disabled = !canStart;
         if (state.gameStarted) {
-          startBtn.textContent = '⚡ Restart Match';
+          startBtn.textContent = `⚡ Restart ${gLabel}`;
         } else if (!canStart) {
           startBtn.textContent = '⏳ Need 2+ Players (or Bot Fill)';
         } else if (joinedHumans >= maxP) {
-          startBtn.textContent = `🚀 All ${maxP} Ready — Start Match`;
+          startBtn.textContent = `🚀 All ${maxP} Ready — Start ${gLabel}`;
         } else {
-          startBtn.textContent = '🚀 Start Online Match';
+          startBtn.textContent = `🚀 Start Online ${gLabel}`;
         }
         startBtn.onclick = () => startOnlineMatch(!state.gameStarted);
       } else {
@@ -7525,8 +7688,11 @@
       },
 
       createOnlineFromSetup() {
+        const capMax = this.gameType === 'bingo' ? 5 : 4;
+        online.gameType = this.gameType;
+        online.maxPlayers = Math.min(capMax, Math.max(2, this.playerCount || online.maxPlayers || 4));
         openOnlineSheet();
-        createOnlineRoom();
+        createOnlineRoom(this.gameType);
       },
 
       joinOnlineFromSetup() {
@@ -8527,10 +8693,19 @@
       gameOver: false,
       botTimer: null,
       animating: false,
+      isOnline: false,
+      mySeat: null,
+      captureCellKey: null,
+      returningYard: null,
+      lastEventId: '',
 
       startFromSetup(slots) {
         if (this.botTimer) { clearTimeout(this.botTimer); this.botTimer = null; }
         stopConfetti();
+        this.isOnline = false;
+        this.mySeat = null;
+        this.captureCellKey = null;
+        this.returningYard = null;
         const seatMap = slots.length === 2 ? [0, 2] : slots.length === 3 ? [0, 1, 2] : [0, 1, 2, 3];
         this.players = slots.map((s, i) => {
           const house = LUDO_HOUSES[seatMap[i]];
@@ -8554,8 +8729,72 @@
         this.scheduleBot();
       },
 
+      startOnline(seats, mySeat) {
+        const activeSeats = (seats || []).slice(0, 4);
+        this.startFromSetup(activeSeats.map((s, i) => ({
+          name: s ? s.name : `Player ${i + 1}`,
+          isBot: s ? Boolean(s.isBot) : true
+        })));
+        this.isOnline = true;
+        this.mySeat = mySeat;
+        this.render();
+        this.scheduleBot();
+      },
+
+      exportOnlineState() {
+        return {
+          players: this.players.map(p => ({ ...p, tokens: [...p.tokens] })),
+          turnIdx: this.turnIdx,
+          diceVal: this.diceVal,
+          phase: this.phase,
+          sixCount: this.sixCount,
+          gameOver: this.gameOver
+        };
+      },
+
+      applyOnlineState(ls, mySeat, shouldShowScreen = false) {
+        if (!ls || !Array.isArray(ls.players)) return;
+        this.isOnline = true;
+        this.mySeat = mySeat;
+        if (!this.animating) {
+          this.players = ls.players.map(p => ({ ...p, tokens: [...(p.tokens || [-1, -1, -1, -1])] }));
+          this.turnIdx = ls.turnIdx || 0;
+          this.diceVal = ls.diceVal ?? null;
+          this.phase = ls.phase || 'roll';
+          this.sixCount = ls.sixCount || 0;
+          this.gameOver = Boolean(ls.gameOver);
+        }
+        if (shouldShowScreen) showScreen('ludo');
+        this.render();
+      },
+
+      handleRemoteEvent(msg) {
+        if (!msg || !msg.eventId || msg.eventId === this.lastEventId) return;
+        this.lastEventId = msg.eventId;
+        if (msg.event === 'roll') {
+          this.turnIdx = msg.turnIdx;
+          this.diceVal = msg.roll;
+          this.sixCount = msg.sixCount || 0;
+          this.phase = msg.nextPhase || 'move';
+          BingoAudioFX.playDiceRattle();
+          this.render();
+          const cur = this.players[this.turnIdx];
+          if (cur) this.triggerDiceRollAnim(cur.houseId);
+          if (msg.statusText) this.setStatus(msg.statusText);
+        } else if (msg.event === 'move') {
+          this.turnIdx = msg.turnIdx;
+          this.diceVal = msg.roll;
+          this.phase = 'move';
+          this.moveToken(msg.tokenIdx, true);
+        }
+      },
+
       exitToHome() {
         if (this.botTimer) { clearTimeout(this.botTimer); this.botTimer = null; }
+        if (this.isOnline && typeof leaveOnlineRoom === 'function') {
+          this.isOnline = false;
+          leaveOnlineRoom(false);
+        }
         showScreen('home');
       },
 
@@ -8581,28 +8820,42 @@
         return res;
       },
 
-      rollDice() {
-        if (this.gameOver || this.animating || this.phase !== 'roll') return;
-        const cur = this.players[this.turnIdx];
-        if (!cur) return;
-        const roll = cryptoRandomDie();
-        this.diceVal = roll;
-        BingoAudioFX.playDiceRattle();
-
-        const diceBtn = document.getElementById(`ludo-dice-${cur.houseId}`);
+      triggerDiceRollAnim(houseId) {
+        const diceBtn = document.getElementById(`ludo-dice-${houseId}`);
         if (diceBtn) {
           diceBtn.classList.remove('rolling');
           void diceBtn.offsetWidth;
           diceBtn.classList.add('rolling');
         }
+      },
+
+      rollDice(fromAuthority = false) {
+        if (this.gameOver || this.animating || this.phase !== 'roll') return;
+        const cur = this.players[this.turnIdx];
+        if (!cur) return;
+
+        if (this.isOnline && !online.isHost && !fromAuthority) {
+          if (cur.slotIdx !== this.mySeat) return;
+          sendOnlineMessage({ type: 'ludo_roll_intent', seat: this.mySeat });
+          return;
+        }
+
+        const roll = cryptoRandomDie();
+        this.diceVal = roll;
+        BingoAudioFX.playDiceRattle();
 
         if (roll === 6) {
           this.sixCount += 1;
           if (this.sixCount >= 3) {
             this.sixCount = 0;
-            this.setStatus(`${cur.name} rolled three 6s — turn forfeited!`);
-            setTimeout(() => this.advanceTurn(), 650);
+            const statusText = `${cur.name} rolled three 6s — turn forfeited!`;
+            this.setStatus(statusText);
+            if (this.isOnline && online.isHost) {
+              sendOnlineMessage({ type: 'ludo_event', event: 'roll', eventId: nextMsgId(), turnIdx: this.turnIdx, roll, sixCount: 0, nextPhase: 'roll', statusText });
+            }
             this.render();
+            this.triggerDiceRollAnim(cur.houseId);
+            setTimeout(() => this.advanceTurn(), 650);
             return;
           }
         } else {
@@ -8611,23 +8864,32 @@
 
         const movable = this.getMovableTokens(cur, roll);
         if (movable.length === 0) {
-          this.setStatus(`${cur.name} rolled ${roll} — no valid moves.`);
+          const statusText = `${cur.name} rolled ${roll} — no valid moves.`;
+          this.setStatus(statusText);
+          if (this.isOnline && online.isHost) {
+            sendOnlineMessage({ type: 'ludo_event', event: 'roll', eventId: nextMsgId(), turnIdx: this.turnIdx, roll, sixCount: this.sixCount, nextPhase: 'roll', statusText });
+          }
           this.render();
+          this.triggerDiceRollAnim(cur.houseId);
           setTimeout(() => this.advanceTurn(), 650);
           return;
         }
 
-        if (roll === 6) this.setStatus(`${cur.name} rolled a 6! Pick a token.`);
-        else this.setStatus(`${cur.name} rolled ${roll}. Select a token.`);
-
+        const statusText = roll === 6 ? `${cur.name} rolled a 6! Pick a token.` : `${cur.name} rolled ${roll}. Select a token.`;
+        this.setStatus(statusText);
         this.phase = 'move';
+        if (this.isOnline && online.isHost) {
+          sendOnlineMessage({ type: 'ludo_event', event: 'roll', eventId: nextMsgId(), turnIdx: this.turnIdx, roll, sixCount: this.sixCount, nextPhase: 'move', statusText });
+          broadcastOnlineStateSync();
+        }
         this.render();
+        this.triggerDiceRollAnim(cur.houseId);
 
         if (cur.isBot) {
           const chosen = this.pickBestBotMove(cur, movable, roll);
-          setTimeout(() => this.moveToken(chosen), 360);
-        } else if (movable.length === 1) {
-          setTimeout(() => this.moveToken(movable[0]), 280);
+          setTimeout(() => this.moveToken(chosen, true), 420);
+        } else if (movable.length === 1 && (!this.isOnline || online.isHost)) {
+          setTimeout(() => this.moveToken(movable[0], true), 300);
         }
       },
 
@@ -8646,7 +8908,6 @@
             if (nextProg === 56) score += 110;
             else if (nextProg >= 51) score += 65;
 
-            // Escape threats 1-6 tiles behind current position
             if (curTrack >= 0 && !LUDO_SAFE_INDICES.has(curTrack)) {
               const threatened = this.players.some(op => op.houseId !== player.houseId && op.tokens.some(opP => {
                 const opT = this.getTrackIndex(op.houseId, opP);
@@ -8674,23 +8935,34 @@
         return bestIdx;
       },
 
-      async moveToken(tokenIdx) {
+      async moveToken(tokenIdx, fromAuthority = false) {
         if (this.gameOver || this.animating || this.phase !== 'move') return;
         const cur = this.players[this.turnIdx];
         const roll = this.diceVal;
         if (!cur || !this.getMovableTokens(cur, roll).includes(tokenIdx)) return;
+
+        if (this.isOnline && !online.isHost && !fromAuthority) {
+          if (cur.slotIdx !== this.mySeat) return;
+          sendOnlineMessage({ type: 'ludo_move_intent', seat: this.mySeat, tokenIdx });
+          return;
+        }
+
+        if (this.isOnline && online.isHost) {
+          sendOnlineMessage({ type: 'ludo_event', event: 'move', eventId: nextMsgId(), turnIdx: this.turnIdx, roll, tokenIdx });
+        }
 
         this.animating = true;
         if (cur.tokens[tokenIdx] === -1) {
           cur.tokens[tokenIdx] = 0;
           BingoAudioFX.playDaub(2);
           this.render(cur.houseId, tokenIdx);
+          await new Promise(r => setTimeout(r, 95));
         } else {
           for (let s = 0; s < roll; s++) {
             cur.tokens[tokenIdx] += 1;
             BingoAudioFX.playDaub(Math.min(5, s));
             this.render(cur.houseId, tokenIdx);
-            await new Promise(r => setTimeout(r, 110));
+            await new Promise(r => setTimeout(r, 95));
           }
         }
 
@@ -8700,22 +8972,33 @@
           bonusTurn = true;
           BingoAudioFX.playBingoJackpot();
           if (typeof startConfetti === 'function') startConfetti();
+          if (typeof showComboCallout === 'function') showComboCallout('HOME!', cur.color);
           showToast(`${cur.name} reached HOME!`, true);
         } else {
           const trackIdx = this.getTrackIndex(cur.houseId, finalProg);
           if (trackIdx >= 0 && !LUDO_SAFE_INDICES.has(trackIdx)) {
+            const [cr, cc] = LUDO_TRACK[trackIdx];
             this.players.forEach(op => {
               if (op.houseId === cur.houseId) return;
               op.tokens.forEach((opP, opT) => {
                 if (this.getTrackIndex(op.houseId, opP) === trackIdx) {
                   op.tokens[opT] = -1;
                   bonusTurn = true;
+                  this.captureCellKey = `${cr},${cc}`;
+                  this.returningYard = { houseId: op.houseId, tokenIdx: opT };
                   BingoAudioFX.playCaptureCrash();
+                  if (typeof showComboCallout === 'function') showComboCallout('CAPTURED!', '#ef4444');
                   if (!cur.isBot && typeof FalconDailyQuests !== 'undefined') FalconDailyQuests.recordProgress('action1', 1);
                   showToast(`${cur.name} CAPTURED ${op.name}!`, true);
                 }
               });
             });
+            if (this.captureCellKey) {
+              this.render();
+              await new Promise(r => setTimeout(r, 380));
+              this.captureCellKey = null;
+              this.returningYard = null;
+            }
           } else if (trackIdx >= 0 && LUDO_SAFE_INDICES.has(trackIdx)) {
             BingoAudioFX.playLineCombo(1, 2);
           }
@@ -8729,6 +9012,7 @@
           recordArcadeWin('Ludo', cur.name, !cur.isBot);
           this.setStatus(`${cur.name} WINS LUDO!`);
           this.render();
+          if (this.isOnline && online.isHost) broadcastOnlineStateSync();
           showToast(`${cur.name} WINS LUDO!`, true);
           return;
         }
@@ -8739,6 +9023,7 @@
           this.diceVal = null;
           this.setStatus(`${cur.name} gets a BONUS ROLL!`);
           this.render();
+          if (this.isOnline && online.isHost) broadcastOnlineStateSync();
           this.scheduleBot();
         } else {
           this.advanceTurn();
@@ -8753,15 +9038,17 @@
         const cur = this.players[this.turnIdx];
         this.setStatus(`${cur.name}'s Turn — Roll the dice`);
         this.render();
+        if (this.isOnline && online.isHost) broadcastOnlineStateSync();
         this.scheduleBot();
       },
 
       scheduleBot() {
         if (this.botTimer) clearTimeout(this.botTimer);
         if (this.gameOver) return;
+        if (this.isOnline && !online.isHost) return;
         const cur = this.players[this.turnIdx];
         if (cur && cur.isBot && this.phase === 'roll') {
-          this.botTimer = setTimeout(() => this.rollDice(), Math.max(400, state.botSpeed || 650));
+          this.botTimer = setTimeout(() => this.rollDice(true), Math.max(400, state.botSpeed || 650));
         }
       },
 
@@ -8770,13 +9057,54 @@
         if (el) el.textContent = msg;
       },
 
+      diceSvg(val) {
+        const pips = {
+          1: [[12, 12]],
+          2: [[7, 7], [17, 17]],
+          3: [[7, 7], [12, 12], [17, 17]],
+          4: [[7, 7], [17, 7], [7, 17], [17, 17]],
+          5: [[7, 7], [17, 7], [12, 12], [7, 17], [17, 17]],
+          6: [[7, 6.5], [17, 6.5], [7, 12], [17, 12], [7, 17.5], [17, 17.5]]
+        }[val];
+        if (!pips) return `<svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="2.6" fill="#d97706"/></svg>`;
+        return `<svg viewBox="0 0 24 24" width="24" height="24">${pips.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2.2" fill="#1e1052"/>`).join('')}</svg>`;
+      },
+
       pinSvg(color) {
         return `<svg viewBox="0 0 24 28" width="100%" height="100%"><ellipse cx="12" cy="24" rx="7" ry="3" fill="#ffffff" stroke="${color}" stroke-width="2"/><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 8 14 8 14s8-8.5 8-14c0-4.4-3.6-8-8-8z" fill="${color}" stroke="#ffffff" stroke-width="2"/><circle cx="12" cy="10" r="3.2" fill="#ffffff"/></svg>`;
       },
 
+      renderCenterFinish() {
+        const svg = document.getElementById('ludo-center-overlay');
+        if (!svg) return;
+        const slotsByHouse = {
+          0: [[14, 38], [14, 62], [26, 46], [26, 54]],
+          1: [[38, 14], [62, 14], [46, 26], [54, 26]],
+          2: [[86, 38], [86, 62], [74, 46], [74, 54]],
+          3: [[38, 86], [62, 86], [46, 74], [54, 74]]
+        };
+        let pins = '';
+        this.players.forEach(p => {
+          const done = p.tokens.filter(t => t === 56).length;
+          for (let i = 0; i < done; i++) {
+            const [cx, cy] = (slotsByHouse[p.houseId] || [[50, 50]])[i % 4];
+            pins += `<circle cx="${cx}" cy="${cy}" r="5.5" fill="${p.color}" stroke="#ffffff" stroke-width="1.8"/>`;
+          }
+        });
+        svg.innerHTML = `
+          <polygon points="0,0 50,50 0,100" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="0,0 100,0 50,50" fill="#22c55e" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="100,0 100,100 50,50" fill="#eab308" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="0,100 100,100 50,50" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+          <circle cx="50" cy="50" r="14" fill="#ffffff" stroke="#fbbf24" stroke-width="2.5"/>
+          ${pins}
+        `;
+      },
+
       render(hopHouseId = null, hopTokenIdx = null) {
         const cur = this.players[this.turnIdx];
-        const movable = (this.phase === 'move' && cur && !cur.isBot) ? this.getMovableTokens(cur, this.diceVal) : [];
+        const canLocalControl = !this.isOnline || (cur && cur.slotIdx === this.mySeat);
+        const movable = (this.phase === 'move' && cur && !cur.isBot && canLocalControl) ? this.getMovableTokens(cur, this.diceVal) : [];
 
         // Render 4 corner pods + solid yard overlays
         [0, 1, 2, 3].forEach(hId => {
@@ -8785,11 +9113,15 @@
           const house = LUDO_HOUSES[hId];
           const yardEl = document.getElementById(`ludo-yard-${hId}`);
           if (yardEl) {
+            const isDimmed = Boolean(!p || (cur && cur.houseId !== hId && !this.gameOver));
+            yardEl.classList.toggle('dimmed', isDimmed);
             const bases = [0, 1, 2, 3].map(tIdx => {
               const inYard = p && p.tokens[tIdx] === -1;
               const isMovable = inYard && cur && cur.houseId === hId && movable.includes(tIdx);
+              const isReturning = this.returningYard && this.returningYard.houseId === hId && this.returningYard.tokenIdx === tIdx;
+              const halo = isMovable ? `<span class="ludo-pin-halo"></span>` : '';
               const pinHtml = inYard
-                ? `<button type="button" ${isMovable ? `onclick="LudoEngine.moveToken(${tIdx})"` : ''} class="ludo-pin-btn ${isMovable ? 'movable' : ''}">${this.pinSvg(house.color)}</button>`
+                ? `<button type="button" ${isMovable ? `onclick="LudoEngine.moveToken(${tIdx})"` : ''} class="ludo-pin-btn ${isMovable ? 'movable' : ''} ${isReturning ? 'ludo-yard-pin-returning' : ''}">${halo}${this.pinSvg(house.color)}</button>`
                 : '';
               return `<div class="ludo-yard-base" style="background:${house.color}22; border-color:${house.color};">${pinHtml}</div>`;
             }).join('');
@@ -8802,27 +9134,31 @@
             return;
           }
           const isTurn = cur && cur.houseId === hId && !this.gameOver;
+          const isMe = this.isOnline && p.slotIdx === this.mySeat;
           pod.className = `ludo-pod ${isTurn ? 'active-turn' : ''}`;
           const doneCount = p.tokens.filter(t => t === 56).length;
-          const diceFace = isTurn && this.diceVal ? this.diceVal : '•';
-          const arrow = isTurn && !p.isBot && this.phase === 'roll' ? `<span class="ludo-turn-arrow">→</span>` : '';
+          const diceFace = this.diceSvg(isTurn ? this.diceVal : null);
+          const canRoll = isTurn && !p.isBot && this.phase === 'roll' && canLocalControl;
+          const arrow = canRoll ? `<span class="ludo-turn-arrow">→</span>` : '';
           pod.innerHTML = `
             <div style="display:flex; align-items:center; gap:6px; min-width:0;">
               <span style="width:16px; height:18px; flex-shrink:0;">${this.pinSvg(p.color)}</span>
               <div style="min-width:0;">
-                <div style="font-size:0.74rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(p.name)}</div>
+                <div style="font-size:0.74rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(p.name)}${isMe ? ' (You)' : ''}</div>
                 <div style="font-size:0.62rem; color:var(--text-muted);">${p.isBot ? 'AI' : 'Human'} · ${doneCount}/4</div>
               </div>
             </div>
-            <div style="display:flex; align-items:center; gap:4px;">${arrow}<button type="button" id="ludo-dice-${hId}" onclick="LudoEngine.rollDice()" class="ludo-dice-btn" ${(!isTurn || p.isBot || this.phase !== 'roll') ? 'disabled' : ''}>${diceFace}</button></div>
+            <div style="display:flex; align-items:center; gap:4px;">${arrow}<button type="button" id="ludo-dice-${hId}" onclick="LudoEngine.rollDice()" class="ludo-dice-btn" ${canRoll ? '' : 'disabled'}>${diceFace}</button></div>
           `;
         });
 
-        // Build track token coordinate map (skipping -1 yard tokens since yard overlay renders them)
+        this.renderCenterFinish();
+
+        // Build track token coordinate map (skipping -1 yard & 56 center-finished tokens)
         const cellTokens = new Map();
         this.players.forEach(p => {
           p.tokens.forEach((prog, tIdx) => {
-            if (prog < 0) return;
+            if (prog < 0 || prog >= 56) return;
             const [r, c] = this.getTokenCoords(p.houseId, tIdx, prog);
             const key = `${r},${c}`;
             if (!cellTokens.has(key)) cellTokens.set(key, []);
@@ -8862,12 +9198,17 @@
             else if (r === 7 && c === 14) dirArrow = '←';
             else if (r === 14 && c === 7) dirArrow = '↑';
 
-            const toks = cellTokens.get(`${r},${c}`) || [];
-            const miniCls = toks.length > 1 ? 'mini' : '';
+            const cellKey = `${r},${c}`;
+            const toks = cellTokens.get(cellKey) || [];
+            const sizeCls = toks.length >= 3 ? 'micro' : (toks.length === 2 ? 'mini' : '');
+            const burstHtml = this.captureCellKey === cellKey ? `<div class="ludo-capture-burst"></div>` : '';
             const toksHtml = toks.length > 0
-              ? `<div class="ludo-tokens-stack">${toks.map(t => `<button type="button" ${t.movable ? `onclick="LudoEngine.moveToken(${t.tokenIdx})"` : ''} class="ludo-pin-btn ${miniCls} ${t.movable ? 'movable' : ''} ${t.hopping ? 'hopping' : ''}">${this.pinSvg(t.player.color)}</button>`).join('')}</div>`
+              ? `<div class="ludo-tokens-stack">${toks.map(t => {
+                  const halo = t.movable ? `<span class="ludo-pin-halo"></span>` : '';
+                  return `<button type="button" ${t.movable ? `onclick="LudoEngine.moveToken(${t.tokenIdx})"` : ''} class="ludo-pin-btn ${sizeCls} ${t.movable ? 'movable' : ''} ${t.hopping ? 'hopping' : ''}">${halo}${this.pinSvg(t.player.color)}</button>`;
+                }).join('')}</div>`
               : dirArrow;
-            html += `<div class="${cls}">${toksHtml}</div>`;
+            html += `<div class="${cls}">${burstHtml}${toksHtml}</div>`;
           }
         }
         grid.innerHTML = html;
@@ -8890,10 +9231,15 @@
       gameOver: false,
       animating: false,
       botTimer: null,
+      isOnline: false,
+      mySeat: null,
+      lastEventId: '',
 
       startFromSetup(slots) {
         if (this.botTimer) { clearTimeout(this.botTimer); this.botTimer = null; }
         stopConfetti();
+        this.isOnline = false;
+        this.mySeat = null;
         this.players = slots.map((s, i) => ({
           id: i,
           name: (s.name || '').trim() || (s.isBot ? `Bot ${i + 1}` : `Player ${i + 1}`),
@@ -8910,8 +9256,55 @@
         this.scheduleBot();
       },
 
+      startOnline(seats, mySeat) {
+        const activeSeats = (seats || []).slice(0, 4);
+        this.startFromSetup(activeSeats.map((s, i) => ({
+          name: s ? s.name : `Player ${i + 1}`,
+          isBot: s ? Boolean(s.isBot) : true
+        })));
+        this.isOnline = true;
+        this.mySeat = mySeat;
+        this.render();
+        this.scheduleBot();
+      },
+
+      exportOnlineState() {
+        return {
+          players: this.players.map(p => ({ ...p })),
+          turnIdx: this.turnIdx,
+          gameOver: this.gameOver
+        };
+      },
+
+      applyOnlineState(ss, mySeat, shouldShowScreen = false) {
+        if (!ss || !Array.isArray(ss.players)) return;
+        this.isOnline = true;
+        this.mySeat = mySeat;
+        if (!this.animating) {
+          this.players = ss.players.map(p => ({ ...p }));
+          this.turnIdx = ss.turnIdx || 0;
+          this.gameOver = Boolean(ss.gameOver);
+        }
+        if (shouldShowScreen) {
+          showScreen('snakes');
+          this.buildBoard();
+        }
+        this.render();
+      },
+
+      handleRemoteEvent(msg) {
+        if (!msg || !msg.eventId || msg.eventId === this.lastEventId) return;
+        this.lastEventId = msg.eventId;
+        this.turnIdx = msg.turnIdx;
+        this.rollDice(true, msg.roll);
+      },
+
       exitToHome() {
         if (this.botTimer) { clearTimeout(this.botTimer); this.botTimer = null; }
+        if (this.isOnline && typeof leaveOnlineRoom === 'function') {
+          this.isOnline = false;
+          leaveOnlineRoom(false);
+        }
         showScreen('home');
       },
 
@@ -8961,13 +9354,23 @@
         }
       },
 
-      async rollDice() {
+      async rollDice(fromAuthority = false, forcedRoll = null) {
         if (this.gameOver || this.animating) return;
         const cur = this.players[this.turnIdx];
         if (!cur) return;
+
+        if (this.isOnline && !online.isHost && !fromAuthority) {
+          if (cur.id !== this.mySeat) return;
+          sendOnlineMessage({ type: 'snakes_roll_intent', seat: this.mySeat });
+          return;
+        }
+
         this.animating = true;
 
-        const roll = cryptoRandomDie();
+        const roll = forcedRoll !== null ? forcedRoll : cryptoRandomDie();
+        if (this.isOnline && online.isHost && forcedRoll === null) {
+          sendOnlineMessage({ type: 'snakes_event', eventId: nextMsgId(), turnIdx: this.turnIdx, roll });
+        }
         const diceBtn = document.getElementById('snakes-dice-btn');
         if (diceBtn) {
           diceBtn.textContent = String(roll);
@@ -9017,26 +9420,30 @@
           if (subEl) subEl.textContent = `VICTORY! ${cur.name} reached 100!`;
           showToast(`VICTORY! ${cur.name} reached 100!`, true);
           this.render();
+          if (this.isOnline && online.isHost) broadcastOnlineStateSync();
           return;
         }
 
         this.animating = false;
         this.turnIdx = (this.turnIdx + 1) % this.players.length;
         this.render();
+        if (this.isOnline && online.isHost) broadcastOnlineStateSync();
         this.scheduleBot();
       },
 
       scheduleBot() {
         if (this.botTimer) clearTimeout(this.botTimer);
         if (this.gameOver) return;
+        if (this.isOnline && !online.isHost) return;
         const cur = this.players[this.turnIdx];
         if (cur && cur.isBot) {
-          this.botTimer = setTimeout(() => this.rollDice(), Math.max(450, state.botSpeed || 650));
+          this.botTimer = setTimeout(() => this.rollDice(true), Math.max(450, state.botSpeed || 650));
         }
       },
 
       render() {
         const cur = this.players[this.turnIdx];
+        const canLocalControl = !this.isOnline || (cur && cur.id === this.mySeat);
         const row = document.getElementById('snakes-players-row');
         if (row) {
           row.style.gridTemplateColumns = `repeat(${this.players.length}, 1fr)`;
@@ -9044,7 +9451,7 @@
             <div class="ludo-pod ${idx === this.turnIdx && !this.gameOver ? 'active-turn' : ''}" style="padding:5px 7px;">
               <span class="ludo-color-dot" style="background:${p.color};"></span>
               <div style="min-width:0;">
-                <div style="font-size:0.68rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(p.name)}</div>
+                <div style="font-size:0.68rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(p.name)}${this.isOnline && p.id === this.mySeat ? ' (You)' : ''}</div>
                 <div style="font-size:0.6rem; color:var(--text-muted);">Sq ${p.pos}</div>
               </div>
             </div>
@@ -9053,7 +9460,7 @@
         const turnLbl = document.getElementById('snakes-turn-label');
         if (turnLbl && cur) turnLbl.textContent = `${cur.name}'s Turn`;
         const diceBtn = document.getElementById('snakes-dice-btn');
-        if (diceBtn) diceBtn.disabled = this.gameOver || this.animating || (cur && cur.isBot);
+        if (diceBtn) diceBtn.disabled = this.gameOver || this.animating || !canLocalControl || (cur && cur.isBot);
 
         const layer = document.getElementById('snakes-tokens-layer');
         if (layer) {
