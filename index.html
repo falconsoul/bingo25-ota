@@ -10,7 +10,7 @@
   <script>
     const OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.2.6",
+      currentVersion: "1.2.7",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
@@ -19,18 +19,23 @@
     window.__bingoOtaSwapHtml = async function (html) {
       var cap = window.Capacitor;
       var fs = cap && cap.Plugins && cap.Plugins.Filesystem;
-      if (fs && typeof fs.writeFile === 'function' && typeof cap.convertFileSrc === 'function' &&
-          !String(window.location.href || '').endsWith('/ota/index.html')) {
+      if (fs && typeof fs.writeFile === 'function' && typeof fs.getUri === 'function' &&
+          typeof cap.convertFileSrc === 'function' &&
+          !String(window.location.href || '').includes('/ota/index.html')) {
         try {
-          var res = await fs.writeFile({
+          await fs.writeFile({
             path: 'ota/index.html',
             data: html,
             directory: 'DATA',
             encoding: 'utf8',
             recursive: true
           });
-          if (res && res.uri) {
-            window.location.replace(cap.convertFileSrc(res.uri));
+          var uriRes = await fs.getUri({
+            path: 'ota/index.html',
+            directory: 'DATA'
+          });
+          if (uriRes && uriRes.uri) {
+            window.location.replace(cap.convertFileSrc(uriRes.uri));
             return true;
           }
         } catch (fsErr) {
@@ -71,6 +76,17 @@
         return;
       }
       try {
+        var raw = localStorage.getItem('bingo25_ota_bundle');
+        var bundle = null;
+        if (raw) {
+          try { bundle = JSON.parse(raw); } catch (parseErr) {}
+        }
+        var isOtaFile = String(window.location.href || '').includes('/ota/index.html');
+        if (isOtaFile && (!bundle || bundle.version === OTA_CONFIG.currentVersion)) {
+          localStorage.removeItem('bingo25_ota_booting');
+          removeHide();
+          return;
+        }
         if (localStorage.getItem('bingo25_ota_booting') === '1') {
           localStorage.removeItem('bingo25_ota_booting');
           localStorage.removeItem('bingo25_ota_bundle');
@@ -78,9 +94,6 @@
           removeHide();
           return;
         }
-        var raw = localStorage.getItem('bingo25_ota_bundle');
-        if (!raw) return;
-        var bundle = JSON.parse(raw);
         if (!bundle || !bundle.version || typeof bundle.html !== 'string' ||
             bundle.html.length <= 5000 || bundle.html.indexOf('</html>') === -1 ||
             bundle.html.indexOf('OTA_CONFIG') === -1) {
@@ -6917,7 +6930,7 @@
         }
       },
 
-      async applyPendingUpdate() {
+      async applyStagedUpdate() {
         const cached = (this.pendingBundle && this.isValidHtmlBundle(this.pendingBundle.html))
           ? this.pendingBundle
           : this.readCachedBundle();
@@ -6926,18 +6939,20 @@
           return false;
         }
         try {
-          window.location.reload();
-          return true;
+          localStorage.removeItem(this.BOOTING_FLAG_KEY);
+          if (typeof window.__bingoOtaSwapHtml === 'function') {
+            return await window.__bingoOtaSwapHtml(cached.html);
+          }
+          return false;
         } catch (e) {
-          try {
-            localStorage.setItem(this.BOOTING_FLAG_KEY, '1');
-            if (typeof window.__bingoOtaSwapHtml === 'function') {
-              window.__bingoOtaSwapHtml(cached.html);
-              return true;
-            }
-          } catch (_) {}
+          console.error('[BingoOtaUpdater] applyStagedUpdate error:', e);
+          showToast('❌ Failed to apply update: ' + (e && e.message ? e.message : String(e)));
           return false;
         }
+      },
+
+      async applyPendingUpdate() {
+        return await this.applyStagedUpdate();
       }
     };
     window.BingoOtaUpdater = BingoOtaUpdater;
