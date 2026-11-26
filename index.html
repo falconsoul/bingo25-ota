@@ -10,7 +10,7 @@
   <script>
     var OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.2.8",
+      currentVersion: "1.2.9",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
@@ -1653,6 +1653,56 @@
     .setup-count-btn.active {
       background: linear-gradient(135deg, #4f46e5, #6366f1);
       color: #fff;
+      border-color: transparent;
+      box-shadow: 0 3px 10px rgba(79, 70, 229, 0.28);
+    }
+    .home-hero-cta {
+      width: 100%;
+      padding: 15px 16px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 10px 26px rgba(79, 70, 229, 0.34);
+    }
+    .setup-mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: var(--surface-muted);
+      padding: 4px;
+      border-radius: 15px;
+      border: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+    }
+    .setup-mode-tab {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 11px;
+      padding: 9px 8px;
+      font-family: var(--font-display);
+      font-size: 0.84rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: all 0.14s ease;
+    }
+    .setup-mode-tab.active {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(79, 70, 229, 0.25);
+    }
+    .setup-you-badge {
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 5px 10px;
+      border-radius: 9px;
+      background: rgba(79, 70, 229, 0.12);
+      color: #4f46e5;
+      border: 1px solid rgba(79, 70, 229, 0.25);
+      flex-shrink: 0;
+    }
       border-color: #4f46e5;
       box-shadow: 0 3px 10px rgba(79, 70, 229, 0.28);
     }
@@ -1839,39 +1889,19 @@
         <span>↻</span>
       </button>
 
-      <!-- Primary Play Mode Cards -->
+      <!-- Primary Play Mode CTAs -->
       <div class="home-modes-stack">
-        <button type="button" onclick="openMatchSetup('solo')" class="home-mode-btn featured">
-          <div style="display:flex; align-items:center; gap:11px; min-width:0;">
-            <div class="mode-card-ico">🤖</div>
-            <div>
-              <div style="font-family:var(--font-display); font-size:0.98rem; font-weight:900;">Solo vs Smart AI</div>
-              <div style="font-size:0.71rem; color:var(--text-muted);">2–5 players • Mix Humans &amp; AI Bots</div>
-            </div>
+        <button type="button" onclick="openMatchSetup('local')" class="btn btn-primary home-hero-cta">
+          <div style="text-align:left; min-width:0;">
+            <div style="font-family:var(--font-display); font-size:1.12rem; font-weight:900;">▶ Play Match</div>
+            <div style="font-size:0.72rem; opacity:0.92; font-weight:700; margin-top:2px;">2–5 Players • Smart AI, Pass &amp; Play, or Online</div>
           </div>
-          <span style="font-size:1rem; font-weight:900; color:#4f46e5;">▶</span>
+          <span style="font-size:1.15rem; font-weight:900; flex-shrink:0;">→</span>
         </button>
 
-        <button type="button" onclick="openMatchSetup('passplay')" class="home-mode-btn">
-          <div style="display:flex; align-items:center; gap:11px; min-width:0;">
-            <div class="mode-card-ico">📱</div>
-            <div>
-              <div style="font-family:var(--font-display); font-size:0.98rem; font-weight:900;">Pass &amp; Play</div>
-              <div style="font-size:0.71rem; color:var(--text-muted);">Local 2–5 friends on 1 phone with Privacy Veil</div>
-            </div>
-          </div>
-          <span style="font-size:1rem; font-weight:900; color:var(--text-muted);">▶</span>
-        </button>
-
-        <button type="button" onclick="openOnlineFromHome()" class="home-mode-btn">
-          <div style="display:flex; align-items:center; gap:11px; min-width:0;">
-            <div class="mode-card-ico">🌐</div>
-            <div>
-              <div style="font-family:var(--font-display); font-size:0.98rem; font-weight:900;">Online Multiplayer Room</div>
-              <div style="font-size:0.71rem; color:var(--text-muted);">Create or join a 2–5 player Room Code lobby</div>
-            </div>
-          </div>
-          <span style="font-size:1rem; font-weight:900; color:var(--text-muted);">▶</span>
+        <button type="button" onclick="openMatchSetup('online-join')" class="home-mode-btn" style="padding:11px 14px; justify-content:center; gap:8px;">
+          <span>🔑</span>
+          <span style="font-family:var(--font-display); font-size:0.88rem; font-weight:900;">Join Online Room with Code</span>
         </button>
       </div>
 
@@ -1908,43 +1938,98 @@
         <div style="width:62px;"></div>
       </div>
 
-      <div class="setup-card">
-        <label style="font-size:0.7rem; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); display:block; margin-bottom:7px;">
-          Number of Players (2–5)
-        </label>
-        <div class="setup-count-seg" id="setup-player-count-seg">
-          <button type="button" onclick="MatchSetup.setPlayerCount(2)" class="setup-count-btn active" id="setup-cnt-2">2 Players</button>
-          <button type="button" onclick="MatchSetup.setPlayerCount(3)" class="setup-count-btn" id="setup-cnt-3">3 Players</button>
-          <button type="button" onclick="MatchSetup.setPlayerCount(4)" class="setup-count-btn" id="setup-cnt-4">4 Players</button>
-          <button type="button" onclick="MatchSetup.setPlayerCount(5)" class="setup-count-btn" id="setup-cnt-5">5 Players</button>
-        </div>
+      <div class="setup-mode-tabs">
+        <button type="button" id="setup-tab-local" onclick="MatchSetup.setModeTab('local')" class="setup-mode-tab active">📱 Local Device</button>
+        <button type="button" id="setup-tab-online" onclick="MatchSetup.setModeTab('online')" class="setup-mode-tab">🌐 Online Room</button>
       </div>
 
-      <div id="setup-mode-status-pill" class="setup-status-pill">
-        🤝 Pass &amp; Play Active (2 Humans) — Privacy Veil will hide boards between human turns
-      </div>
-
-      <div class="setup-card" style="flex:1; min-height:0; overflow-y:auto;">
-        <label style="font-size:0.7rem; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); display:block; margin-bottom:7px;">
-          Player Roster &amp; Roles
-        </label>
-        <div id="setup-slot-list" class="setup-slot-list"></div>
-      </div>
-
-      <div class="setup-card" id="setup-bot-speed-card" style="padding:9px 12px;">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-          <span style="font-size:0.72rem; font-weight:900; text-transform:uppercase; color:var(--text-muted);">AI Speed</span>
-          <div style="display:flex; gap:5px;">
-            <button type="button" onclick="selectSetupBotSpeed(1050, true)" class="btn btn-ghost" id="match-spd-1050" style="padding:5px 8px; font-size:0.7rem;">🐢 Relaxed</button>
-            <button type="button" onclick="selectSetupBotSpeed(650, true)" class="btn btn-ghost" id="match-spd-650" style="padding:5px 8px; font-size:0.7rem;">⚡ Normal</button>
-            <button type="button" onclick="selectSetupBotSpeed(300, true)" class="btn btn-ghost" id="match-spd-300" style="padding:5px 8px; font-size:0.7rem;">🚀 Turbo</button>
+      <div id="setup-local-panel" style="display:flex; flex-direction:column; gap:8px; flex:1; min-height:0;">
+        <div class="setup-card">
+          <label style="font-size:0.7rem; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); display:block; margin-bottom:7px;">
+            Select Number of Players (2–5)
+          </label>
+          <div class="setup-count-seg" id="setup-player-count-seg">
+            <button type="button" onclick="MatchSetup.setPlayerCount(2)" class="setup-count-btn active" id="setup-cnt-2">2 Players</button>
+            <button type="button" onclick="MatchSetup.setPlayerCount(3)" class="setup-count-btn" id="setup-cnt-3">3 Players</button>
+            <button type="button" onclick="MatchSetup.setPlayerCount(4)" class="setup-count-btn" id="setup-cnt-4">4 Players</button>
+            <button type="button" onclick="MatchSetup.setPlayerCount(5)" class="setup-count-btn" id="setup-cnt-5">5 Players</button>
           </div>
         </div>
+
+        <div id="setup-mode-status-pill" class="setup-status-pill">
+          🤖 Solo vs Smart AI (2 Players)
+        </div>
+
+        <div class="setup-card" style="flex:1; min-height:0; overflow-y:auto;">
+          <label style="font-size:0.7rem; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); display:block; margin-bottom:7px;">
+            Player Slots (Seats 1–5)
+          </label>
+          <div id="setup-slot-list" class="setup-slot-list"></div>
+        </div>
+
+        <div class="setup-card" id="setup-privacy-row" style="display:none; padding:9px 12px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <div>
+              <div style="font-size:0.76rem; font-weight:900;">🛡️ Privacy Veil</div>
+              <div style="font-size:0.66rem; color:var(--text-muted);">Hide boards between human turns</div>
+            </div>
+            <button type="button" id="setup-inline-privacy-btn" onclick="MatchSetup.togglePrivacyVeil()" class="btn btn-primary" style="padding:5px 12px; font-size:0.74rem;">ON</button>
+          </div>
+        </div>
+
+        <div class="setup-card" id="setup-bot-speed-card" style="padding:9px 12px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <span style="font-size:0.72rem; font-weight:900; text-transform:uppercase; color:var(--text-muted);">AI Speed</span>
+            <div style="display:flex; gap:5px;">
+              <button type="button" onclick="selectSetupBotSpeed(1050, true)" class="btn btn-ghost" id="match-spd-1050" style="padding:5px 8px; font-size:0.7rem;">🐢 Relaxed</button>
+              <button type="button" onclick="selectSetupBotSpeed(650, true)" class="btn btn-ghost" id="match-spd-650" style="padding:5px 8px; font-size:0.7rem;">⚡ Normal</button>
+              <button type="button" onclick="selectSetupBotSpeed(300, true)" class="btn btn-ghost" id="match-spd-300" style="padding:5px 8px; font-size:0.7rem;">🚀 Turbo</button>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" onclick="MatchSetup.startMatch()" id="setup-start-match-btn" class="btn btn-primary" style="width:100%; padding:13px; font-size:0.96rem; flex-shrink:0;">
+          ▶ Start Match
+        </button>
       </div>
 
-      <button type="button" onclick="MatchSetup.startMatch()" id="setup-start-match-btn" class="btn btn-primary" style="width:100%; padding:13px; font-size:0.96rem; flex-shrink:0;">
-        🚀 Start Match
-      </button>
+      <div id="setup-online-panel" style="display:none; flex-direction:column; gap:10px; flex:1; min-height:0; overflow-y:auto;">
+        <div class="setup-mode-tabs">
+          <button type="button" id="setup-online-sub-create" onclick="MatchSetup.setOnlineSubTab('create')" class="setup-mode-tab active">✨ Create Room</button>
+          <button type="button" id="setup-online-sub-join" onclick="MatchSetup.setOnlineSubTab('join')" class="setup-mode-tab">🔑 Join Room</button>
+        </div>
+
+        <div id="setup-online-create-box" class="setup-card" style="display:flex; flex-direction:column; gap:10px;">
+          <div>
+            <label style="font-size:0.7rem; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); display:block; margin-bottom:7px;">
+              Room Capacity (2–5 Players)
+            </label>
+            <div class="setup-count-seg">
+              <button type="button" onclick="setOnlineMaxPlayers(2)" class="setup-count-btn" id="setup-online-cnt-2">2 Players</button>
+              <button type="button" onclick="setOnlineMaxPlayers(3)" class="setup-count-btn" id="setup-online-cnt-3">3 Players</button>
+              <button type="button" onclick="setOnlineMaxPlayers(4)" class="setup-count-btn active" id="setup-online-cnt-4">4 Players</button>
+              <button type="button" onclick="setOnlineMaxPlayers(5)" class="setup-count-btn" id="setup-online-cnt-5">5 Players</button>
+            </div>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">
+            Host a 6-character Room Code lobby and invite 1–4 friends to play live across devices.
+          </p>
+          <button type="button" onclick="MatchSetup.createOnlineFromSetup()" class="btn btn-primary" style="width:100%; padding:13px; font-size:0.94rem;">
+            ✨ Create 6-Char Room Lobby
+          </button>
+        </div>
+
+        <div id="setup-online-join-box" class="setup-card" style="display:none; flex-direction:column; gap:10px;">
+          <label style="font-size:0.7rem; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); display:block;">
+            Enter 6-Character Room Code
+          </label>
+          <input type="text" id="setup-online-join-code" class="online-input" maxlength="8" placeholder="K7M4P2" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')" onkeydown="if(event.key==='Enter') MatchSetup.joinOnlineFromSetup()" />
+          <button type="button" onclick="MatchSetup.joinOnlineFromSetup()" class="btn btn-amber" style="width:100%; padding:13px; font-size:0.94rem;">
+            🔑 Join Lobby
+          </button>
+          <p id="setup-online-entry-status" style="font-size:0.74rem; color:#e11d48; text-align:center; min-height:16px;"></p>
+        </div>
+      </div>
     </section>
 
     <!-- ========================================================================
@@ -4785,6 +4870,8 @@
       [2, 3, 4, 5].forEach(n => {
         const btn = document.getElementById(`online-cnt-${n}`);
         if (btn) btn.classList.toggle('active', online.maxPlayers === n);
+        const setupBtn = document.getElementById(`setup-online-cnt-${n}`);
+        if (setupBtn) setupBtn.classList.toggle('active', online.maxPlayers === n);
       });
     }
 
@@ -6075,20 +6162,68 @@
 
     const MatchSetup = {
       playerCount: 2,
+      modeTab: 'local',
+      onlineSubTab: 'create',
       slots: [],
 
-      init(preset = 'passplay') {
+      init(preset = 'local') {
         const p1Name = (BingoAuth && BingoAuth.currentUser && BingoAuth.currentUser.name)
           ? BingoAuth.currentUser.name
           : (state.players && state.players[0] ? state.players[0].name : 'Player 1');
         this.playerCount = 2;
+        if (preset === 'online-join') {
+          this.modeTab = 'online';
+          this.onlineSubTab = 'join';
+        } else if (preset === 'online-create') {
+          this.modeTab = 'online';
+          this.onlineSubTab = 'create';
+        } else {
+          this.modeTab = 'local';
+        }
+        const defaultToBots = preset === 'local' || preset === 'solo';
         this.slots = PLAYER_THEMES.map((theme, idx) => {
-          const isBot = preset === 'solo' ? idx !== 0 : false;
+          const isBot = idx === 0 ? false : defaultToBots;
           return {
             name: idx === 0 ? p1Name : (isBot ? `Bot ${idx + 1}` : theme.defaultName),
             isBot
           };
         });
+        this.render();
+      },
+
+      setModeTab(tab) {
+        this.modeTab = tab === 'online' ? 'online' : 'local';
+        this.render();
+      },
+
+      setOnlineSubTab(sub) {
+        this.onlineSubTab = sub === 'join' ? 'join' : 'create';
+        this.render();
+      },
+
+      togglePrivacyVeil() {
+        state.privacyMode = !state.privacyMode;
+        this.render();
+      },
+
+      createOnlineFromSetup() {
+        openOnlineSheet();
+        createOnlineRoom();
+      },
+
+      joinOnlineFromSetup() {
+        const setupInput = document.getElementById('setup-online-join-code');
+        const statusEl = document.getElementById('setup-online-entry-status');
+        const code = (setupInput ? setupInput.value : '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (code.length < 4) {
+          if (statusEl) statusEl.textContent = 'Enter a valid 6-character Room Code.';
+          return;
+        }
+        if (statusEl) statusEl.textContent = '';
+        const modalInput = document.getElementById('online-join-code-input');
+        if (modalInput) modalInput.value = code;
+        openOnlineSheet();
+        joinOnlineRoomFromInput();
       },
 
       setPlayerCount(count) {
@@ -6125,6 +6260,8 @@
         } else if (!targetBot && (!curName || /^Bot \d+$/i.test(curName))) {
           this.slots[idx].name = PLAYER_THEMES[idx].defaultName;
         }
+        const summary = this.getSummary();
+        state.privacyMode = summary.isPassPlay;
         this.render();
         return true;
       },
@@ -6148,7 +6285,28 @@
       },
 
       render() {
-        if (!this.slots || this.slots.length !== 5) this.init('passplay');
+        if (!this.slots || this.slots.length !== 5) this.init('local');
+
+        const isOnline = this.modeTab === 'online';
+        const tabLocal = document.getElementById('setup-tab-local');
+        const tabOnline = document.getElementById('setup-tab-online');
+        const localPanel = document.getElementById('setup-local-panel');
+        const onlinePanel = document.getElementById('setup-online-panel');
+        if (tabLocal) tabLocal.classList.toggle('active', !isOnline);
+        if (tabOnline) tabOnline.classList.toggle('active', isOnline);
+        if (localPanel) localPanel.style.display = isOnline ? 'none' : 'flex';
+        if (onlinePanel) onlinePanel.style.display = isOnline ? 'flex' : 'none';
+
+        const isJoin = this.onlineSubTab === 'join';
+        const subCreate = document.getElementById('setup-online-sub-create');
+        const subJoin = document.getElementById('setup-online-sub-join');
+        const createBox = document.getElementById('setup-online-create-box');
+        const joinBox = document.getElementById('setup-online-join-box');
+        if (subCreate) subCreate.classList.toggle('active', !isJoin);
+        if (subJoin) subJoin.classList.toggle('active', isJoin);
+        if (createBox) createBox.style.display = isJoin ? 'none' : 'flex';
+        if (joinBox) joinBox.style.display = isJoin ? 'flex' : 'none';
+        if (typeof setOnlineMaxPlayers === 'function') setOnlineMaxPlayers(online.maxPlayers || 4);
 
         [2, 3, 4, 5].forEach(n => {
           const btn = document.getElementById(`setup-cnt-${n}`);
@@ -6160,10 +6318,18 @@
         if (pillEl) {
           if (summary.isPassPlay) {
             const botPart = summary.bots > 0 ? `, ${summary.bots} Bot${summary.bots > 1 ? 's' : ''}` : '';
-            pillEl.textContent = `🤝 Pass & Play Active (${summary.humans} Humans${botPart}) — Privacy Veil will hide boards between human turns`;
+            pillEl.textContent = `📱 Pass & Play (${summary.humans} Humans${botPart})`;
           } else {
-            pillEl.textContent = `🤖 Solo vs Bots (1 Human, ${summary.bots} Bot${summary.bots > 1 ? 's' : ''})`;
+            pillEl.textContent = `🤖 Solo vs Smart AI (${summary.total} Players)`;
           }
+        }
+
+        const privacyRow = document.getElementById('setup-privacy-row');
+        const privacyBtn = document.getElementById('setup-inline-privacy-btn');
+        if (privacyRow) privacyRow.style.display = summary.isPassPlay ? 'block' : 'none';
+        if (privacyBtn) {
+          privacyBtn.textContent = state.privacyMode ? 'ON' : 'OFF';
+          privacyBtn.className = state.privacyMode ? 'btn btn-primary' : 'btn btn-ghost';
         }
 
         const listEl = document.getElementById('setup-slot-list');
@@ -6173,6 +6339,12 @@
             const avatar = (idx === 0 && BingoAuth && BingoAuth.currentUser && BingoAuth.currentUser.avatar)
               ? BingoAuth.currentUser.avatar
               : theme.defaultAvatar;
+            const roleControl = idx === 0
+              ? `<span class="setup-you-badge">🧑 YOU</span>`
+              : `<div class="setup-role-toggle">
+                  <button type="button" onclick="MatchSetup.toggleSlotRole(${idx}, false)" class="setup-role-btn ${!slot.isBot ? 'active' : ''}">🧑 Human</button>
+                  <button type="button" onclick="MatchSetup.toggleSlotRole(${idx}, true)" class="setup-role-btn bot ${slot.isBot ? 'active' : ''}">🤖 Bot</button>
+                </div>`;
             return `
               <div class="setup-slot-card">
                 <div class="setup-slot-avatar ${theme.bgClass}">${avatar}</div>
@@ -6185,10 +6357,7 @@
                   oninput="MatchSetup.updateSlotName(${idx}, this.value)"
                   aria-label="Player ${idx + 1} name"
                 />
-                <div class="setup-role-toggle">
-                  <button type="button" onclick="MatchSetup.toggleSlotRole(${idx}, false)" class="setup-role-btn ${!slot.isBot ? 'active' : ''}">👤 Human</button>
-                  <button type="button" onclick="MatchSetup.toggleSlotRole(${idx}, true)" class="setup-role-btn bot ${slot.isBot ? 'active' : ''}">🤖 Bot</button>
-                </div>
+                ${roleControl}
               </div>
             `;
           }).join('');
@@ -6214,6 +6383,7 @@
         stopConfetti();
 
         state.playMode = humans >= 2 ? 'passplay' : 'solo';
+        if (state.playMode === 'solo') state.privacyMode = false;
         state.players = active.map((slot, idx) => {
           const theme = PLAYER_THEMES[idx];
           const fallbackName = slot.isBot ? `Bot ${idx + 1}` : theme.defaultName;

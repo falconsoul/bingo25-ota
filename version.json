@@ -1,7 +1,7 @@
 {
-    "version":  "1.2.8",
-    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.2.8/index.html",
-    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.2.8/index.html",
-    "notes":  "Verified self-tested OTA update v1.2.8",
-    "releasedAt":  "2026-11-26T02:20:20Z"
+    "version":  "1.2.9",
+    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.2.9/index.html",
+    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.2.9/index.html",
+    "notes":  "Unified Play Match lobby with 2-5 player selector, Human/Bot Pass \u0026 Play toggles, and integrated Online Room",
+    "releasedAt":  "2026-11-26T03:13:41Z"
 }
