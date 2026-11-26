@@ -6543,6 +6543,7 @@
       AUTO_UPDATE_STORAGE_KEY: 'bingo25_ota_auto_update',
       CACHED_HTML_STORAGE_KEY: 'bingo25_ota_bundle',
       BOOTING_FLAG_KEY: 'bingo25_ota_booting',
+      GITHUB_API_MANIFEST_URL: 'https://api.github.com/repos/falconsoul/bingo25-ota/contents/version.json',
       FALLBACK_MANIFEST_URL: 'https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/version.json',
       FALLBACK_HTML_URL: 'https://raw.githubusercontent.com/falconsoul/bingo25-ota/main/index.html',
       BACKGROUND_THROTTLE_MS: 120000,
@@ -6712,20 +6713,31 @@
         return 0;
       },
 
-      async fetchWithFallback(primaryUrl, fallbackUrl, parseAs = 'text') {
-        const urls = [primaryUrl, fallbackUrl].filter((u, idx, arr) => u && /^https?:\/\//i.test(u) && arr.indexOf(u) === idx);
+      async fetchWithFallback(primaryOrList, fallbackUrl, parseAs = 'text') {
+        const rawList = Array.isArray(primaryOrList) ? primaryOrList : [primaryOrList, fallbackUrl];
+        const entries = rawList
+          .map(item => (typeof item === 'string' ? { url: item } : item))
+          .filter((item, idx, arr) =>
+            item &&
+            item.url &&
+            /^https?:\/\//i.test(item.url) &&
+            arr.findIndex(x => x && x.url === item.url) === idx
+          );
         let lastErr = null;
-        for (const baseUrl of urls) {
+        for (const entry of entries) {
           try {
-            const sep = baseUrl.includes('?') ? '&' : '?';
-            const resp = await fetch(`${baseUrl}${sep}t=${Date.now()}`, { cache: 'no-store' });
+            const sep = entry.url.includes('?') ? '&' : '?';
+            const targetUrl = entry.noQueryBust ? entry.url : `${entry.url}${sep}t=${Date.now()}`;
+            const fetchOpts = { cache: 'no-store' };
+            if (entry.headers) fetchOpts.headers = entry.headers;
+            const resp = await fetch(targetUrl, fetchOpts);
             if (!resp || !resp.ok) {
-              throw new Error(`HTTP ${resp ? resp.status : 'error'} (${baseUrl})`);
+              throw new Error(`HTTP ${resp ? resp.status : 'error'} (${entry.url})`);
             }
             return parseAs === 'json' ? await resp.json() : await resp.text();
           } catch (err) {
             lastErr = err;
-            console.warn('[BingoOtaUpdater] fetch failed for', baseUrl, err);
+            console.warn('[BingoOtaUpdater] fetch failed for', entry.url, err);
           }
         }
         throw lastErr || new Error('All OTA URLs failed');
@@ -6806,8 +6818,16 @@
 
         try {
           const remote = await this.fetchWithFallback(
-            OTA_CONFIG.manifestUrl,
-            this.FALLBACK_MANIFEST_URL,
+            [
+              {
+                url: this.GITHUB_API_MANIFEST_URL,
+                headers: { Accept: 'application/vnd.github.raw+json' },
+                noQueryBust: true
+              },
+              OTA_CONFIG.manifestUrl,
+              this.FALLBACK_MANIFEST_URL
+            ],
+            null,
             'json'
           );
           this.lastCheckedAt = Date.now();
