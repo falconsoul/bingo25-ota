@@ -10,7 +10,7 @@
   <script>
     var OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.3.1",
+      currentVersion: "1.3.2",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
@@ -129,6 +129,7 @@
       --accent-primary: #10b981;
       --accent-secondary: #fbbf24;
       --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
       --text-muted: #94a3b8;
       --tile-bg: #10383b;
       --tile-marked: #059669;
@@ -187,23 +188,26 @@
       --tile-hover-bg: rgba(6, 182, 212, 0.22);
     }
 
-    body.theme-daylight {
-      --bg-app: radial-gradient(circle at top left, #f8fafc 0%, #eef2ff 52%, #e0e7ff 100%);
-      --bg-elevated: #ffffff;
-      --surface-card: rgba(255, 255, 255, 0.94);
-      --surface-pill: #f1f5f9;
-      --border-subtle: rgba(148, 163, 184, 0.42);
-      --accent-primary: #4f46e5;
-      --accent-secondary: #10b981;
-      --text-primary: #0f172a;
+    body.theme-daylight,
+    :root.theme-daylight,
+    html[data-theme="daylight"] {
+      --bg-app: linear-gradient(180deg, #F0F4F2 0%, #E3ECE9 100%);
+      --bg-elevated: #FFFFFF;
+      --surface-card: #FFFFFF;
+      --surface-pill: #F1F5F9;
+      --border-subtle: #CBD5E1;
+      --accent-primary: #0F766E;
+      --accent-secondary: #D97706;
+      --text-primary: #0F172A;
+      --text-secondary: #334155;
       --text-muted: #475569;
-      --tile-bg: #ffffff;
-      --tile-marked: #4f46e5;
-      --status-bar-hex: #eef2ff;
-      --outer-bg: #e2e8f0;
-      --tile-border: #cbd5e1;
-      --tile-shadow: #94a3b8;
-      --tile-hover-bg: #eef2ff;
+      --tile-bg: #FFFFFF;
+      --tile-marked: #0F766E;
+      --status-bar-hex: #F0F4F2;
+      --outer-bg: #E3ECE9;
+      --tile-border: #CBD5E1;
+      --tile-shadow: #94A3B8;
+      --tile-hover-bg: #CCFBF1;
     }
 
     *, *::before, *::after {
@@ -299,8 +303,9 @@
     }
 
     .mini-logo {
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      gap: 2px;
       background: transparent;
       border: none;
       padding: 2px;
@@ -310,25 +315,44 @@
     }
     .mini-logo:active { transform: scale(0.93); }
 
-    .mini-logo span {
+    .mini-logo .brand-orb {
       width: 20px;
       height: 20px;
-      border-radius: 6px;
-      color: #fff;
+      border-radius: 50%;
+      color: #ffffff;
       font-family: var(--font-display);
       font-weight: 900;
-      font-size: 0.72rem;
+      font-size: 0.66rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: -3px;
-      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.22);
+      border: 1.5px solid rgba(255, 255, 255, 0.45);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
     }
-    .mini-logo span:nth-child(1) { background: #f43f5e; transform: rotate(-5deg); }
-    .mini-logo span:nth-child(2) { background: #f59e0b; transform: rotate(4deg); }
-    .mini-logo span:nth-child(3) { background: #10b981; transform: rotate(-3deg); }
-    .mini-logo span:nth-child(4) { background: #0ea5e9; transform: rotate(5deg); }
-    .mini-logo span:nth-child(5) { background: #4f46e5; transform: rotate(-4deg); margin-right: 0; }
+    .mini-logo .brand-orb:nth-child(1) { background: linear-gradient(135deg, #f43f5e, #be123c); }
+    .mini-logo .brand-orb:nth-child(2) { background: linear-gradient(135deg, #f59e0b, #b45309); }
+    .mini-logo .brand-orb:nth-child(3) { background: linear-gradient(135deg, #10b981, #047857); }
+    .mini-logo .brand-orb:nth-child(4) { background: linear-gradient(135deg, #0ea5e9, #0369a1); }
+    .mini-logo .brand-orb:nth-child(5) { background: linear-gradient(135deg, #6366f1, #4338ca); }
+    .mini-logo .brand-25 {
+      margin-left: 3px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      color: #06181b;
+      font-family: var(--font-display);
+      font-size: 0.66rem;
+      font-weight: 900;
+      border: 1px solid #fde68a;
+      line-height: 1.1;
+    }
+    .ico-svg {
+      width: 1.05em;
+      height: 1.05em;
+      display: inline-block;
+      vertical-align: -0.16em;
+      flex-shrink: 0;
+    }
 
     .xp-chip {
       display: inline-flex;
@@ -968,9 +992,9 @@
     }
 
     .dock-btn.primary {
-      background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
+      background: linear-gradient(180deg, #0f766e 0%, #065f46 100%);
       color: #ffffff;
-      box-shadow: 0 2px 0 #3730a3;
+      box-shadow: 0 2px 0 #042f2e;
     }
 
     /* ==========================================================================
@@ -1082,9 +1106,9 @@
       cursor: pointer;
     }
     .btn:active { transform: scale(0.96); }
-    .btn-ghost { background: var(--surface-muted); color: var(--text-main); border-color: var(--border-subtle); }
-    .btn-amber { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
-    .btn-primary { background: linear-gradient(180deg, #6366f1, #4f46e5); color: #fff; box-shadow: 0 3px 0 #3730a3; }
+    .btn-ghost { background: var(--surface-pill); color: var(--text-primary); border: 1.5px solid var(--border-subtle); }
+    .btn-amber { background: #fef3c7; color: #92400e; border: 1.5px solid #f59e0b; }
+    .btn-primary { background: linear-gradient(180deg, #0f766e, #065f46); color: #ffffff; box-shadow: 0 3px 0 #042f2e; }
 
     /* Master 1-25 Grid & Peek All Boards Grid */
     .master-grid-25 {
@@ -1516,9 +1540,9 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      border: 1px solid rgba(251, 191, 36, 0.45);
-      background: rgba(255, 255, 255, 0.1);
-      color: #fde68a;
+      border: 1.5px solid var(--border-subtle);
+      background: var(--surface-pill);
+      color: var(--text-primary);
       font-weight: 900;
       font-size: 0.82rem;
       cursor: pointer;
@@ -1589,17 +1613,51 @@
       position: relative;
       z-index: 2;
       font-family: var(--font-display);
-      font-size: 1.85rem;
+      font-size: 1.65rem;
       font-weight: 900;
       letter-spacing: 0.06em;
       line-height: 1.05;
-      background: linear-gradient(180deg, #fffbeb 15%, #fbbf24 90%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 3px 14px rgba(251, 191, 36, 0.25);
+      color: var(--text-primary);
     }
-
+    .home-brand-circles {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 6px;
+    }
+    .home-brand-circles .brand-orb {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(255, 255, 255, 0.45);
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.28);
+    }
+    .home-brand-circles .brand-orb:nth-child(1) { background: linear-gradient(135deg, #f43f5e, #be123c); }
+    .home-brand-circles .brand-orb:nth-child(2) { background: linear-gradient(135deg, #f59e0b, #b45309); }
+    .home-brand-circles .brand-orb:nth-child(3) { background: linear-gradient(135deg, #10b981, #047857); }
+    .home-brand-circles .brand-orb:nth-child(4) { background: linear-gradient(135deg, #0ea5e9, #0369a1); }
+    .home-brand-circles .brand-orb:nth-child(5) { background: linear-gradient(135deg, #6366f1, #4338ca); }
+    .home-brand-circles .brand-25 {
+      margin-left: 4px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      color: #06181b;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 900;
+      border: 1.5px solid #fde68a;
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+    }
     .daily-bingo-card {
       background: var(--surface-card);
       backdrop-filter: blur(12px);
@@ -1607,7 +1665,7 @@
       border: 1px solid var(--border-subtle);
       padding: 9px 11px;
       flex-shrink: 0;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
     }
     .daily-nodes-row {
       display: grid;
@@ -1618,9 +1676,9 @@
     .daily-node {
       height: 32px;
       border-radius: 999px;
-      border: 1.5px solid rgba(255, 255, 255, 0.16);
-      background: rgba(255, 255, 255, 0.06);
-      color: rgba(248, 250, 252, 0.45);
+      border: 1.5px solid var(--border-subtle);
+      background: var(--surface-pill);
+      color: var(--text-muted);
       font-family: var(--font-display);
       font-weight: 900;
       font-size: 0.85rem;
@@ -1630,21 +1688,21 @@
       transition: all 0.2s ease;
     }
     .daily-node.lit {
-      background: linear-gradient(135deg, #10b981, #059669);
-      border-color: #fde68a;
-      color: #fffbeb;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.55);
+      background: linear-gradient(135deg, #0f766e, #059669);
+      border-color: var(--accent-secondary);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.45);
     }
     .daily-claim-btn {
-      border: none;
+      border: 1.5px solid var(--border-subtle);
       border-radius: 999px;
       padding: 4px 10px;
       font-size: 0.68rem;
       font-weight: 900;
       letter-spacing: 0.05em;
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.45);
+      background: var(--surface-pill);
+      color: var(--text-secondary);
       transition: all 0.18s ease;
     }
     .daily-claim-btn.ready {
@@ -1758,7 +1816,7 @@
     #match-setup-screen .setup-count-btn.active {
       background: var(--accent-primary);
       border-color: var(--accent-secondary);
-      color: #fffbeb;
+      color: #ffffff;
     }
     #match-setup-screen .setup-mode-tabs {
       background: var(--surface-card);
@@ -1767,7 +1825,7 @@
     #match-setup-screen .setup-mode-tab { color: var(--text-muted); }
     #match-setup-screen .setup-mode-tab.active {
       background: var(--accent-primary);
-      color: #fffbeb;
+      color: #ffffff;
     }
     #match-setup-screen .setup-slot-card {
       background: var(--surface-pill);
@@ -2129,21 +2187,23 @@
               <circle class="xp-ring-bg" cx="22" cy="22" r="19"></circle>
               <circle id="home-xp-ring-arc" class="xp-ring-arc" cx="22" cy="22" r="19"></circle>
             </svg>
-            <div id="home-avatar" class="home-avatar-badge">🦁</div>
+            <div id="home-avatar" class="home-avatar-badge">
+              <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
           </div>
           <div style="min-width:0;">
             <div style="display:flex; align-items:center; gap:5px;">
-              <span id="home-user-name" style="font-family:var(--font-display); font-size:0.88rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fffbeb;">Player 1</span>
-              <span id="home-auth-badge" class="seat-badge" style="background:rgba(255,255,255,0.12); color:#cbd5e1; border-color:rgba(255,255,255,0.2);">Guest</span>
+              <span id="home-user-name" style="font-family:var(--font-display); font-size:0.88rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text-primary);">Player 1</span>
+              <span id="home-auth-badge" class="seat-badge" style="background:var(--surface-pill); color:var(--text-secondary); border-color:var(--border-subtle);">Guest</span>
             </div>
             <div style="display:flex; align-items:center; gap:6px; margin-top:2px;">
-              <span id="home-xp-level" style="font-size:0.65rem; font-weight:900; padding:1px 7px; border-radius:999px; background:rgba(251,191,36,0.2); color:#fde68a; border:1px solid rgba(251,191,36,0.4);">Lv.1</span>
-              <div class="xp-track" style="width:42px; height:4px; background:rgba(255,255,255,0.12);"><div id="home-xp-fill" class="xp-fill" style="width:0%"></div></div>
+              <span id="home-xp-level" style="font-size:0.65rem; font-weight:900; padding:1px 7px; border-radius:999px; background:var(--surface-pill); color:var(--accent-secondary); border:1px solid var(--border-subtle);">Lv.1</span>
+              <div class="xp-track" style="width:42px; height:4px; background:var(--surface-pill);"><div id="home-xp-fill" class="xp-fill" style="width:0%"></div></div>
             </div>
           </div>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
-          <span id="home-win-streak" style="font-size:0.68rem; font-weight:900; color:#fde68a; white-space:nowrap; background:rgba(255,255,255,0.08); padding:4px 8px; border-radius:999px; border:1px solid rgba(255,255,255,0.14);">🔥 0 • 🏆 0</span>
+          <span id="home-win-streak" style="display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; font-weight:900; color:var(--text-primary); white-space:nowrap; background:var(--surface-pill); padding:4px 8px; border-radius:999px; border:1px solid var(--border-subtle);">0 Streak · 0 Wins</span>
           <button type="button" id="home-auth-action-btn" onclick="event.stopPropagation(); openHomeAuthOrAccount()" class="home-gold-btn">
             Sign In
           </button>
@@ -2156,23 +2216,26 @@
         <div class="emblem-lasers" aria-hidden="true">
           <span></span><span></span><span></span><span></span><span></span>
         </div>
-        <div class="emblem-tiles-row" aria-hidden="true">
-          <div class="emblem-tile ivory">7</div>
-          <div class="emblem-tile gold">13</div>
-          <div class="emblem-tile ivory-r">25</div>
+        <div class="home-brand-circles" aria-hidden="true">
+          <span class="brand-orb">B</span>
+          <span class="brand-orb">I</span>
+          <span class="brand-orb">N</span>
+          <span class="brand-orb">G</span>
+          <span class="brand-orb">O</span>
+          <span class="brand-25">25</span>
         </div>
         <h1 class="home-title">BINGO 25</h1>
-        <p style="position:relative; z-index:2; font-size:0.71rem; font-weight:700; color:#a7f3d0; margin-top:3px;">
+        <p style="position:relative; z-index:2; font-size:0.71rem; font-weight:700; color:var(--text-secondary); margin-top:3px;">
           5×5 Indian Arcade • Offline &amp; Online
         </p>
 
         <button type="button" id="home-resume-btn" onclick="resumeSavedMatchFromHome()" class="btn btn-amber" style="position:relative; z-index:2; display:none; width:100%; margin-top:8px; padding:8px 12px; font-size:0.78rem;">
-          ▶ Resume Saved Match
+          Resume Saved Match
         </button>
       </div>
 
-      <button type="button" id="home-ota-banner" onclick="BingoOtaUpdater.applyPendingUpdate()" class="btn" style="position:static !important; display:none; margin:0; width:100%; box-sizing:border-box; padding:8px 12px; font-size:0.76rem; justify-content:space-between; background:linear-gradient(135deg, rgba(16,185,129,0.28), rgba(251,191,36,0.22)); color:#fde68a; border:1px solid rgba(251,191,36,0.55); border-radius:999px;">
-        <span id="home-ota-banner-text">✨ Update ready — Tap to reload</span>
+      <button type="button" id="home-ota-banner" onclick="BingoOtaUpdater.applyPendingUpdate()" class="btn btn-primary" style="position:static !important; display:none; margin:0; width:100%; box-sizing:border-box; padding:8px 12px; font-size:0.76rem; justify-content:space-between; border-radius:999px;">
+        <span id="home-ota-banner-text">Update ready — Tap to reload</span>
         <span>↻</span>
       </button>
 
@@ -2180,8 +2243,9 @@
       <div class="daily-bingo-card" id="daily-bingo-card">
         <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
           <div style="display:flex; align-items:center; gap:6px;">
-            <span style="font-size:0.72rem; font-weight:900; letter-spacing:0.06em; color:#fde68a;">⚡ DAILY B-I-N-G-O</span>
-            <span id="daily-streak-count" style="font-size:0.66rem; font-weight:800; color:#a7f3d0;">0/5 Wins</span>
+            <svg class="ico-svg" style="color:var(--accent-secondary);" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+            <span style="font-size:0.72rem; font-weight:900; letter-spacing:0.06em; color:var(--text-primary);">DAILY B-I-N-G-O</span>
+            <span id="daily-streak-count" style="font-size:0.66rem; font-weight:800; color:var(--accent-primary);">0/5 Wins</span>
           </div>
           <button type="button" id="daily-claim-btn" onclick="DailyBingoStreak.claimReward()" class="daily-claim-btn">CLAIM</button>
         </div>
@@ -2198,20 +2262,26 @@
       <div class="home-modes-stack">
         <button type="button" onclick="openMatchSetup('local')" class="home-play-3d home-hero-cta">
           <div style="text-align:left; min-width:0;">
-            <div style="font-family:var(--font-display); font-size:1.12rem; font-weight:900; letter-spacing:0.03em;">▶ PLAY MATCH</div>
-            <div style="font-size:0.7rem; color:#d1fae5; font-weight:700; margin-top:2px;">2–5 Players • Smart AI, Pass &amp; Play, Online</div>
+            <div style="font-family:var(--font-display); font-size:1.12rem; font-weight:900; letter-spacing:0.03em; color:#ffffff;">PLAY MATCH</div>
+            <div style="font-size:0.7rem; color:rgba(255,255,255,0.88); font-weight:700; margin-top:2px;">2–5 Players • Smart AI, Pass &amp; Play, Online</div>
           </div>
-          <span style="font-size:1.15rem; font-weight:900; color:#fde68a; flex-shrink:0;">→</span>
+          <svg class="ico-svg" style="width:20px; height:20px; color:#fde68a;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </button>
 
         <div class="home-dual-row">
           <button type="button" onclick="openMatchSetup('online-join')" class="home-quick-glass">
-            <span style="font-family:var(--font-display); font-size:0.84rem; font-weight:900; color:#fde68a;">🔑 JOIN ROOM</span>
-            <span style="font-size:0.66rem; color:#cbd5e1;">Enter 6-char code</span>
+            <span style="display:inline-flex; align-items:center; gap:5px; font-family:var(--font-display); font-size:0.84rem; font-weight:900; color:var(--accent-secondary);">
+              <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3"/></svg>
+              JOIN ROOM
+            </span>
+            <span style="font-size:0.66rem; color:var(--text-secondary);">Enter 6-char code</span>
           </button>
           <button type="button" onclick="launchQuickBlitz()" class="home-quick-glass">
-            <span style="font-family:var(--font-display); font-size:0.84rem; font-weight:900; color:#6ee7b7;">⚡ QUICK BLITZ</span>
-            <span style="font-size:0.66rem; color:#cbd5e1;">1-tap 2P vs Smart AI</span>
+            <span style="display:inline-flex; align-items:center; gap:5px; font-family:var(--font-display); font-size:0.84rem; font-weight:900; color:var(--accent-primary);">
+              <svg class="ico-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+              QUICK BLITZ
+            </span>
+            <span style="font-size:0.66rem; color:var(--text-secondary);">1-tap 2P vs Smart AI</span>
           </button>
         </div>
       </div>
@@ -2219,24 +2289,24 @@
       <!-- Floating Rounded Bottom Pill Dock -->
       <div class="home-pill-dock" role="navigation" aria-label="Home Navigation">
         <button type="button" onclick="openMatchSetup('local')" class="home-dock-btn active">
-          <span style="font-size:1rem;">▶</span>
+          <svg class="ico-svg" style="width:17px; height:17px;" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
           <span>PLAY</span>
         </button>
         <button type="button" onclick="openStatsSheet()" class="home-dock-btn">
-          <span style="font-size:1rem;">🏆</span>
+          <svg class="ico-svg" style="width:17px; height:17px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4a2 2 0 0 1-2-2V5h4M18 9h2a2 2 0 0 0 2-2V5h-4M6 4h12v6a6 6 0 0 1-12 0V4zM12 16v4M8 20h8"/></svg>
           <span>TROPHIES</span>
         </button>
         <button type="button" onclick="openSettingsSheet()" class="home-dock-btn">
-          <span style="font-size:1rem;">🎨</span>
+          <svg class="ico-svg" style="width:17px; height:17px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6H16c3.3 0 6-2.7 6-6 0-4.9-4.5-8.6-10-8.6z"/></svg>
           <span>THEMES</span>
         </button>
         <button type="button" onclick="openSettingsSheet()" class="home-dock-btn">
-          <span style="font-size:1rem;">⚙️</span>
+          <svg class="ico-svg" style="width:17px; height:17px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           <span>SETTINGS</span>
         </button>
       </div>
 
-      <button type="button" onclick="openTermsSheet()" class="home-footer-link" style="color:rgba(203,213,225,0.75);">
+      <button type="button" onclick="openTermsSheet()" class="home-footer-link" style="color:var(--text-muted);">
         Terms &amp; Conditions • Built by Ashutosh Singh
       </button>
     </section>
@@ -2249,13 +2319,13 @@
         <button type="button" onclick="showScreen('home')" class="btn btn-ghost" style="padding:7px 12px; font-size:0.78rem;">
           ← Back
         </button>
-        <div style="font-family:var(--font-display); font-size:0.98rem; font-weight:900;">🎮 Match Setup</div>
+        <div style="font-family:var(--font-display); font-size:0.98rem; font-weight:900;">Match Setup</div>
         <div style="width:62px;"></div>
       </div>
 
       <div class="setup-mode-tabs">
-        <button type="button" id="setup-tab-local" onclick="MatchSetup.setModeTab('local')" class="setup-mode-tab active">📱 Local Device</button>
-        <button type="button" id="setup-tab-online" onclick="MatchSetup.setModeTab('online')" class="setup-mode-tab">🌐 Online Room</button>
+        <button type="button" id="setup-tab-local" onclick="MatchSetup.setModeTab('local')" class="setup-mode-tab active">Local Device</button>
+        <button type="button" id="setup-tab-online" onclick="MatchSetup.setModeTab('online')" class="setup-mode-tab">Online Room</button>
       </div>
 
       <div id="setup-local-panel" style="display:flex; flex-direction:column; gap:8px; flex:1; min-height:0;">
@@ -2272,7 +2342,7 @@
         </div>
 
         <div id="setup-mode-status-pill" class="setup-status-pill">
-          🤖 Solo vs Smart AI (2 Players)
+          Solo vs Smart AI (2 Players)
         </div>
 
         <div class="setup-card" style="flex:1; min-height:0; overflow-y:auto;">
@@ -2285,7 +2355,7 @@
         <div class="setup-card" id="setup-privacy-row" style="display:none; padding:9px 12px;">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
             <div>
-              <div style="font-size:0.76rem; font-weight:900;">🛡️ Privacy Veil</div>
+              <div style="font-size:0.76rem; font-weight:900;">Privacy Veil</div>
               <div style="font-size:0.66rem; color:var(--text-muted);">Hide boards between human turns</div>
             </div>
             <button type="button" id="setup-inline-privacy-btn" onclick="MatchSetup.togglePrivacyVeil()" class="btn btn-primary" style="padding:5px 12px; font-size:0.74rem;">ON</button>
@@ -2296,22 +2366,22 @@
           <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
             <span style="font-size:0.72rem; font-weight:900; text-transform:uppercase; color:var(--text-muted);">AI Speed</span>
             <div style="display:flex; gap:5px;">
-              <button type="button" onclick="selectSetupBotSpeed(1050, true)" class="btn btn-ghost" id="match-spd-1050" style="padding:5px 8px; font-size:0.7rem;">🐢 Relaxed</button>
-              <button type="button" onclick="selectSetupBotSpeed(650, true)" class="btn btn-ghost" id="match-spd-650" style="padding:5px 8px; font-size:0.7rem;">⚡ Normal</button>
-              <button type="button" onclick="selectSetupBotSpeed(300, true)" class="btn btn-ghost" id="match-spd-300" style="padding:5px 8px; font-size:0.7rem;">🚀 Turbo</button>
+              <button type="button" onclick="selectSetupBotSpeed(1050, true)" class="btn btn-ghost" id="match-spd-1050" style="padding:5px 8px; font-size:0.7rem;">Relaxed</button>
+              <button type="button" onclick="selectSetupBotSpeed(650, true)" class="btn btn-ghost" id="match-spd-650" style="padding:5px 8px; font-size:0.7rem;">Normal</button>
+              <button type="button" onclick="selectSetupBotSpeed(300, true)" class="btn btn-ghost" id="match-spd-300" style="padding:5px 8px; font-size:0.7rem;">Turbo</button>
             </div>
           </div>
         </div>
 
         <button type="button" onclick="MatchSetup.startMatch()" id="setup-start-match-btn" class="btn btn-primary" style="width:100%; padding:13px; font-size:0.96rem; flex-shrink:0;">
-          ▶ Start Match
+          Start Match
         </button>
       </div>
 
       <div id="setup-online-panel" style="display:none; flex-direction:column; gap:10px; flex:1; min-height:0; overflow-y:auto;">
         <div class="setup-mode-tabs">
-          <button type="button" id="setup-online-sub-create" onclick="MatchSetup.setOnlineSubTab('create')" class="setup-mode-tab active">✨ Create Room</button>
-          <button type="button" id="setup-online-sub-join" onclick="MatchSetup.setOnlineSubTab('join')" class="setup-mode-tab">🔑 Join Room</button>
+          <button type="button" id="setup-online-sub-create" onclick="MatchSetup.setOnlineSubTab('create')" class="setup-mode-tab active">Create Room</button>
+          <button type="button" id="setup-online-sub-join" onclick="MatchSetup.setOnlineSubTab('join')" class="setup-mode-tab">Join Room</button>
         </div>
 
         <div id="setup-online-create-box" class="setup-card" style="display:flex; flex-direction:column; gap:10px;">
@@ -2355,7 +2425,7 @@
     <header class="mobile-hud">
       <div class="hud-brand">
         <button type="button" id="hud-home-logo" onclick="confirmReturnHome()" class="mini-logo" title="Return to Home Menu" aria-label="Return to Home Menu">
-          <span>B</span><span>I</span><span>N</span><span>G</span><span>O</span>
+          <span class="brand-orb">B</span><span class="brand-orb">I</span><span class="brand-orb">N</span><span class="brand-orb">G</span><span class="brand-orb">O</span><span class="brand-25">25</span>
         </button>
         <div id="xp-chip" class="xp-chip">
           <span id="xp-level-label">Lv.1</span>
@@ -2369,16 +2439,18 @@
 
       <div class="hud-actions">
         <button type="button" onclick="toggleSound()" class="icon-btn" title="Sound & Haptics">
-          <span id="sound-icon">🔊</span>
+          <span id="sound-icon">
+            <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </span>
         </button>
         <button type="button" onclick="openSettingsSheet()" class="icon-btn" title="Themes & Settings">
-          🎨
+          <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
         <button type="button" onclick="openStatsSheet()" class="icon-btn" title="Trophies & Stats">
-          🏆
+          <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4a2 2 0 0 1-2-2V5h4M18 9h2a2 2 0 0 0 2-2V5h-4M6 4h12v6a6 6 0 0 1-12 0V4zM12 16v4M8 20h8"/></svg>
         </button>
         <button type="button" onclick="openRulesSheet()" class="icon-btn" title="How to Play">
-          ❓
+          <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </button>
       </div>
     </header>
@@ -2538,7 +2610,7 @@
       <div class="bottom-sheet">
         <div class="sheet-handle"></div>
         <div class="modal-header">
-          <h2 class="modal-title">🎨 Themes &amp; Mobile Options</h2>
+          <h2 class="modal-title">Themes &amp; Mobile Options</h2>
           <button type="button" onclick="closeSettingsSheet()" class="close-btn">✕</button>
         </div>
 
@@ -2546,19 +2618,19 @@
           Arcade Board Theme
         </label>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
-          <button type="button" onclick="setBoardTheme('emerald')" class="btn btn-ghost" id="thm-emerald">💎 Midnight Emerald</button>
-          <button type="button" onclick="setBoardTheme('obsidian')" class="btn btn-ghost" id="thm-obsidian">👑 Royal Obsidian</button>
-          <button type="button" onclick="setBoardTheme('neon')" class="btn btn-ghost" id="thm-neon">🌌 Cyber Neon</button>
-          <button type="button" onclick="setBoardTheme('daylight')" class="btn btn-ghost" id="thm-daylight">☀️ Clean Daylight</button>
+          <button type="button" onclick="setBoardTheme('emerald')" class="btn btn-ghost" id="thm-emerald">Midnight Emerald</button>
+          <button type="button" onclick="setBoardTheme('obsidian')" class="btn btn-ghost" id="thm-obsidian">Royal Obsidian</button>
+          <button type="button" onclick="setBoardTheme('neon')" class="btn btn-ghost" id="thm-neon">Cyber Neon</button>
+          <button type="button" onclick="setBoardTheme('daylight')" class="btn btn-ghost" id="thm-daylight">Clean Daylight</button>
         </div>
 
         <label style="font-size:0.72rem; font-weight:900; text-transform:uppercase; color:var(--text-muted); display:block; margin-bottom:6px;">
           AI Bot Speed (Solo Mode)
         </label>
         <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px;">
-          <button type="button" onclick="changeBotSpeed(1050)" class="btn btn-ghost" id="spd-1050">🐢 Relaxed</button>
-          <button type="button" onclick="changeBotSpeed(650)" class="btn btn-ghost" id="spd-650">⚡ Normal</button>
-          <button type="button" onclick="changeBotSpeed(300)" class="btn btn-ghost" id="spd-300">🚀 Turbo</button>
+          <button type="button" onclick="changeBotSpeed(1050)" class="btn btn-ghost" id="spd-1050">Relaxed</button>
+          <button type="button" onclick="changeBotSpeed(650)" class="btn btn-ghost" id="spd-650">Normal</button>
+          <button type="button" onclick="changeBotSpeed(300)" class="btn btn-ghost" id="spd-300">Turbo</button>
         </div>
 
         <div style="display:flex; align-items:center; justify-content:space-between; background:var(--surface-muted); padding:10px 12px; border-radius:14px; border:1px solid var(--border-subtle);">
@@ -3605,7 +3677,7 @@
         const circumference = 119.38;
         homeRing.style.strokeDashoffset = String(circumference - (circumference * progressPct) / 100);
       }
-      if (homeWs) homeWs.textContent = `🔥 ${offlineStats.bestStreak} • 🏆 ${offlineStats.wins[0] || 0}`;
+      if (homeWs) homeWs.textContent = `${offlineStats.bestStreak} Streak · ${offlineStats.wins[0] || 0} Wins`;
     }
 
     function downloadOfflineFile() {
@@ -3868,16 +3940,24 @@
       } catch (e) {}
       const activeTheme = normalizeThemeId(state.theme);
       state.theme = activeTheme;
+      document.documentElement.setAttribute('data-theme', activeTheme);
+      document.documentElement.classList.remove('theme-obsidian', 'theme-neon', 'theme-daylight');
       document.body.classList.remove('theme-obsidian', 'theme-neon', 'theme-daylight', 'theme-royal', 'theme-mint');
       const meta = THEME_META[activeTheme];
-      if (meta && meta.className) document.body.classList.add(meta.className);
+      if (meta && meta.className) {
+        document.documentElement.classList.add(meta.className);
+        document.body.classList.add(meta.className);
+      }
       const themeColorMeta = document.querySelector('meta[name="theme-color"]');
       if (themeColorMeta && meta) themeColorMeta.setAttribute('content', meta.statusBarHex);
       try {
-        const sb = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.StatusBar;
-        if (sb && meta) {
-          if (typeof sb.setBackgroundColor === 'function') sb.setBackgroundColor({ color: meta.statusBarHex }).catch(() => {});
-          if (typeof sb.setStyle === 'function') sb.setStyle({ style: meta.isLight ? 'LIGHT' : 'DARK' }).catch(() => {});
+        if (window.Capacitor) {
+          window.Capacitor.Plugins?.StatusBar?.setOverlaysWebView?.({ overlay: true }).catch?.(() => {});
+          window.Capacitor.Plugins?.NavigationBar?.setBehavior?.({ behavior: 'translucent' }).catch?.(() => {});
+          if (meta) {
+            window.Capacitor.Plugins?.StatusBar?.setBackgroundColor?.({ color: meta.statusBarHex }).catch?.(() => {});
+            window.Capacitor.Plugins?.StatusBar?.setStyle?.({ style: meta.isLight ? 'LIGHT' : 'DARK' }).catch?.(() => {});
+          }
         }
       } catch (e) {}
     }
@@ -3904,7 +3984,9 @@
     }
 
     function syncMobileUI() {
-      document.getElementById('sound-icon').textContent = state.soundEnabled ? '🔊' : '🔇';
+      document.getElementById('sound-icon').innerHTML = state.soundEnabled
+        ? '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>'
+        : '<svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
 
       const isOnline = state.playMode === 'online';
       document.getElementById('xp-chip').style.display = isOnline ? 'none' : 'inline-flex';
@@ -6754,9 +6836,9 @@
         if (pillEl) {
           if (summary.isPassPlay) {
             const botPart = summary.bots > 0 ? `, ${summary.bots} Bot${summary.bots > 1 ? 's' : ''}` : '';
-            pillEl.textContent = `📱 Pass & Play (${summary.humans} Humans${botPart})`;
+            pillEl.textContent = `Pass & Play (${summary.humans} Humans${botPart})`;
           } else {
-            pillEl.textContent = `🤖 Solo vs Smart AI (${summary.total} Players)`;
+            pillEl.textContent = `Solo vs Smart AI (${summary.total} Players)`;
           }
         }
 
@@ -6776,10 +6858,10 @@
               ? BingoAuth.currentUser.avatar
               : theme.defaultAvatar;
             const roleControl = idx === 0
-              ? `<span class="setup-you-badge">🧑 YOU</span>`
+              ? `<span class="setup-you-badge">YOU</span>`
               : `<div class="setup-role-toggle">
-                  <button type="button" onclick="MatchSetup.toggleSlotRole(${idx}, false)" class="setup-role-btn ${!slot.isBot ? 'active' : ''}">🧑 Human</button>
-                  <button type="button" onclick="MatchSetup.toggleSlotRole(${idx}, true)" class="setup-role-btn bot ${slot.isBot ? 'active' : ''}">🤖 Bot</button>
+                  <button type="button" onclick="MatchSetup.toggleSlotRole(${idx}, false)" class="setup-role-btn ${!slot.isBot ? 'active' : ''}">Human</button>
+                  <button type="button" onclick="MatchSetup.toggleSlotRole(${idx}, true)" class="setup-role-btn bot ${slot.isBot ? 'active' : ''}">Bot</button>
                 </div>`;
             return `
               <div class="setup-slot-card">
@@ -7389,7 +7471,7 @@
         if (banner && bannerText) {
           if (this.stagedVersion) {
             banner.style.display = 'flex';
-            bannerText.textContent = `✨ Update v${this.stagedVersion} ready — Tap to reload`;
+            bannerText.textContent = `Update v${this.stagedVersion} ready — Tap to reload`;
           } else {
             banner.style.display = 'none';
           }
