@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#4f46e5" />
+  <meta name="theme-color" content="#092629" />
   <title>B-I-N-G-O | 4-Player Offline &amp; Online Arcade</title>
   <script>
     var OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.3.0",
+      currentVersion: "1.3.1",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
@@ -120,72 +120,90 @@
       --admob-banner-height: 0px;
       --font-display: ui-rounded, 'Trebuchet MS', 'Segoe UI', system-ui, -apple-system, sans-serif;
       --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      --outer-bg: #0f172a;
-      --app-bg: radial-gradient(circle at top left, #fef9c3 0%, #ffedd5 42%, #e0e7ff 100%);
-      --surface: rgba(255, 255, 255, 0.94);
-      --surface-solid: #ffffff;
-      --surface-muted: #f1f5f9;
-      --border-subtle: rgba(203, 213, 225, 0.9);
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --tile-bg: #ffffff;
-      --tile-border: #cbd5e1;
-      --tile-shadow: #94a3b8;
-      --tile-text: #1e293b;
-      --tile-hover-bg: #eef2ff;
-      --tile-hover-border: #6366f1;
-      --indigo-600: #4f46e5;
+      /* Default Theme: Midnight Emerald */
+      --bg-app: radial-gradient(circle at 50% 18%, #114B46 0%, #092629 55%, #06181B 100%);
+      --bg-elevated: #0b2d30;
+      --surface-card: rgba(6, 24, 27, 0.72);
+      --surface-pill: rgba(255, 255, 255, 0.09);
+      --border-subtle: rgba(52, 211, 153, 0.25);
+      --accent-primary: #10b981;
+      --accent-secondary: #fbbf24;
+      --text-primary: #f8fafc;
+      --text-muted: #94a3b8;
+      --tile-bg: #10383b;
+      --tile-marked: #059669;
+      --status-bar-hex: #092629;
+
+      /* Legacy token aliases */
+      --outer-bg: #06181b;
+      --app-bg: var(--bg-app);
+      --surface: var(--surface-card);
+      --surface-solid: var(--bg-elevated);
+      --surface-muted: var(--surface-pill);
+      --text-main: var(--text-primary);
+      --tile-border: rgba(52, 211, 153, 0.35);
+      --tile-shadow: #041517;
+      --tile-text: var(--text-primary);
+      --tile-hover-bg: rgba(16, 185, 129, 0.22);
+      --tile-hover-border: var(--accent-secondary);
+      --indigo-600: var(--accent-primary);
+    }
+
+    body.theme-obsidian {
+      --bg-app: radial-gradient(circle at 50% 15%, #27272a 0%, #141417 58%, #09090b 100%);
+      --bg-elevated: #18181b;
+      --surface-card: rgba(24, 24, 27, 0.86);
+      --surface-pill: rgba(255, 255, 255, 0.08);
+      --border-subtle: rgba(251, 191, 36, 0.28);
+      --accent-primary: #f59e0b;
+      --accent-secondary: #fde68a;
+      --text-primary: #fafaf9;
+      --text-muted: #a1a1aa;
+      --tile-bg: #27272a;
+      --tile-marked: #b45309;
+      --status-bar-hex: #141417;
+      --outer-bg: #09090b;
+      --tile-border: rgba(251, 191, 36, 0.3);
+      --tile-shadow: #09090b;
+      --tile-hover-bg: rgba(245, 158, 11, 0.2);
     }
 
     body.theme-neon {
-      --outer-bg: #020617;
-      --app-bg: radial-gradient(circle at top, #1e1b4b 0%, #0f172a 58%, #020617 100%);
-      --surface: rgba(15, 23, 42, 0.92);
-      --surface-solid: #0f172a;
-      --surface-muted: #1e293b;
-      --border-subtle: rgba(99, 102, 241, 0.42);
-      --text-main: #f8fafc;
+      --bg-app: radial-gradient(circle at 50% 15%, #1e1b4b 0%, #0f172a 58%, #020617 100%);
+      --bg-elevated: #0f172a;
+      --surface-card: rgba(15, 23, 42, 0.88);
+      --surface-pill: rgba(56, 189, 248, 0.11);
+      --border-subtle: rgba(56, 189, 248, 0.34);
+      --accent-primary: #06b6d4;
+      --accent-secondary: #a855f7;
+      --text-primary: #f8fafc;
       --text-muted: #94a3b8;
       --tile-bg: #1e293b;
-      --tile-border: #334155;
+      --tile-marked: #0284c7;
+      --status-bar-hex: #0f172a;
+      --outer-bg: #020617;
+      --tile-border: rgba(56, 189, 248, 0.35);
       --tile-shadow: #020617;
-      --tile-text: #f1f5f9;
-      --tile-hover-bg: #312e81;
-      --tile-hover-border: #818cf8;
+      --tile-hover-bg: rgba(6, 182, 212, 0.22);
     }
 
-    body.theme-royal {
-      --outer-bg: #1c0505;
-      --app-bg: radial-gradient(circle at top left, #450a0a 0%, #7f1d1d 48%, #290d0d 100%);
-      --surface: rgba(255, 251, 235, 0.96);
-      --surface-solid: #fffbeb;
-      --surface-muted: #fef3c7;
-      --border-subtle: rgba(217, 119, 6, 0.5);
-      --text-main: #451a03;
-      --text-muted: #92400e;
+    body.theme-daylight {
+      --bg-app: radial-gradient(circle at top left, #f8fafc 0%, #eef2ff 52%, #e0e7ff 100%);
+      --bg-elevated: #ffffff;
+      --surface-card: rgba(255, 255, 255, 0.94);
+      --surface-pill: #f1f5f9;
+      --border-subtle: rgba(148, 163, 184, 0.42);
+      --accent-primary: #4f46e5;
+      --accent-secondary: #10b981;
+      --text-primary: #0f172a;
+      --text-muted: #475569;
       --tile-bg: #ffffff;
-      --tile-border: #fcd34d;
-      --tile-shadow: #d97706;
-      --tile-text: #78350f;
-      --tile-hover-bg: #fef3c7;
-      --tile-hover-border: #d97706;
-    }
-
-    body.theme-mint {
-      --outer-bg: #022c22;
-      --app-bg: radial-gradient(circle at top right, #d1fae5 0%, #ccfbf1 48%, #e0f2fe 100%);
-      --surface: rgba(255, 255, 255, 0.94);
-      --surface-solid: #ffffff;
-      --surface-muted: #ecfdf5;
-      --border-subtle: rgba(16, 185, 129, 0.45);
-      --text-main: #064e3b;
-      --text-muted: #047857;
-      --tile-bg: #ffffff;
-      --tile-border: #6ee7b7;
-      --tile-shadow: #10b981;
-      --tile-text: #065f46;
-      --tile-hover-bg: #d1fae5;
-      --tile-hover-border: #059669;
+      --tile-marked: #4f46e5;
+      --status-bar-hex: #eef2ff;
+      --outer-bg: #e2e8f0;
+      --tile-border: #cbd5e1;
+      --tile-shadow: #94a3b8;
+      --tile-hover-bg: #eef2ff;
     }
 
     *, *::before, *::after {
@@ -198,14 +216,16 @@
     }
 
     html, body {
+      width: 100%;
       height: 100%;
       height: 100dvh;
+      margin: 0;
       overflow: hidden;
       overscroll-behavior: none;
       touch-action: manipulation;
       font-family: var(--font-body);
-      background: var(--outer-bg);
-      color: var(--text-main);
+      background: var(--bg-app);
+      color: var(--text-primary);
       -webkit-font-smoothing: antialiased;
     }
 
@@ -215,33 +235,38 @@
     body > .mobile-shell ~ .mobile-shell { display: none !important; }
     body > #home-screen ~ #home-screen { display: none !important; }
 
-    /* Native Mobile Device Frame on Desktop, Full Edge-to-Edge on Mobile */
+    /* True Full-Screen Edge-to-Edge Mobile Shell */
     .mobile-shell {
-      width: 100%;
-      max-width: 480px;
+      width: 100vw;
+      max-width: 100vw;
+      min-height: 100dvh;
       height: 100dvh;
-      margin: 0 auto;
-      background: var(--app-bg);
+      margin: 0;
+      border-radius: 0;
+      background: var(--bg-app);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding-top: max(8px, env(safe-area-inset-top));
+      padding-top: max(10px, env(safe-area-inset-top));
       padding-bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--admob-banner-height));
-      padding-left: max(10px, env(safe-area-inset-left));
-      padding-right: max(10px, env(safe-area-inset-right));
+      padding-left: max(12px, env(safe-area-inset-left));
+      padding-right: max(12px, env(safe-area-inset-right));
       position: relative;
       overflow: hidden;
       gap: 7px;
       transition: background 0.35s ease, padding-bottom 0.2s ease;
     }
 
-    @media (min-width: 520px) {
+    @media (min-width: 600px) {
       .mobile-shell {
+        width: 100%;
+        max-width: 460px;
+        min-height: 0;
         height: min(94dvh, 880px);
         margin: 3dvh auto;
-        border-radius: 34px;
-        border: 5px solid #1e293b;
-        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.12);
+        border-radius: 32px;
+        border: 1px solid var(--border-subtle);
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55);
         padding: 12px 14px calc(14px + var(--admob-banner-height));
       }
     }
@@ -987,13 +1012,13 @@
     .modal-backdrop.visible { display: flex; }
 
     .bottom-sheet {
-      background: var(--surface-solid);
-      color: var(--text-main);
+      background: var(--bg-elevated);
+      color: var(--text-primary);
       width: 100%;
       border-top-left-radius: 26px;
       border-top-right-radius: 26px;
       padding: 18px 18px calc(max(18px, env(safe-area-inset-bottom)) + var(--admob-banner-height));
-      box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.45);
       border-top: 1px solid var(--border-subtle);
       max-height: 88%;
       overflow-y: auto;
@@ -1179,7 +1204,7 @@
       justify-content: center;
       cursor: pointer;
     }
-    .builder-cell.filled { background: #eef2ff; border-color: #6366f1; color: #3730a3; }
+    .builder-cell.filled { background: var(--tile-hover-bg); border-color: var(--accent-primary); color: var(--text-primary); }
     .builder-cell.empty { border-style: dashed; color: var(--text-muted); }
 
     /* Toast */
@@ -1381,32 +1406,30 @@
       position: relative;
       justify-content: space-between;
       overflow-y: auto;
-      padding: 4px 2px 4px;
+      padding: 2px 0 4px;
       gap: 9px;
-      background: radial-gradient(circle at 50% 18%, #114B46 0%, #092629 55%, #06181B 100%);
-      border-radius: 22px;
-      color: #f8fafc;
+      background: transparent;
+      color: var(--text-primary);
     }
     #home-screen::before {
       content: "";
       position: absolute;
       inset: 0;
       pointer-events: none;
-      opacity: 0.09;
+      opacity: 0.08;
       background-image:
         repeating-linear-gradient(45deg, rgba(251, 191, 36, 0.35) 0 1px, transparent 1px 22px),
         repeating-linear-gradient(-45deg, rgba(16, 185, 129, 0.35) 0 1px, transparent 1px 22px);
-      border-radius: inherit;
     }
     #home-screen > * { position: relative; z-index: 1; }
     body > #home-screen ~ #home-screen { display: none !important; }
 
     .home-profile-bar {
-      background: rgba(6, 24, 27, 0.62);
+      background: var(--surface-card);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-radius: 999px;
-      border: 1px solid rgba(251, 191, 36, 0.28);
+      border: 1px solid var(--border-subtle);
       padding: 6px 8px 6px 7px;
       display: flex;
       align-items: center;
@@ -1414,7 +1437,7 @@
       gap: 8px;
       cursor: pointer;
       flex-shrink: 0;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
       transition: transform 0.12s ease;
     }
     .home-profile-bar:active { transform: scale(0.985); }
@@ -1476,15 +1499,15 @@
 
     .bingo-emblem-card {
       position: relative;
-      background: linear-gradient(160deg, rgba(17, 75, 70, 0.72), rgba(6, 24, 27, 0.82));
+      background: var(--surface-card);
       backdrop-filter: blur(12px);
-      border-radius: 22px;
-      border: 1.5px solid rgba(251, 191, 36, 0.32);
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
       padding: 13px 12px 11px;
       text-align: center;
       flex-shrink: 0;
       overflow: hidden;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.34);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
     }
     .emblem-rules-btn {
       position: absolute;
@@ -1578,13 +1601,13 @@
     }
 
     .daily-bingo-card {
-      background: rgba(6, 24, 27, 0.68);
+      background: var(--surface-card);
       backdrop-filter: blur(12px);
-      border-radius: 18px;
-      border: 1px solid rgba(52, 211, 153, 0.28);
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
       padding: 9px 11px;
       flex-shrink: 0;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
     }
     .daily-nodes-row {
       display: grid;
@@ -1666,38 +1689,39 @@
       gap: 8px;
     }
     .home-quick-glass {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--surface-card);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
       padding: 10px 10px;
-      color: #f8fafc;
+      color: var(--text-primary);
       text-align: left;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       gap: 2px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
       transition: transform 0.12s ease, border-color 0.15s ease;
     }
     .home-quick-glass:active { transform: scale(0.97); }
-    .home-quick-glass:hover { border-color: rgba(251, 191, 36, 0.55); }
+    .home-quick-glass:hover { border-color: var(--accent-secondary); }
 
     .home-pill-dock {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 4px;
-      background: rgba(6, 24, 27, 0.85);
+      background: var(--surface-card);
       backdrop-filter: blur(14px);
-      border: 1px solid rgba(251, 191, 36, 0.25);
+      border: 1px solid var(--border-subtle);
       border-radius: 999px;
       padding: 5px 6px;
       flex-shrink: 0;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.38);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
     }
     .home-dock-btn {
       border: none;
       background: transparent;
-      color: #cbd5e1;
+      color: var(--text-muted);
       border-radius: 999px;
       padding: 6px 2px;
       font-size: 0.62rem;
@@ -1710,54 +1734,54 @@
       cursor: pointer;
     }
     .home-dock-btn.active {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(251, 191, 36, 0.22));
-      color: #fde68a;
+      background: var(--surface-pill);
+      color: var(--accent-secondary);
     }
 
     #match-setup-screen {
-      background: radial-gradient(circle at 50% 18%, #114B46 0%, #092629 55%, #06181B 100%);
-      border-radius: 22px;
-      padding: 4px 2px;
-      color: #f8fafc;
+      background: transparent;
+      padding: 2px 0;
+      color: var(--text-primary);
     }
     #match-setup-screen .setup-card {
-      background: rgba(6, 24, 27, 0.68);
-      border-color: rgba(52, 211, 153, 0.25);
-      color: #f8fafc;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+      color: var(--text-primary);
     }
     #match-setup-screen .setup-count-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.16);
-      color: #e2e8f0;
+      background: var(--surface-pill);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
     }
     #match-setup-screen .setup-count-btn.active {
-      background: linear-gradient(135deg, #10b981, #059669);
-      border-color: #fde68a;
+      background: var(--accent-primary);
+      border-color: var(--accent-secondary);
       color: #fffbeb;
     }
     #match-setup-screen .setup-mode-tabs {
-      background: rgba(6, 24, 27, 0.72);
-      border-color: rgba(251, 191, 36, 0.26);
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
     }
-    #match-setup-screen .setup-mode-tab { color: #94a3b8; }
+    #match-setup-screen .setup-mode-tab { color: var(--text-muted); }
     #match-setup-screen .setup-mode-tab.active {
-      background: linear-gradient(135deg, #10b981, #059669);
+      background: var(--accent-primary);
       color: #fffbeb;
-      border: 1px solid rgba(251, 191, 36, 0.55);
     }
     #match-setup-screen .setup-slot-card {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.14);
+      background: var(--surface-pill);
+      border: 1px solid var(--border-subtle);
     }
     #match-setup-screen .setup-slot-name {
-      background: rgba(6, 24, 27, 0.75);
-      border-color: rgba(255, 255, 255, 0.18);
-      color: #f8fafc;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
     }
     #match-setup-screen .setup-status-pill {
-      background: rgba(251, 191, 36, 0.14);
-      border-color: rgba(251, 191, 36, 0.35);
-      color: #fde68a;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--accent-secondary);
     }
       flex-direction: column;
       align-items: center;
@@ -2522,10 +2546,10 @@
           Arcade Board Theme
         </label>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
-          <button type="button" onclick="changeTheme('classic')" class="btn btn-ghost" id="thm-classic">☀️ Classic Pop</button>
-          <button type="button" onclick="changeTheme('neon')" class="btn btn-ghost" id="thm-neon">🌌 Neon Arcade</button>
-          <button type="button" onclick="changeTheme('royal')" class="btn btn-ghost" id="thm-royal">👑 Royal Gold</button>
-          <button type="button" onclick="changeTheme('mint')" class="btn btn-ghost" id="thm-mint">🌿 Cyber Mint</button>
+          <button type="button" onclick="setBoardTheme('emerald')" class="btn btn-ghost" id="thm-emerald">💎 Midnight Emerald</button>
+          <button type="button" onclick="setBoardTheme('obsidian')" class="btn btn-ghost" id="thm-obsidian">👑 Royal Obsidian</button>
+          <button type="button" onclick="setBoardTheme('neon')" class="btn btn-ghost" id="thm-neon">🌌 Cyber Neon</button>
+          <button type="button" onclick="setBoardTheme('daylight')" class="btn btn-ghost" id="thm-daylight">☀️ Clean Daylight</button>
         </div>
 
         <label style="font-size:0.72rem; font-weight:900; text-transform:uppercase; color:var(--text-muted); display:block; margin-bottom:6px;">
@@ -3056,7 +3080,7 @@
 
     let state = {
       playMode: 'solo', // 'solo' | 'passplay' | 'online'
-      theme: 'classic',
+      theme: 'emerald',
       botSpeed: 650,
       players: [],
       calledNumbers: [],
@@ -3810,18 +3834,52 @@
       renderAll(false);
     }
 
-    function changeTheme(themeName) {
-      state.theme = themeName;
+    const THEME_META = {
+      emerald: { className: '', statusBarHex: '#092629', isLight: false },
+      obsidian: { className: 'theme-obsidian', statusBarHex: '#141417', isLight: false },
+      neon: { className: 'theme-neon', statusBarHex: '#0f172a', isLight: false },
+      daylight: { className: 'theme-daylight', statusBarHex: '#eef2ff', isLight: true }
+    };
+
+    function normalizeThemeId(themeId) {
+      if (themeId === 'classic') return 'daylight';
+      if (themeId === 'royal') return 'obsidian';
+      if (themeId === 'mint') return 'emerald';
+      return THEME_META[themeId] ? themeId : 'emerald';
+    }
+
+    function setBoardTheme(themeId) {
+      const normalized = normalizeThemeId(themeId);
+      state.theme = normalized;
+      try { localStorage.setItem('bingo25_board_theme', normalized); } catch (e) {}
       applyThemeClass();
       syncMobileUI();
       saveGameToStorage();
     }
 
+    function changeTheme(themeName) {
+      setBoardTheme(themeName);
+    }
+
     function applyThemeClass() {
-      document.body.classList.remove('theme-neon', 'theme-royal', 'theme-mint');
-      if (state.theme === 'neon') document.body.classList.add('theme-neon');
-      else if (state.theme === 'royal') document.body.classList.add('theme-royal');
-      else if (state.theme === 'mint') document.body.classList.add('theme-mint');
+      try {
+        const saved = localStorage.getItem('bingo25_board_theme');
+        if (saved && !state.theme) state.theme = saved;
+      } catch (e) {}
+      const activeTheme = normalizeThemeId(state.theme);
+      state.theme = activeTheme;
+      document.body.classList.remove('theme-obsidian', 'theme-neon', 'theme-daylight', 'theme-royal', 'theme-mint');
+      const meta = THEME_META[activeTheme];
+      if (meta && meta.className) document.body.classList.add(meta.className);
+      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeColorMeta && meta) themeColorMeta.setAttribute('content', meta.statusBarHex);
+      try {
+        const sb = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.StatusBar;
+        if (sb && meta) {
+          if (typeof sb.setBackgroundColor === 'function') sb.setBackgroundColor({ color: meta.statusBarHex }).catch(() => {});
+          if (typeof sb.setStyle === 'function') sb.setStyle({ style: meta.isLight ? 'LIGHT' : 'DARK' }).catch(() => {});
+        }
+      } catch (e) {}
     }
 
     function changeBotSpeed(ms) {
@@ -3889,9 +3947,9 @@
       document.getElementById('fourth-dock-ico').textContent = !state.gameStarted ? '🎲' : '👀';
       document.getElementById('fourth-dock-lbl').textContent = !state.gameStarted ? 'Shuffle' : 'All Boards';
 
-      ['classic', 'neon', 'royal', 'mint'].forEach(t => {
+      ['emerald', 'obsidian', 'neon', 'daylight'].forEach(t => {
         const el = document.getElementById(`thm-${t}`);
-        if (el) el.style.borderColor = state.theme === t ? '#4f46e5' : 'var(--border-subtle)';
+        if (el) el.style.borderColor = state.theme === t ? 'var(--accent-primary)' : 'var(--border-subtle)';
       });
       [1050, 650, 300].forEach(s => {
         const el = document.getElementById(`spd-${s}`);
