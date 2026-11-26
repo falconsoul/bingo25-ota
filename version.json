@@ -1,7 +1,7 @@
 {
-    "version":  "1.4.0",
-    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.4.0/index.html",
-    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.4.0/index.html",
-    "notes":  "Rebranded to Falcon Games and added full Ludo and Snakes \u0026 Ladders with unified theme and sound effects",
-    "releasedAt":  "2026-11-26T08:38:49Z"
+    "version":  "1.4.1",
+    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.4.1/index.html",
+    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.4.1/index.html",
+    "notes":  "Authentic Ludo board \u0026 pin tokens, smart Ludo AI, hop animations, streamlined top HUD, universal Join Room, and Daily Quests \u0026 Mystery Chest",
+    "releasedAt":  "2026-11-26T09:48:31Z"
 }

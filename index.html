@@ -11,7 +11,7 @@
   <script>
     var OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.4.0",
+      currentVersion: "1.4.1",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
@@ -1973,7 +1973,163 @@
     .ludo-cell.home-green { background: #bbf7d0; }
     .ludo-cell.home-yellow { background: #fef08a; }
     .ludo-cell.home-blue { background: #bfdbfe; }
-    .ludo-cell.center-goal { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e1052; }
+    .ludo-cell.center-goal { background: transparent; }
+    .ludo-yard-overlay {
+      position: absolute;
+      width: 40%;
+      height: 40%;
+      z-index: 3;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    .ludo-yard-overlay.red { top: 0; left: 0; background: #ef4444; border-top-left-radius: 10px; }
+    .ludo-yard-overlay.green { top: 0; right: 0; background: #22c55e; border-top-right-radius: 10px; }
+    .ludo-yard-overlay.blue { bottom: 0; left: 0; background: #3b82f6; border-bottom-left-radius: 10px; }
+    .ludo-yard-overlay.yellow { bottom: 0; right: 0; background: #eab308; border-bottom-right-radius: 10px; }
+    .ludo-yard-inner {
+      width: 82%;
+      height: 82%;
+      background: #ffffff;
+      border-radius: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      place-items: center;
+      padding: 8px;
+      gap: 6px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.14);
+    }
+    .ludo-yard-base {
+      width: 84%;
+      height: 84%;
+      border-radius: 50%;
+      border: 2px solid rgba(15, 23, 42, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .ludo-yard-label {
+      position: absolute;
+      bottom: 2px;
+      font-size: 0.56rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+      letter-spacing: 0.02em;
+      max-width: 92%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ludo-center-overlay {
+      position: absolute;
+      top: 40%;
+      left: 40%;
+      width: 20%;
+      height: 20%;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .ludo-pin-btn {
+      background: transparent;
+      border: none;
+      padding: 0;
+      width: 88%;
+      height: 88%;
+      max-width: 20px;
+      max-height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+      position: relative;
+      transition: transform 0.12s ease;
+    }
+    .ludo-pin-btn.mini { width: 46%; height: 46%; max-width: 12px; max-height: 12px; }
+    .ludo-pin-btn.movable {
+      cursor: pointer;
+      filter: drop-shadow(0 0 4px #fbbf24);
+      animation: pulseGold 0.85s infinite;
+      z-index: 8;
+    }
+    .ludo-pin-btn.hopping {
+      animation: ludoHop 0.12s ease-out;
+    }
+    @keyframes ludoHop {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-14px) scale(1.18); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    .ludo-turn-arrow {
+      color: #fbbf24;
+      font-size: 0.88rem;
+      font-weight: 900;
+      animation: pulseGold 0.9s infinite;
+      flex-shrink: 0;
+    }
+    .quest-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 6px;
+    }
+    .quest-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 10px;
+      background: var(--surface-pill);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+    .quest-item.done {
+      border-color: var(--accent-primary);
+      color: var(--text-primary);
+    }
+    .chest-bar-track {
+      height: 6px;
+      border-radius: 999px;
+      background: var(--surface-pill);
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .chest-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #fbbf24, #10b981);
+      transition: width 0.3s ease;
+    }
+    .home-join-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 5px 6px 5px 10px;
+      flex-shrink: 0;
+    }
+    .home-join-input {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      outline: none;
+    }
     .ludo-tokens-stack {
       position: relative;
       z-index: 4;
@@ -2568,10 +2724,13 @@
             </div>
           </div>
         </div>
-        <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
-          <span id="home-win-streak" style="display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; font-weight:900; color:var(--text-primary); white-space:nowrap; background:var(--surface-pill); padding:4px 8px; border-radius:999px; border:1px solid var(--border-subtle);">0 Streak · 0 Wins</span>
-          <button type="button" id="home-auth-action-btn" onclick="event.stopPropagation(); openHomeAuthOrAccount()" class="home-gold-btn">
-            Sign In
+        <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
+          <button type="button" id="home-win-streak" onclick="event.stopPropagation(); openStatsSheet()" title="Trophies & All-Game Stats" style="display:inline-flex; align-items:center; gap:4px; font-size:0.68rem; font-weight:900; color:var(--text-primary); white-space:nowrap; background:var(--surface-pill); padding:5px 8px; border-radius:999px; border:1px solid var(--border-subtle); cursor:pointer;">0 Streak · 0 Wins</button>
+          <button type="button" onclick="event.stopPropagation(); toggleSound()" class="icon-btn" title="Sound" style="width:30px; height:30px;">
+            <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+          <button type="button" onclick="event.stopPropagation(); openSettingsSheet()" class="icon-btn" title="Themes & Settings" style="width:30px; height:30px;">
+            <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6H16c3.3 0 6-2.7 6-6 0-4.9-4.5-8.6-10-8.6z"/></svg>
           </button>
         </div>
       </div>
@@ -2624,26 +2783,21 @@
         <span>↻</span>
       </button>
 
-      <!-- Daily Streak 5-Win Tracker -->
-      <div class="daily-bingo-card" id="daily-bingo-card">
+      <!-- Daily Quests & Mystery Chest -->
+      <div class="daily-bingo-card" id="daily-quests-card">
         <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
           <div style="display:flex; align-items:center; gap:6px;">
             <svg class="ico-svg" style="color:var(--accent-secondary);" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-            <span style="font-size:0.72rem; font-weight:900; letter-spacing:0.06em; color:var(--text-primary);">DAILY STREAK</span>
-            <span id="daily-streak-count" style="font-size:0.66rem; font-weight:800; color:var(--accent-primary);">0/5 Wins</span>
+            <span style="font-size:0.72rem; font-weight:900; letter-spacing:0.06em; color:var(--text-primary);">DAILY QUESTS &amp; CHEST</span>
+            <span id="daily-quest-count" style="font-size:0.66rem; font-weight:800; color:var(--accent-primary);">0/3</span>
           </div>
-          <button type="button" id="daily-claim-btn" onclick="DailyBingoStreak.claimReward()" class="daily-claim-btn">CLAIM</button>
+          <button type="button" id="daily-claim-btn" onclick="FalconDailyQuests.claimChest()" class="daily-claim-btn">OPEN CHEST</button>
         </div>
-        <div class="daily-nodes-row">
-          <div class="daily-node" id="daily-node-0">B</div>
-          <div class="daily-node" id="daily-node-1">I</div>
-          <div class="daily-node" id="daily-node-2">N</div>
-          <div class="daily-node" id="daily-node-3">G</div>
-          <div class="daily-node" id="daily-node-4">O</div>
-        </div>
+        <div class="chest-bar-track"><div id="daily-chest-fill" class="chest-bar-fill" style="width:0%"></div></div>
+        <div id="daily-quests-list" class="quest-list"></div>
       </div>
 
-      <!-- 3-Game Selection Stack + Join Room Pill -->
+      <!-- 3-Game Selection Stack + Universal Join Online Room Bar -->
       <div class="game-select-stack">
         <button type="button" onclick="openMatchSetup('local', 'bingo')" class="game-select-card primary-game">
           <div style="display:flex; align-items:center; gap:10px; min-width:0;">
@@ -2684,30 +2838,11 @@
           <svg class="ico-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </button>
 
-        <button type="button" onclick="openMatchSetup('online-join')" class="home-quick-glass" style="flex-direction:row; align-items:center; justify-content:center; gap:7px; padding:9px 12px;">
+        <div class="home-join-bar">
           <svg class="ico-svg" style="color:var(--accent-primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3"/></svg>
-          <span style="font-family:var(--font-display); font-size:0.82rem; font-weight:900;">JOIN ONLINE ROOM WITH CODE</span>
-        </button>
-      </div>
-
-      <!-- Floating Rounded Bottom Pill Dock -->
-      <div class="home-pill-dock" role="navigation" aria-label="Home Navigation">
-        <button type="button" onclick="openMatchSetup('local', 'bingo')" class="home-dock-btn active">
-          <svg class="ico-svg" style="width:17px; height:17px;" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          <span>GAMES</span>
-        </button>
-        <button type="button" onclick="openStatsSheet()" class="home-dock-btn">
-          <svg class="ico-svg" style="width:17px; height:17px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4a2 2 0 0 1-2-2V5h4M18 9h2a2 2 0 0 0 2-2V5h-4M6 4h12v6a6 6 0 0 1-12 0V4zM12 16v4M8 20h8"/></svg>
-          <span>TROPHIES</span>
-        </button>
-        <button type="button" onclick="openSettingsSheet()" class="home-dock-btn">
-          <svg class="ico-svg" style="width:17px; height:17px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6H16c3.3 0 6-2.7 6-6 0-4.9-4.5-8.6-10-8.6z"/></svg>
-          <span>THEMES</span>
-        </button>
-        <button type="button" onclick="openSettingsSheet()" class="home-dock-btn">
-          <svg class="ico-svg" style="width:17px; height:17px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          <span>SETTINGS</span>
-        </button>
+          <input type="text" id="home-join-code-input" class="home-join-input" maxlength="8" placeholder="JOIN ROOM (6-CHAR CODE)" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')" onkeydown="if(event.key==='Enter') joinOnlineFromHome()" />
+          <button type="button" onclick="joinOnlineFromHome()" class="btn btn-primary" style="padding:6px 12px; font-size:0.74rem; border-radius:11px;">Join</button>
+        </div>
       </div>
 
       <button type="button" onclick="openTermsSheet()" class="home-footer-link" style="color:var(--text-muted);">
@@ -2984,6 +3119,17 @@
       <div class="ludo-board-wrap">
         <div class="ludo-board-box" id="ludo-board-box">
           <div class="ludo-grid" id="ludo-board-grid"></div>
+          <div class="ludo-yard-overlay red" id="ludo-yard-0"></div>
+          <div class="ludo-yard-overlay green" id="ludo-yard-1"></div>
+          <div class="ludo-yard-overlay blue" id="ludo-yard-3"></div>
+          <div class="ludo-yard-overlay yellow" id="ludo-yard-2"></div>
+          <svg class="ludo-center-overlay" viewBox="0 0 100 100" aria-hidden="true">
+            <polygon points="0,0 50,50 0,100" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+            <polygon points="0,0 100,0 50,50" fill="#22c55e" stroke="#ffffff" stroke-width="2"/>
+            <polygon points="100,0 100,100 50,50" fill="#eab308" stroke="#ffffff" stroke-width="2"/>
+            <polygon points="0,100 100,100 50,50" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+            <circle cx="50" cy="50" r="14" fill="#ffffff" stroke="#fbbf24" stroke-width="2.5"/>
+          </svg>
         </div>
       </div>
 
@@ -3580,9 +3726,10 @@
       <div class="bottom-sheet">
         <div class="sheet-handle"></div>
         <div class="modal-header">
-          <h2 class="modal-title">🏆 Trophies &amp; Offline Stats</h2>
+          <h2 class="modal-title">Trophies &amp; All-Game Stats</h2>
           <button type="button" onclick="closeStatsSheet()" class="close-btn">✕</button>
         </div>
+        <div id="stats-arcade-games" style="display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:10px;"></div>
         <div id="stats-summary-bar" style="display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:12px;"></div>
         <div id="stats-list" style="display:flex; flex-direction:column; gap:6px; margin-bottom:12px;"></div>
         <div id="achievements-list" style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:12px;"></div>
@@ -4029,6 +4176,17 @@
         playTone(root * 1.25, 'triangle', 0.18, 0.06, 0.15);
         playTone(root * 1.5, 'sine', 0.24, 0.12, 0.16);
         if (lineDelta >= 2) playTone(root * 2, 'sine', 0.28, 0.18, 0.14);
+      },
+      playDiceRattle() {
+        triggerHaptic(14);
+        playTone(240, 'triangle', 0.05, 0, 0.08, 320);
+        playTone(310, 'triangle', 0.05, 0.06, 0.08, 220);
+        playTone(280, 'triangle', 0.06, 0.12, 0.09, 360);
+      },
+      playCaptureCrash() {
+        triggerHaptic([45, 25, 65]);
+        playTone(180, 'sawtooth', 0.14, 0, 0.14, 70);
+        playTone(520, 'triangle', 0.16, 0.04, 0.14, 260);
       },
       playBingoJackpot() {
         triggerHaptic([40, 30, 80]);
@@ -4527,11 +4685,6 @@
       }
       const themeColorMeta = document.querySelector('meta[name="theme-color"]');
       if (themeColorMeta && meta) themeColorMeta.setAttribute('content', meta.statusBarHex);
-      try {
-        if (window.BingoIconSwitcher && typeof window.BingoIconSwitcher.setIcon === 'function') {
-          window.BingoIconSwitcher.setIcon(meta ? meta.iconKey : activeTheme);
-        }
-      } catch (e) {}
       try {
         if (window.Capacitor) {
           window.Capacitor.Plugins?.StatusBar?.setOverlaysWebView?.({ overlay: true }).catch?.(() => {});
@@ -5428,6 +5581,20 @@
     }
 
     function openStatsSheet() {
+      const aw = offlineStats.arcadeWins || { bingo: offlineStats.wins[0] || 0, ludo: 0, snakes: 0 };
+      const arcadeEl = document.getElementById('stats-arcade-games');
+      if (arcadeEl) {
+        arcadeEl.innerHTML = [
+          { label: 'Bingo 25', val: aw.bingo || 0, color: '#f59e0b' },
+          { label: 'Ludo', val: aw.ludo || 0, color: '#ef4444' },
+          { label: 'Snakes', val: aw.snakes || 0, color: '#10b981' }
+        ].map(g => `
+          <div style="background:var(--surface-muted); padding:8px; border-radius:13px; text-align:center; border:1px solid var(--border-subtle);">
+            <div style="font-family:var(--font-display); font-weight:900; font-size:1rem; color:${g.color};">${g.val}W</div>
+            <div style="font-size:0.64rem; font-weight:800; color:var(--text-muted);">${g.label}</div>
+          </div>
+        `).join('');
+      }
       document.getElementById('stats-summary-bar').innerHTML = `
         <div style="background:var(--surface-muted); padding:9px; border-radius:13px; text-align:center; border:1px solid var(--border-subtle);">
           <div style="font-family:var(--font-display); font-weight:900; font-size:1.1rem; color:#4f46e5;">${offlineStats.gamesPlayed}</div>
@@ -7189,11 +7356,27 @@
         }
       }
       updateXPBar();
-      if (typeof DailyBingoStreak !== 'undefined') DailyBingoStreak.render();
+      if (typeof FalconDailyQuests !== 'undefined') FalconDailyQuests.render();
     }
 
-    const DailyBingoStreak = {
-      STORAGE_KEY: 'bingo25_daily_streak',
+    function joinOnlineFromHome() {
+      const inp = document.getElementById('home-join-code-input');
+      const code = (inp ? inp.value : '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+      openMatchSetup('online-join', 'bingo');
+      if (code.length > 0) {
+        const setupInp = document.getElementById('setup-online-join-code');
+        if (setupInp) setupInp.value = code;
+        if (code.length >= 4) MatchSetup.joinOnlineFromSetup();
+      }
+    }
+
+    const FalconDailyQuests = {
+      STORAGE_KEY: 'falcon_daily_quests',
+      QUEST_DEFS: [
+        { id: 'win1', label: 'Win 1 Match in Any Game', target: 1 },
+        { id: 'action1', label: 'Capture a Token or Climb a Ladder', target: 1 },
+        { id: 'play2', label: 'Complete 2 Matches', target: 2 }
+      ],
       getTodayKey() {
         const d = new Date();
         return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -7203,66 +7386,76 @@
         try {
           const raw = localStorage.getItem(this.STORAGE_KEY);
           if (raw) {
-            const parsed = JSON.parse(raw);
-            if (parsed && parsed.date === today) {
-              return {
-                date: today,
-                wins: Math.min(5, Math.max(0, parseInt(parsed.wins, 10) || 0)),
-                claimedMilestones: Math.min(5, Math.max(0, parseInt(parsed.claimedMilestones, 10) || 0))
-              };
+            const p = JSON.parse(raw);
+            if (p && p.date === today) {
+              return { date: today, progress: p.progress || { win1: 0, action1: 0, play2: 0 }, chestClaimed: Boolean(p.chestClaimed) };
             }
           }
         } catch (e) {}
-        return { date: today, wins: 0, claimedMilestones: 0 };
+        return { date: today, progress: { win1: 0, action1: 0, play2: 0 }, chestClaimed: false };
       },
       save(data) {
         try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
       },
-      recordWin() {
+      recordProgress(questId, amount = 1) {
         const data = this.load();
-        if (data.wins < 5) {
-          data.wins += 1;
-          this.save(data);
-        }
+        const def = this.QUEST_DEFS.find(q => q.id === questId);
+        if (!def) return;
+        data.progress[questId] = Math.min(def.target, (data.progress[questId] || 0) + amount);
+        this.save(data);
         this.render();
       },
-      claimReward() {
+      claimChest() {
         const data = this.load();
-        if (data.wins <= data.claimedMilestones) {
-          showToast('Win a match today to unlock the next Daily B-I-N-G-O letter!');
+        const completed = this.QUEST_DEFS.filter(q => (data.progress[q.id] || 0) >= q.target).length;
+        if (completed < 1) {
+          showToast('Complete at least 1 Daily Quest to open the Mystery Chest!');
           return;
         }
-        const newlyClaimed = data.wins - data.claimedMilestones;
-        const completedAll = data.wins >= 5 && data.claimedMilestones < 5;
-        const xpBonus = (newlyClaimed * 75) + (completedAll ? 175 : 0);
-        data.claimedMilestones = data.wins;
+        if (data.chestClaimed) {
+          showToast('Mystery Chest already claimed today! Come back tomorrow.');
+          return;
+        }
+        const xpBonus = completed * 80 + (completed >= 3 ? 120 : 0);
+        data.chestClaimed = true;
         this.save(data);
         offlineStats.xp += xpBonus;
         saveOfflineStats();
         updateXPBar();
         this.render();
-        if (typeof launchConfetti === 'function') launchConfetti();
-        showToast(completedAll
-          ? `👑 DAILY B-I-N-G-O COMPLETE! +${xpBonus} Bonus XP!`
-          : `⚡ Daily Streak Claimed! +${xpBonus} Bonus XP!`, true);
+        if (typeof startConfetti === 'function') startConfetti();
+        BingoAudioFX.playBingoJackpot();
+        showToast(`MYSTERY CHEST OPENED! +${xpBonus} Bonus XP!`, true);
       },
       render() {
         const data = this.load();
-        for (let i = 0; i < 5; i++) {
-          const node = document.getElementById(`daily-node-${i}`);
-          if (node) node.classList.toggle('lit', i < data.wins);
+        let doneCount = 0;
+        const listEl = document.getElementById('daily-quests-list');
+        if (listEl) {
+          listEl.innerHTML = this.QUEST_DEFS.map(q => {
+            const cur = Math.min(q.target, data.progress[q.id] || 0);
+            const isDone = cur >= q.target;
+            if (isDone) doneCount++;
+            return `<div class="quest-item ${isDone ? 'done' : ''}"><span>${q.label}</span><span>${cur}/${q.target}</span></div>`;
+          }).join('');
         }
-        const countEl = document.getElementById('daily-streak-count');
-        if (countEl) countEl.textContent = `${data.wins}/5 Wins`;
+        const countEl = document.getElementById('daily-quest-count');
+        if (countEl) countEl.textContent = `${doneCount}/3`;
+        const fillEl = document.getElementById('daily-chest-fill');
+        if (fillEl) fillEl.style.width = `${Math.round((doneCount / 3) * 100)}%`;
         const claimBtn = document.getElementById('daily-claim-btn');
         if (claimBtn) {
-          const canClaim = data.wins > data.claimedMilestones;
+          const canClaim = doneCount >= 1 && !data.chestClaimed;
           claimBtn.classList.toggle('ready', canClaim);
-          claimBtn.textContent = data.wins >= 5 && !canClaim ? 'DONE ✓' : 'CLAIM';
+          claimBtn.textContent = data.chestClaimed ? 'CLAIMED' : 'OPEN CHEST';
         }
       }
     };
-    window.DailyBingoStreak = DailyBingoStreak;
+    window.FalconDailyQuests = FalconDailyQuests;
+    const DailyBingoStreak = {
+      recordWin() { FalconDailyQuests.recordProgress('win1', 1); },
+      render() { FalconDailyQuests.render(); }
+    };
 
     function launchQuickBlitz() {
       MatchSetup.init('local');
@@ -8279,17 +8472,33 @@
     window.BingoAuth = BingoAuth;
     window.BingoAdMob = BingoAdMob;
 
+    function cryptoRandomDie() {
+      try {
+        if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+          const arr = new Uint32Array(1);
+          window.crypto.getRandomValues(arr);
+          return (arr[0] % 6) + 1;
+        }
+      } catch (e) {}
+      return Math.floor(Math.random() * 6) + 1;
+    }
+
     function recordArcadeWin(gameLabel, winnerName, winnerIsHuman) {
       offlineStats.gamesPlayed += 1;
       offlineStats.xp += winnerIsHuman ? 140 : 40;
+      if (!offlineStats.arcadeWins) offlineStats.arcadeWins = { bingo: 0, ludo: 0, snakes: 0 };
       if (winnerIsHuman) {
+        if (gameLabel === 'Ludo') offlineStats.arcadeWins.ludo = (offlineStats.arcadeWins.ludo || 0) + 1;
+        else if (gameLabel.includes('Snakes')) offlineStats.arcadeWins.snakes = (offlineStats.arcadeWins.snakes || 0) + 1;
+        else offlineStats.arcadeWins.bingo = (offlineStats.arcadeWins.bingo || 0) + 1;
         offlineStats.wins[0] = (offlineStats.wins[0] || 0) + 1;
         offlineStats.streaks[0] = (offlineStats.streaks[0] || 0) + 1;
         if (offlineStats.streaks[0] > offlineStats.bestStreak) offlineStats.bestStreak = offlineStats.streaks[0];
-        if (typeof DailyBingoStreak !== 'undefined') DailyBingoStreak.recordWin();
+        if (typeof FalconDailyQuests !== 'undefined') FalconDailyQuests.recordProgress('win1', 1);
       } else {
         offlineStats.streaks[0] = 0;
       }
+      if (typeof FalconDailyQuests !== 'undefined') FalconDailyQuests.recordProgress('play2', 1);
       offlineStats.history.unshift({
         date: new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
         winnerNames: `${gameLabel}: ${winnerName}`,
@@ -8384,9 +8593,9 @@
         if (this.gameOver || this.animating || this.phase !== 'roll') return;
         const cur = this.players[this.turnIdx];
         if (!cur) return;
-        const roll = Math.floor(Math.random() * 6) + 1;
+        const roll = cryptoRandomDie();
         this.diceVal = roll;
-        BingoAudioFX.playDaub(roll - 1);
+        BingoAudioFX.playDiceRattle();
 
         const diceBtn = document.getElementById(`ludo-dice-${cur.houseId}`);
         if (diceBtn) {
@@ -8435,18 +8644,36 @@
         let bestScore = -999;
         movable.forEach(tIdx => {
           const prog = player.tokens[tIdx];
-          let score = prog;
-          if (prog === -1 && roll === 6) score = 45;
-          else {
+          let score = prog * 0.5;
+          if (prog === -1 && roll === 6) {
+            score = 85;
+          } else {
             const nextProg = prog + roll;
-            if (nextProg === 56) score += 120;
-            else if (nextProg >= 51) score += 60;
-            const trackIdx = this.getTrackIndex(player.houseId, nextProg);
-            if (trackIdx >= 0) {
-              if (LUDO_SAFE_INDICES.has(trackIdx)) score += 45;
-              else {
-                const hits = this.players.some(op => op.houseId !== player.houseId && op.tokens.some(opP => this.getTrackIndex(op.houseId, opP) === trackIdx));
-                if (hits) score += 100;
+            const curTrack = this.getTrackIndex(player.houseId, prog);
+            const nextTrack = this.getTrackIndex(player.houseId, nextProg);
+            if (nextProg === 56) score += 110;
+            else if (nextProg >= 51) score += 65;
+
+            // Escape threats 1-6 tiles behind current position
+            if (curTrack >= 0 && !LUDO_SAFE_INDICES.has(curTrack)) {
+              const threatened = this.players.some(op => op.houseId !== player.houseId && op.tokens.some(opP => {
+                const opT = this.getTrackIndex(op.houseId, opP);
+                return opT >= 0 && ((curTrack - opT + 52) % 52) >= 1 && ((curTrack - opT + 52) % 52) <= 6;
+              }));
+              if (threatened) score += 75;
+            }
+
+            if (nextTrack >= 0) {
+              if (LUDO_SAFE_INDICES.has(nextTrack)) {
+                score += 60;
+              } else {
+                const hits = this.players.some(op => op.houseId !== player.houseId && op.tokens.some(opP => this.getTrackIndex(op.houseId, opP) === nextTrack));
+                if (hits) score += 120;
+                const inDanger = this.players.some(op => op.houseId !== player.houseId && op.tokens.some(opP => {
+                  const opT = this.getTrackIndex(op.houseId, opP);
+                  return opT >= 0 && ((nextTrack - opT + 52) % 52) >= 1 && ((nextTrack - opT + 52) % 52) <= 6;
+                }));
+                if (inDanger) score -= 65;
               }
             }
           }
@@ -8465,13 +8692,13 @@
         if (cur.tokens[tokenIdx] === -1) {
           cur.tokens[tokenIdx] = 0;
           BingoAudioFX.playDaub(2);
-          this.render();
+          this.render(cur.houseId, tokenIdx);
         } else {
           for (let s = 0; s < roll; s++) {
             cur.tokens[tokenIdx] += 1;
             BingoAudioFX.playDaub(Math.min(5, s));
-            this.render();
-            await new Promise(r => setTimeout(r, 95));
+            this.render(cur.houseId, tokenIdx);
+            await new Promise(r => setTimeout(r, 110));
           }
         }
 
@@ -8479,8 +8706,9 @@
         const finalProg = cur.tokens[tokenIdx];
         if (finalProg === 56) {
           bonusTurn = true;
-          BingoAudioFX.playLineCombo(1, 3);
-          showToast(`${cur.name} reached HOME!`);
+          BingoAudioFX.playBingoJackpot();
+          if (typeof startConfetti === 'function') startConfetti();
+          showToast(`${cur.name} reached HOME!`, true);
         } else {
           const trackIdx = this.getTrackIndex(cur.houseId, finalProg);
           if (trackIdx >= 0 && !LUDO_SAFE_INDICES.has(trackIdx)) {
@@ -8490,11 +8718,14 @@
                 if (this.getTrackIndex(op.houseId, opP) === trackIdx) {
                   op.tokens[opT] = -1;
                   bonusTurn = true;
-                  BingoAudioFX.playLineCombo(2, 4);
+                  BingoAudioFX.playCaptureCrash();
+                  if (!cur.isBot && typeof FalconDailyQuests !== 'undefined') FalconDailyQuests.recordProgress('action1', 1);
                   showToast(`${cur.name} CAPTURED ${op.name}!`, true);
                 }
               });
             });
+          } else if (trackIdx >= 0 && LUDO_SAFE_INDICES.has(trackIdx)) {
+            BingoAudioFX.playLineCombo(1, 2);
           }
         }
 
@@ -8547,15 +8778,32 @@
         if (el) el.textContent = msg;
       },
 
-      render() {
+      pinSvg(color) {
+        return `<svg viewBox="0 0 24 28" width="100%" height="100%"><ellipse cx="12" cy="24" rx="7" ry="3" fill="#ffffff" stroke="${color}" stroke-width="2"/><path d="M12 2C7.6 2 4 5.6 4 10c0 5.5 8 14 8 14s8-8.5 8-14c0-4.4-3.6-8-8-8z" fill="${color}" stroke="#ffffff" stroke-width="2"/><circle cx="12" cy="10" r="3.2" fill="#ffffff"/></svg>`;
+      },
+
+      render(hopHouseId = null, hopTokenIdx = null) {
         const cur = this.players[this.turnIdx];
         const movable = (this.phase === 'move' && cur && !cur.isBot) ? this.getMovableTokens(cur, this.diceVal) : [];
 
-        // Render 4 corner pods
+        // Render 4 corner pods + solid yard overlays
         [0, 1, 2, 3].forEach(hId => {
           const pod = document.getElementById(`ludo-pod-${hId}`);
-          if (!pod) return;
           const p = this.players.find(pl => pl.houseId === hId);
+          const house = LUDO_HOUSES[hId];
+          const yardEl = document.getElementById(`ludo-yard-${hId}`);
+          if (yardEl) {
+            const bases = [0, 1, 2, 3].map(tIdx => {
+              const inYard = p && p.tokens[tIdx] === -1;
+              const isMovable = inYard && cur && cur.houseId === hId && movable.includes(tIdx);
+              const pinHtml = inYard
+                ? `<button type="button" ${isMovable ? `onclick="LudoEngine.moveToken(${tIdx})"` : ''} class="ludo-pin-btn ${isMovable ? 'movable' : ''}">${this.pinSvg(house.color)}</button>`
+                : '';
+              return `<div class="ludo-yard-base" style="background:${house.color}22; border-color:${house.color};">${pinHtml}</div>`;
+            }).join('');
+            yardEl.innerHTML = `<div class="ludo-yard-inner">${bases}</div><div class="ludo-yard-label">${escapeHtml(p ? p.name : house.name)}</div>`;
+          }
+          if (!pod) return;
           if (!p) {
             pod.className = 'ludo-pod inactive-seat';
             pod.innerHTML = `<div style="font-size:0.7rem; color:var(--text-muted); font-weight:800;">Empty</div>`;
@@ -8565,26 +8813,33 @@
           pod.className = `ludo-pod ${isTurn ? 'active-turn' : ''}`;
           const doneCount = p.tokens.filter(t => t === 56).length;
           const diceFace = isTurn && this.diceVal ? this.diceVal : '•';
+          const arrow = isTurn && !p.isBot && this.phase === 'roll' ? `<span class="ludo-turn-arrow">→</span>` : '';
           pod.innerHTML = `
             <div style="display:flex; align-items:center; gap:6px; min-width:0;">
-              <span class="ludo-color-dot" style="background:${p.color};"></span>
+              <span style="width:16px; height:18px; flex-shrink:0;">${this.pinSvg(p.color)}</span>
               <div style="min-width:0;">
                 <div style="font-size:0.74rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(p.name)}</div>
-                <div style="font-size:0.62rem; color:var(--text-muted);">${p.isBot ? 'AI' : 'Human'} · ${doneCount}/4 Home</div>
+                <div style="font-size:0.62rem; color:var(--text-muted);">${p.isBot ? 'AI' : 'Human'} · ${doneCount}/4</div>
               </div>
             </div>
-            <button type="button" id="ludo-dice-${hId}" onclick="LudoEngine.rollDice()" class="ludo-dice-btn" ${(!isTurn || p.isBot || this.phase !== 'roll') ? 'disabled' : ''}>${diceFace}</button>
+            <div style="display:flex; align-items:center; gap:4px;">${arrow}<button type="button" id="ludo-dice-${hId}" onclick="LudoEngine.rollDice()" class="ludo-dice-btn" ${(!isTurn || p.isBot || this.phase !== 'roll') ? 'disabled' : ''}>${diceFace}</button></div>
           `;
         });
 
-        // Build token coordinate map
+        // Build track token coordinate map (skipping -1 yard tokens since yard overlay renders them)
         const cellTokens = new Map();
         this.players.forEach(p => {
           p.tokens.forEach((prog, tIdx) => {
+            if (prog < 0) return;
             const [r, c] = this.getTokenCoords(p.houseId, tIdx, prog);
             const key = `${r},${c}`;
             if (!cellTokens.has(key)) cellTokens.set(key, []);
-            cellTokens.get(key).push({ player: p, tokenIdx: tIdx, movable: cur && cur.houseId === p.houseId && movable.includes(tIdx) });
+            cellTokens.get(key).push({
+              player: p,
+              tokenIdx: tIdx,
+              movable: cur && cur.houseId === p.houseId && movable.includes(tIdx),
+              hopping: hopHouseId === p.houseId && hopTokenIdx === tIdx
+            });
           });
         });
 
@@ -8594,10 +8849,11 @@
         for (let r = 0; r < 15; r++) {
           for (let c = 0; c < 15; c++) {
             let cls = 'ludo-cell';
-            if (r < 6 && c < 6) cls += (r >= 1 && r <= 4 && c >= 1 && c <= 4) ? ' yard-inner' : ' yard-red';
-            else if (r < 6 && c > 8) cls += (r >= 1 && r <= 4 && c >= 10 && c <= 13) ? ' yard-inner' : ' yard-green';
-            else if (r > 8 && c > 8) cls += (r >= 10 && r <= 13 && c >= 10 && c <= 13) ? ' yard-inner' : ' yard-yellow';
-            else if (r > 8 && c < 6) cls += (r >= 10 && r <= 13 && c >= 1 && c <= 4) ? ' yard-inner' : ' yard-blue';
+            let dirArrow = '';
+            if (r < 6 && c < 6) cls += ' yard-red';
+            else if (r < 6 && c > 8) cls += ' yard-green';
+            else if (r > 8 && c > 8) cls += ' yard-yellow';
+            else if (r > 8 && c < 6) cls += ' yard-blue';
             else if (r >= 6 && r <= 8 && c >= 6 && c <= 8) cls += ' center-goal';
             else if (r === 7 && c >= 1 && c <= 5) cls += ' home-red';
             else if (c === 7 && r >= 1 && r <= 5) cls += ' home-green';
@@ -8609,11 +8865,16 @@
             else if (r === 13 && c === 6) cls += ' home-blue safe-star';
             else if ((r === 2 && c === 6) || (r === 6 && c === 12) || (r === 12 && c === 8) || (r === 8 && c === 2)) cls += ' safe-star';
 
+            if (r === 7 && c === 0) dirArrow = '→';
+            else if (r === 0 && c === 7) dirArrow = '↓';
+            else if (r === 7 && c === 14) dirArrow = '←';
+            else if (r === 14 && c === 7) dirArrow = '↑';
+
             const toks = cellTokens.get(`${r},${c}`) || [];
             const miniCls = toks.length > 1 ? 'mini' : '';
             const toksHtml = toks.length > 0
-              ? `<div class="ludo-tokens-stack">${toks.map(t => `<button type="button" ${t.movable ? `onclick="LudoEngine.moveToken(${t.tokenIdx})"` : ''} class="ludo-token ${miniCls} ${t.movable ? 'movable' : ''}" style="background:${t.player.color};"></button>`).join('')}</div>`
-              : '';
+              ? `<div class="ludo-tokens-stack">${toks.map(t => `<button type="button" ${t.movable ? `onclick="LudoEngine.moveToken(${t.tokenIdx})"` : ''} class="ludo-pin-btn ${miniCls} ${t.movable ? 'movable' : ''} ${t.hopping ? 'hopping' : ''}">${this.pinSvg(t.player.color)}</button>`).join('')}</div>`
+              : dirArrow;
             html += `<div class="${cls}">${toksHtml}</div>`;
           }
         }
@@ -8714,7 +8975,7 @@
         if (!cur) return;
         this.animating = true;
 
-        const roll = Math.floor(Math.random() * 6) + 1;
+        const roll = cryptoRandomDie();
         const diceBtn = document.getElementById('snakes-dice-btn');
         if (diceBtn) {
           diceBtn.textContent = String(roll);
@@ -8722,7 +8983,7 @@
           void diceBtn.offsetWidth;
           diceBtn.classList.add('rolling');
         }
-        BingoAudioFX.playDaub(roll - 1);
+        BingoAudioFX.playDiceRattle();
 
         const subEl = document.getElementById('snakes-status-sub');
         if (cur.pos + roll > 100) {
@@ -8742,6 +9003,7 @@
             cur.pos = jump;
             if (isLadder) {
               BingoAudioFX.playLineCombo(2, 4);
+              if (!cur.isBot && typeof FalconDailyQuests !== 'undefined') FalconDailyQuests.recordProgress('action1', 1);
               showToast(`CLIMB UP to ${jump}!`, true);
               if (subEl) subEl.textContent = `CLIMB UP! ${cur.name} jumped to ${jump}!`;
             } else {
