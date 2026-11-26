@@ -1,7 +1,7 @@
 {
-    "version":  "1.4.5",
-    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.4.5/index.html",
-    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.4.5/index.html",
-    "notes":  "Completely removed party poppers and confetti animations",
-    "releasedAt":  "2026-11-26T13:47:12Z"
+    "version":  "1.4.6",
+    "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.4.6/index.html",
+    "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.4.6/index.html",
+    "notes":  "Ludo 3D popping pawns, hop sound effects, full reverse-track capture rewind animation, and WINNER badge inside player corner box",
+    "releasedAt":  "2026-11-26T14:41:51Z"
 }
