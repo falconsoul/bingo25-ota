@@ -10,7 +10,7 @@
   <script>
     var OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.2.9",
+      currentVersion: "1.3.0",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
@@ -1378,136 +1378,387 @@
     }
 
     #home-screen {
+      position: relative;
       justify-content: space-between;
       overflow-y: auto;
-      padding-bottom: 2px;
+      padding: 4px 2px 4px;
+      gap: 9px;
+      background: radial-gradient(circle at 50% 18%, #114B46 0%, #092629 55%, #06181B 100%);
+      border-radius: 22px;
+      color: #f8fafc;
     }
+    #home-screen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.09;
+      background-image:
+        repeating-linear-gradient(45deg, rgba(251, 191, 36, 0.35) 0 1px, transparent 1px 22px),
+        repeating-linear-gradient(-45deg, rgba(16, 185, 129, 0.35) 0 1px, transparent 1px 22px);
+      border-radius: inherit;
+    }
+    #home-screen > * { position: relative; z-index: 1; }
     body > #home-screen ~ #home-screen { display: none !important; }
 
     .home-profile-bar {
-      background: var(--surface);
-      backdrop-filter: blur(12px);
-      border-radius: 18px;
-      border: 1px solid var(--border-subtle);
-      padding: 8px 11px;
+      background: rgba(6, 24, 27, 0.62);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 999px;
+      border: 1px solid rgba(251, 191, 36, 0.28);
+      padding: 6px 8px 6px 7px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
       cursor: pointer;
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
       transition: transform 0.12s ease;
     }
     .home-profile-bar:active { transform: scale(0.985); }
 
-    .home-avatar-badge {
-      width: 40px;
-      height: 40px;
-      border-radius: 13px;
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      color: #fff;
-      font-size: 1.35rem;
+    .xp-ring-wrap {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      box-shadow: 0 3px 8px rgba(79, 70, 229, 0.28);
     }
-
-    .home-hero-card {
-      background: var(--surface);
-      border-radius: 24px;
-      border: 2px solid var(--border-subtle);
-      padding: 16px 14px;
-      text-align: center;
-      flex-shrink: 0;
-      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    .xp-ring-svg {
+      position: absolute;
+      inset: 0;
+      width: 44px;
+      height: 44px;
+      transform: rotate(-90deg);
     }
-
-    .home-hero-tiles {
-      display: inline-flex;
-      gap: 6px;
-      margin-bottom: 8px;
+    .xp-ring-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.14);
+      stroke-width: 3.5;
     }
-    .home-hero-tiles span {
-      width: 36px;
-      height: 36px;
-      border-radius: 11px;
+    .xp-ring-arc {
+      fill: none;
+      stroke: #fbbf24;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-dasharray: 119.38;
+      stroke-dashoffset: 119.38;
+      transition: stroke-dashoffset 0.35s ease;
+    }
+    .home-avatar-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #065f46);
       color: #fff;
-      font-family: var(--font-display);
-      font-weight: 900;
       font-size: 1.15rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.22);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25);
     }
-    .home-hero-tiles span:nth-child(1) { background: #f43f5e; transform: rotate(-5deg); }
-    .home-hero-tiles span:nth-child(2) { background: #f59e0b; transform: rotate(4deg); }
-    .home-hero-tiles span:nth-child(3) { background: #10b981; transform: rotate(-3deg); }
-    .home-hero-tiles span:nth-child(4) { background: #0ea5e9; transform: rotate(5deg); }
-    .home-hero-tiles span:nth-child(5) { background: #4f46e5; transform: rotate(-4deg); }
-
-    .home-title {
-      font-family: var(--font-display);
-      font-size: 1.75rem;
+    .home-gold-btn {
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      color: #06181b;
+      border: 1px solid #fde68a;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.72rem;
       font-weight: 900;
-      letter-spacing: 0.04em;
-      line-height: 1.1;
-      background: linear-gradient(135deg, #4f46e5, #e11d48);
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 3px 10px rgba(245, 158, 11, 0.32);
+    }
+
+    .bingo-emblem-card {
+      position: relative;
+      background: linear-gradient(160deg, rgba(17, 75, 70, 0.72), rgba(6, 24, 27, 0.82));
+      backdrop-filter: blur(12px);
+      border-radius: 22px;
+      border: 1.5px solid rgba(251, 191, 36, 0.32);
+      padding: 13px 12px 11px;
+      text-align: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.34);
+    }
+    .emblem-rules-btn {
+      position: absolute;
+      top: 9px;
+      right: 9px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(251, 191, 36, 0.45);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fde68a;
+      font-weight: 900;
+      font-size: 0.82rem;
+      cursor: pointer;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .emblem-lasers {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+    .emblem-lasers span {
+      position: absolute;
+      left: -15%;
+      right: -15%;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.7), rgba(52, 211, 153, 0.8), transparent);
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.55);
+    }
+    .emblem-lasers span:nth-child(1) { top: 24%; transform: rotate(-4deg); }
+    .emblem-lasers span:nth-child(2) { top: 41%; transform: rotate(3deg); }
+    .emblem-lasers span:nth-child(3) { top: 56%; transform: rotate(-2deg); }
+    .emblem-lasers span:nth-child(4) { top: 71%; transform: rotate(4deg); }
+    .emblem-lasers span:nth-child(5) { top: 84%; transform: rotate(-3deg); }
+
+    .emblem-tiles-row {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .emblem-tile {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 0.96rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35), 0 8px 14px rgba(0, 0, 0, 0.25);
+    }
+    .emblem-tile.ivory {
+      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+      color: #064e3b;
+      border: 1.5px solid #fde68a;
+      transform: rotate(-6deg);
+    }
+    .emblem-tile.gold {
+      background: linear-gradient(180deg, #fde047 0%, #f59e0b 100%);
+      color: #06181b;
+      border: 1.5px solid #fef08a;
+      transform: translateY(-3px) scale(1.08);
+    }
+    .emblem-tile.ivory-r {
+      background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+      color: #064e3b;
+      border: 1.5px solid #fde68a;
+      transform: rotate(6deg);
+    }
+    .home-title {
+      position: relative;
+      z-index: 2;
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      line-height: 1.05;
+      background: linear-gradient(180deg, #fffbeb 15%, #fbbf24 90%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      text-shadow: 0 3px 14px rgba(251, 191, 36, 0.25);
+    }
+
+    .daily-bingo-card {
+      background: rgba(6, 24, 27, 0.68);
+      backdrop-filter: blur(12px);
+      border-radius: 18px;
+      border: 1px solid rgba(52, 211, 153, 0.28);
+      padding: 9px 11px;
+      flex-shrink: 0;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+    .daily-nodes-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      margin-top: 7px;
+    }
+    .daily-node {
+      height: 32px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(248, 250, 252, 0.45);
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .daily-node.lit {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-color: #fde68a;
+      color: #fffbeb;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.55);
+    }
+    .daily-claim-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.45);
+      transition: all 0.18s ease;
+    }
+    .daily-claim-btn.ready {
+      background: linear-gradient(135deg, #fde047, #f59e0b);
+      color: #06181b;
+      box-shadow: 0 0 14px rgba(251, 191, 36, 0.65);
+      animation: pulseGold 1.4s infinite;
+    }
+    @keyframes pulseGold {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
 
     .home-modes-stack {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      flex: 1;
-      justify-content: center;
-      min-height: 0;
+      flex-shrink: 0;
     }
-
-    .home-mode-btn {
+    .home-play-3d {
       width: 100%;
-      text-align: left;
-      padding: 12px 14px;
-      border-radius: 18px;
-      border: 2px solid var(--border-subtle);
-      background: var(--surface);
-      color: var(--text-main);
+      border: 1.5px solid #fde68a;
+      border-radius: 20px;
+      padding: 13px 15px;
+      background: linear-gradient(135deg, #10b981 0%, #047857 58%, #065f46 100%);
+      color: #fffbeb;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 11px;
+      gap: 10px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+      box-shadow: 0 5px 0 #064e3b, 0 12px 24px rgba(0, 0, 0, 0.35);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .home-play-3d:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #064e3b, 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    .home-dual-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .home-quick-glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 16px;
+      padding: 10px 10px;
+      color: #f8fafc;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
       transition: transform 0.12s ease, border-color 0.15s ease;
     }
-    .home-mode-btn:active { transform: scale(0.98); }
-    .home-mode-btn.featured {
-      border-color: #6366f1;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(79, 70, 229, 0.04));
-    }
+    .home-quick-glass:active { transform: scale(0.97); }
+    .home-quick-glass:hover { border-color: rgba(251, 191, 36, 0.55); }
 
-    .home-secondary-bar {
+    .home-pill-dock {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 7px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      background: rgba(6, 24, 27, 0.85);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      border-radius: 999px;
+      padding: 5px 6px;
       flex-shrink: 0;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.38);
+    }
+    .home-dock-btn {
+      border: none;
+      background: transparent;
+      color: #cbd5e1;
+      border-radius: 999px;
+      padding: 6px 2px;
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+    }
+    .home-dock-btn.active {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(251, 191, 36, 0.22));
+      color: #fde68a;
     }
 
-    .home-sec-btn {
-      background: var(--surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 15px;
-      padding: 9px 6px;
-      color: var(--text-main);
-      font-size: 0.72rem;
-      font-weight: 800;
-      display: flex;
+    #match-setup-screen {
+      background: radial-gradient(circle at 50% 18%, #114B46 0%, #092629 55%, #06181B 100%);
+      border-radius: 22px;
+      padding: 4px 2px;
+      color: #f8fafc;
+    }
+    #match-setup-screen .setup-card {
+      background: rgba(6, 24, 27, 0.68);
+      border-color: rgba(52, 211, 153, 0.25);
+      color: #f8fafc;
+    }
+    #match-setup-screen .setup-count-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.16);
+      color: #e2e8f0;
+    }
+    #match-setup-screen .setup-count-btn.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-color: #fde68a;
+      color: #fffbeb;
+    }
+    #match-setup-screen .setup-mode-tabs {
+      background: rgba(6, 24, 27, 0.72);
+      border-color: rgba(251, 191, 36, 0.26);
+    }
+    #match-setup-screen .setup-mode-tab { color: #94a3b8; }
+    #match-setup-screen .setup-mode-tab.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fffbeb;
+      border: 1px solid rgba(251, 191, 36, 0.55);
+    }
+    #match-setup-screen .setup-slot-card {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+    #match-setup-screen .setup-slot-name {
+      background: rgba(6, 24, 27, 0.75);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: #f8fafc;
+    }
+    #match-setup-screen .setup-status-pill {
+      background: rgba(251, 191, 36, 0.14);
+      border-color: rgba(251, 191, 36, 0.35);
+      color: #fde68a;
+    }
       flex-direction: column;
       align-items: center;
       gap: 3px;
@@ -1846,82 +2097,122 @@
          HOME SCREEN / MAIN MENU (#home-screen)
          ======================================================================== -->
     <section id="home-screen" class="app-screen active" aria-label="Home Menu">
-      <!-- Top Profile Header -->
+      <!-- Top Floating Glass Capsule -->
       <div id="home-profile-bar" class="home-profile-bar" onclick="openHomeProfileAction()">
-        <div style="display:flex; align-items:center; gap:9px; min-width:0;">
-          <div id="home-avatar" class="home-avatar-badge">🦁</div>
+        <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+          <div class="xp-ring-wrap">
+            <svg class="xp-ring-svg" viewBox="0 0 44 44" aria-hidden="true">
+              <circle class="xp-ring-bg" cx="22" cy="22" r="19"></circle>
+              <circle id="home-xp-ring-arc" class="xp-ring-arc" cx="22" cy="22" r="19"></circle>
+            </svg>
+            <div id="home-avatar" class="home-avatar-badge">🦁</div>
+          </div>
           <div style="min-width:0;">
             <div style="display:flex; align-items:center; gap:5px;">
-              <span id="home-user-name" style="font-family:var(--font-display); font-size:0.94rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Player 1</span>
-              <span id="home-auth-badge" class="seat-badge">Guest</span>
+              <span id="home-user-name" style="font-family:var(--font-display); font-size:0.88rem; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fffbeb;">Player 1</span>
+              <span id="home-auth-badge" class="seat-badge" style="background:rgba(255,255,255,0.12); color:#cbd5e1; border-color:rgba(255,255,255,0.2);">Guest</span>
             </div>
             <div style="display:flex; align-items:center; gap:6px; margin-top:2px;">
-              <div class="xp-chip" style="padding:1px 6px;">
-                <span id="home-xp-level">Lv.1</span>
-                <div class="xp-track"><div id="home-xp-fill" class="xp-fill" style="width:0%"></div></div>
-              </div>
-              <span id="home-win-streak" style="font-size:0.66rem; font-weight:800; color:var(--text-muted); white-space:nowrap;">🏆 0W • 🔥 0</span>
+              <span id="home-xp-level" style="font-size:0.65rem; font-weight:900; padding:1px 7px; border-radius:999px; background:rgba(251,191,36,0.2); color:#fde68a; border:1px solid rgba(251,191,36,0.4);">Lv.1</span>
+              <div class="xp-track" style="width:42px; height:4px; background:rgba(255,255,255,0.12);"><div id="home-xp-fill" class="xp-fill" style="width:0%"></div></div>
             </div>
           </div>
         </div>
-        <button type="button" id="home-auth-action-btn" onclick="event.stopPropagation(); openHomeAuthOrAccount()" class="btn btn-primary" style="padding:7px 11px; font-size:0.74rem; flex-shrink:0;">
-          Sign In
-        </button>
+        <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+          <span id="home-win-streak" style="font-size:0.68rem; font-weight:900; color:#fde68a; white-space:nowrap; background:rgba(255,255,255,0.08); padding:4px 8px; border-radius:999px; border:1px solid rgba(255,255,255,0.14);">🔥 0 • 🏆 0</span>
+          <button type="button" id="home-auth-action-btn" onclick="event.stopPropagation(); openHomeAuthOrAccount()" class="home-gold-btn">
+            Sign In
+          </button>
+        </div>
       </div>
 
-      <!-- Game Title Hero -->
-      <div class="home-hero-card">
-        <div class="home-hero-tiles" aria-hidden="true">
-          <span>B</span><span>I</span><span>N</span><span>G</span><span>O</span>
+      <!-- Signature BINGO 25 Tactile Emblem -->
+      <div class="bingo-emblem-card">
+        <button type="button" onclick="openRulesSheet()" class="emblem-rules-btn" title="How to Play" aria-label="How to Play">?</button>
+        <div class="emblem-lasers" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="emblem-tiles-row" aria-hidden="true">
+          <div class="emblem-tile ivory">7</div>
+          <div class="emblem-tile gold">13</div>
+          <div class="emblem-tile ivory-r">25</div>
         </div>
         <h1 class="home-title">BINGO 25</h1>
-        <p style="font-size:0.74rem; font-weight:700; color:var(--text-muted); margin-top:3px;">
-          4-Player 5×5 Indian Arcade • Offline &amp; Online
+        <p style="position:relative; z-index:2; font-size:0.71rem; font-weight:700; color:#a7f3d0; margin-top:3px;">
+          5×5 Indian Arcade • Offline &amp; Online
         </p>
 
-        <button type="button" id="home-resume-btn" onclick="resumeSavedMatchFromHome()" class="btn btn-amber" style="display:none; width:100%; margin-top:10px; padding:9px 12px; font-size:0.8rem;">
+        <button type="button" id="home-resume-btn" onclick="resumeSavedMatchFromHome()" class="btn btn-amber" style="position:relative; z-index:2; display:none; width:100%; margin-top:8px; padding:8px 12px; font-size:0.78rem;">
           ▶ Resume Saved Match
         </button>
       </div>
 
-      <button type="button" id="home-ota-banner" onclick="BingoOtaUpdater.applyPendingUpdate()" class="btn btn-primary" style="position:static !important; display:none; margin:8px 0 12px; width:100%; box-sizing:border-box; padding:8px 12px; font-size:0.78rem; justify-content:space-between;">
+      <button type="button" id="home-ota-banner" onclick="BingoOtaUpdater.applyPendingUpdate()" class="btn" style="position:static !important; display:none; margin:0; width:100%; box-sizing:border-box; padding:8px 12px; font-size:0.76rem; justify-content:space-between; background:linear-gradient(135deg, rgba(16,185,129,0.28), rgba(251,191,36,0.22)); color:#fde68a; border:1px solid rgba(251,191,36,0.55); border-radius:999px;">
         <span id="home-ota-banner-text">✨ Update ready — Tap to reload</span>
         <span>↻</span>
       </button>
 
-      <!-- Primary Play Mode CTAs -->
-      <div class="home-modes-stack">
-        <button type="button" onclick="openMatchSetup('local')" class="btn btn-primary home-hero-cta">
-          <div style="text-align:left; min-width:0;">
-            <div style="font-family:var(--font-display); font-size:1.12rem; font-weight:900;">▶ Play Match</div>
-            <div style="font-size:0.72rem; opacity:0.92; font-weight:700; margin-top:2px;">2–5 Players • Smart AI, Pass &amp; Play, or Online</div>
+      <!-- Daily B-I-N-G-O 5-Win Streak Tracker -->
+      <div class="daily-bingo-card" id="daily-bingo-card">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:0.72rem; font-weight:900; letter-spacing:0.06em; color:#fde68a;">⚡ DAILY B-I-N-G-O</span>
+            <span id="daily-streak-count" style="font-size:0.66rem; font-weight:800; color:#a7f3d0;">0/5 Wins</span>
           </div>
-          <span style="font-size:1.15rem; font-weight:900; flex-shrink:0;">→</span>
+          <button type="button" id="daily-claim-btn" onclick="DailyBingoStreak.claimReward()" class="daily-claim-btn">CLAIM</button>
+        </div>
+        <div class="daily-nodes-row">
+          <div class="daily-node" id="daily-node-0">B</div>
+          <div class="daily-node" id="daily-node-1">I</div>
+          <div class="daily-node" id="daily-node-2">N</div>
+          <div class="daily-node" id="daily-node-3">G</div>
+          <div class="daily-node" id="daily-node-4">O</div>
+        </div>
+      </div>
+
+      <!-- Hero Primary Card + Dual Quick-Action Row -->
+      <div class="home-modes-stack">
+        <button type="button" onclick="openMatchSetup('local')" class="home-play-3d home-hero-cta">
+          <div style="text-align:left; min-width:0;">
+            <div style="font-family:var(--font-display); font-size:1.12rem; font-weight:900; letter-spacing:0.03em;">▶ PLAY MATCH</div>
+            <div style="font-size:0.7rem; color:#d1fae5; font-weight:700; margin-top:2px;">2–5 Players • Smart AI, Pass &amp; Play, Online</div>
+          </div>
+          <span style="font-size:1.15rem; font-weight:900; color:#fde68a; flex-shrink:0;">→</span>
         </button>
 
-        <button type="button" onclick="openMatchSetup('online-join')" class="home-mode-btn" style="padding:11px 14px; justify-content:center; gap:8px;">
-          <span>🔑</span>
-          <span style="font-family:var(--font-display); font-size:0.88rem; font-weight:900;">Join Online Room with Code</span>
+        <div class="home-dual-row">
+          <button type="button" onclick="openMatchSetup('online-join')" class="home-quick-glass">
+            <span style="font-family:var(--font-display); font-size:0.84rem; font-weight:900; color:#fde68a;">🔑 JOIN ROOM</span>
+            <span style="font-size:0.66rem; color:#cbd5e1;">Enter 6-char code</span>
+          </button>
+          <button type="button" onclick="launchQuickBlitz()" class="home-quick-glass">
+            <span style="font-family:var(--font-display); font-size:0.84rem; font-weight:900; color:#6ee7b7;">⚡ QUICK BLITZ</span>
+            <span style="font-size:0.66rem; color:#cbd5e1;">1-tap 2P vs Smart AI</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Floating Rounded Bottom Pill Dock -->
+      <div class="home-pill-dock" role="navigation" aria-label="Home Navigation">
+        <button type="button" onclick="openMatchSetup('local')" class="home-dock-btn active">
+          <span style="font-size:1rem;">▶</span>
+          <span>PLAY</span>
+        </button>
+        <button type="button" onclick="openStatsSheet()" class="home-dock-btn">
+          <span style="font-size:1rem;">🏆</span>
+          <span>TROPHIES</span>
+        </button>
+        <button type="button" onclick="openSettingsSheet()" class="home-dock-btn">
+          <span style="font-size:1rem;">🎨</span>
+          <span>THEMES</span>
+        </button>
+        <button type="button" onclick="openSettingsSheet()" class="home-dock-btn">
+          <span style="font-size:1rem;">⚙️</span>
+          <span>SETTINGS</span>
         </button>
       </div>
 
-      <!-- Secondary Action Bar -->
-      <div class="home-secondary-bar">
-        <button type="button" onclick="openRulesSheet()" class="home-sec-btn">
-          <span style="font-size:1.15rem;">❓</span>
-          <span>How to Play</span>
-        </button>
-        <button type="button" onclick="openStatsSheet()" class="home-sec-btn">
-          <span style="font-size:1.15rem;">🏆</span>
-          <span>Stats &amp; Trophies</span>
-        </button>
-        <button type="button" onclick="openSettingsSheet()" class="home-sec-btn">
-          <span style="font-size:1.15rem;">🎨</span>
-          <span>Settings</span>
-        </button>
-      </div>
-
-      <button type="button" onclick="openTermsSheet()" class="home-footer-link">
+      <button type="button" onclick="openTermsSheet()" class="home-footer-link" style="color:rgba(203,213,225,0.75);">
         Terms &amp; Conditions • Built by Ashutosh Singh
       </button>
     </section>
@@ -3282,10 +3573,15 @@
       document.getElementById('xp-bar-fill').style.width = `${progressPct}%`;
       const homeLv = document.getElementById('home-xp-level');
       const homeFill = document.getElementById('home-xp-fill');
+      const homeRing = document.getElementById('home-xp-ring-arc');
       const homeWs = document.getElementById('home-win-streak');
       if (homeLv) homeLv.textContent = `Lv.${level}`;
       if (homeFill) homeFill.style.width = `${progressPct}%`;
-      if (homeWs) homeWs.textContent = `🏆 ${offlineStats.wins[0] || 0}W • 🔥 ${offlineStats.bestStreak}`;
+      if (homeRing) {
+        const circumference = 119.38;
+        homeRing.style.strokeDashoffset = String(circumference - (circumference * progressPct) / 100);
+      }
+      if (homeWs) homeWs.textContent = `🔥 ${offlineStats.bestStreak} • 🏆 ${offlineStats.wins[0] || 0}`;
     }
 
     function downloadOfflineFile() {
@@ -3825,6 +4121,9 @@
       });
       if (offlineStats.history.length > 8) offlineStats.history.pop();
       saveOfflineStats();
+      if (winners.some(w => !w.isBot) && typeof DailyBingoStreak !== 'undefined') {
+        DailyBingoStreak.recordWin();
+      }
     }
 
     // ==========================================================================
@@ -6137,6 +6436,85 @@
         }
       }
       updateXPBar();
+      if (typeof DailyBingoStreak !== 'undefined') DailyBingoStreak.render();
+    }
+
+    const DailyBingoStreak = {
+      STORAGE_KEY: 'bingo25_daily_streak',
+      getTodayKey() {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      },
+      load() {
+        const today = this.getTodayKey();
+        try {
+          const raw = localStorage.getItem(this.STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && parsed.date === today) {
+              return {
+                date: today,
+                wins: Math.min(5, Math.max(0, parseInt(parsed.wins, 10) || 0)),
+                claimedMilestones: Math.min(5, Math.max(0, parseInt(parsed.claimedMilestones, 10) || 0))
+              };
+            }
+          }
+        } catch (e) {}
+        return { date: today, wins: 0, claimedMilestones: 0 };
+      },
+      save(data) {
+        try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data)); } catch (e) {}
+      },
+      recordWin() {
+        const data = this.load();
+        if (data.wins < 5) {
+          data.wins += 1;
+          this.save(data);
+        }
+        this.render();
+      },
+      claimReward() {
+        const data = this.load();
+        if (data.wins <= data.claimedMilestones) {
+          showToast('Win a match today to unlock the next Daily B-I-N-G-O letter!');
+          return;
+        }
+        const newlyClaimed = data.wins - data.claimedMilestones;
+        const completedAll = data.wins >= 5 && data.claimedMilestones < 5;
+        const xpBonus = (newlyClaimed * 75) + (completedAll ? 175 : 0);
+        data.claimedMilestones = data.wins;
+        this.save(data);
+        offlineStats.xp += xpBonus;
+        saveOfflineStats();
+        updateXPBar();
+        this.render();
+        if (typeof launchConfetti === 'function') launchConfetti();
+        showToast(completedAll
+          ? `👑 DAILY B-I-N-G-O COMPLETE! +${xpBonus} Bonus XP!`
+          : `⚡ Daily Streak Claimed! +${xpBonus} Bonus XP!`, true);
+      },
+      render() {
+        const data = this.load();
+        for (let i = 0; i < 5; i++) {
+          const node = document.getElementById(`daily-node-${i}`);
+          if (node) node.classList.toggle('lit', i < data.wins);
+        }
+        const countEl = document.getElementById('daily-streak-count');
+        if (countEl) countEl.textContent = `${data.wins}/5 Wins`;
+        const claimBtn = document.getElementById('daily-claim-btn');
+        if (claimBtn) {
+          const canClaim = data.wins > data.claimedMilestones;
+          claimBtn.classList.toggle('ready', canClaim);
+          claimBtn.textContent = data.wins >= 5 && !canClaim ? 'DONE ✓' : 'CLAIM';
+        }
+      }
+    };
+    window.DailyBingoStreak = DailyBingoStreak;
+
+    function launchQuickBlitz() {
+      MatchSetup.init('local');
+      MatchSetup.playerCount = 2;
+      MatchSetup.startMatch();
     }
 
     function openHomeProfileAction() {
@@ -6425,9 +6803,15 @@
     };
     window.MatchSetup = MatchSetup;
 
-    function openMatchSetup(preset = 'passplay') {
+    function openMatchSetup(preset = 'local') {
       MatchSetup.init(preset);
       showScreen('setup');
+      if (preset === 'online-join') {
+        setTimeout(() => {
+          const inp = document.getElementById('setup-online-join-code');
+          if (inp) inp.focus();
+        }, 60);
+      }
     }
 
     function openTermsSheet() {
