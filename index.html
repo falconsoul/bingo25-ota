@@ -10,27 +10,35 @@
   <script>
     const OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.2.1",
+      currentVersion: "1.2.3",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
       ...(window.BINGO_OTA_CONFIG || {})
     };
     (function () {
-      if (window.__BINGO_OTA_HOTSWAPPED__) return;
+      if (window.__BINGO_OTA_HOTSWAPPED__) {
+        document.documentElement.style.visibility = 'visible';
+        return;
+      }
       try {
         if (localStorage.getItem('bingo25_ota_booting') === '1') {
           localStorage.removeItem('bingo25_ota_booting');
           localStorage.removeItem('bingo25_ota_bundle');
           window.__BINGO_OTA_REVERTED__ = true;
+          document.documentElement.style.visibility = 'visible';
           return;
         }
         var raw = localStorage.getItem('bingo25_ota_bundle');
-        if (!raw) return;
+        if (!raw) {
+          document.documentElement.style.visibility = 'visible';
+          return;
+        }
         var bundle = JSON.parse(raw);
         if (!bundle || !bundle.version || typeof bundle.html !== 'string' ||
             bundle.html.length <= 5000 || bundle.html.indexOf('</html>') === -1 ||
             bundle.html.indexOf('OTA_CONFIG') === -1) {
+          document.documentElement.style.visibility = 'visible';
           return;
         }
         var parseVer = function (v) {
@@ -46,61 +54,26 @@
           if ((pa[i] || 0) < (pb[i] || 0)) break;
         }
         if (isNewer) {
-          localStorage.setItem('bingo25_ota_booting', '1');
-          window.__BINGO_OTA_HOTSWAPPED__ = true;
-          document.open();
-          document.write(bundle.html);
-          document.close();
+          document.documentElement.style.visibility = 'hidden';
+          document.addEventListener('DOMContentLoaded', function () {
+            try {
+              localStorage.setItem('bingo25_ota_booting', '1');
+              window.__BINGO_OTA_HOTSWAPPED__ = true;
+              if (typeof window.stop === 'function') window.stop();
+              if (document.body) document.body.innerHTML = '';
+              document.open('text/html', 'replace');
+              document.write(bundle.html);
+              document.close();
+            } catch (err) {
+              document.documentElement.style.visibility = 'visible';
+            }
+          }, { once: true });
+        } else {
+          document.documentElement.style.visibility = 'visible';
         }
-      } catch (e) {}
-    })();
-  </script>
-  <script>
-    const OTA_CONFIG = {
-      enabled: true,
-      currentVersion: "1.2.1",
-      manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
-      autoUpdate: true,
-      autoApplyOnNextLaunch: true,
-      ...(window.BINGO_OTA_CONFIG || {})
-    };
-    (function () {
-      if (window.__BINGO_OTA_HOTSWAPPED__) return;
-      try {
-        if (localStorage.getItem('bingo25_ota_booting') === '1') {
-          localStorage.removeItem('bingo25_ota_booting');
-          localStorage.removeItem('bingo25_ota_bundle');
-          window.__BINGO_OTA_REVERTED__ = true;
-          return;
-        }
-        var raw = localStorage.getItem('bingo25_ota_bundle');
-        if (!raw) return;
-        var bundle = JSON.parse(raw);
-        if (!bundle || !bundle.version || typeof bundle.html !== 'string' ||
-            bundle.html.length <= 5000 || bundle.html.indexOf('</html>') === -1 ||
-            bundle.html.indexOf('OTA_CONFIG') === -1) {
-          return;
-        }
-        var parseVer = function (v) {
-          return String(v || '0.0.0').replace(/^v/i, '').split('-')[0].split('.').map(function (n) {
-            return parseInt(n, 10) || 0;
-          });
-        };
-        var pa = parseVer(bundle.version);
-        var pb = parseVer(OTA_CONFIG.currentVersion);
-        var isNewer = false;
-        for (var i = 0; i < 3; i++) {
-          if ((pa[i] || 0) > (pb[i] || 0)) { isNewer = true; break; }
-          if ((pa[i] || 0) < (pb[i] || 0)) break;
-        }
-        if (isNewer) {
-          localStorage.setItem('bingo25_ota_booting', '1');
-          window.__BINGO_OTA_HOTSWAPPED__ = true;
-          document.open();
-          document.write(bundle.html);
-          document.close();
-        }
-      } catch (e) {}
+      } catch (e) {
+        document.documentElement.style.visibility = 'visible';
+      }
     })();
   </script>
   <style>
@@ -1371,6 +1344,7 @@
       overflow-y: auto;
       padding-bottom: 2px;
     }
+    body > #home-screen ~ #home-screen { display: none !important; }
 
     .home-profile-bar {
       background: var(--surface);
@@ -1820,12 +1794,12 @@
         <button type="button" id="home-resume-btn" onclick="resumeSavedMatchFromHome()" class="btn btn-amber" style="display:none; width:100%; margin-top:10px; padding:9px 12px; font-size:0.8rem;">
           ▶ Resume Saved Match
         </button>
-
-        <button type="button" id="home-ota-banner" onclick="BingoOtaUpdater.applyPendingUpdate()" class="btn btn-primary" style="display:none; width:100%; margin-top:8px; padding:8px 12px; font-size:0.78rem; justify-content:space-between;">
-          <span id="home-ota-banner-text">✨ Update ready — Tap to reload</span>
-          <span>↻</span>
-        </button>
       </div>
+
+      <button type="button" id="home-ota-banner" onclick="BingoOtaUpdater.applyPendingUpdate()" class="btn btn-primary" style="display:none; position:relative; z-index:10; margin:10px 0 14px; width:100%; box-sizing:border-box; padding:8px 12px; font-size:0.78rem; justify-content:space-between;">
+        <span id="home-ota-banner-text">✨ Update ready — Tap to reload</span>
+        <span>↻</span>
+      </button>
 
       <!-- Primary Play Mode Cards -->
       <div class="home-modes-stack">
@@ -1855,8 +1829,8 @@
           <div style="display:flex; align-items:center; gap:11px; min-width:0;">
             <div class="mode-card-ico">🌐</div>
             <div>
-              <div style="font-family:var(--font-display); font-size:0.98rem; font-weight:900;">Online 4-Player Room</div>
-              <div style="font-size:0.71rem; color:var(--text-muted);">Create or join a 6-char Room Code lobby</div>
+              <div style="font-family:var(--font-display); font-size:0.98rem; font-weight:900;">Online Multiplayer Room</div>
+              <div style="font-size:0.71rem; color:var(--text-muted);">Create or join a 2–5 player Room Code lobby</div>
             </div>
           </div>
           <span style="font-size:1rem; font-weight:900; color:var(--text-muted);">▶</span>
@@ -6581,7 +6555,9 @@
           if (cached && this.compareSemver(cached.version, OTA_CONFIG.currentVersion) > 0) {
             localStorage.setItem(this.BOOTING_FLAG_KEY, '1');
             window.__BINGO_OTA_HOTSWAPPED__ = true;
-            document.open();
+            if (typeof window.stop === 'function') window.stop();
+            if (document.body) document.body.innerHTML = '';
+            document.open('text/html', 'replace');
             document.write(cached.html);
             document.close();
             return true;
@@ -6594,6 +6570,7 @@
         if (this.readyNotified) return;
         this.readyNotified = true;
         try {
+          document.documentElement.style.visibility = 'visible';
           localStorage.removeItem(this.BOOTING_FLAG_KEY);
         } catch (e) {}
         const plugin = this.getPlugin();
@@ -6892,7 +6869,9 @@
           try {
             localStorage.setItem(this.BOOTING_FLAG_KEY, '1');
             window.__BINGO_OTA_HOTSWAPPED__ = true;
-            document.open();
+            if (typeof window.stop === 'function') window.stop();
+            if (document.body) document.body.innerHTML = '';
+            document.open('text/html', 'replace');
             document.write(cached.html);
             document.close();
             return true;
