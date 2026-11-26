@@ -2,6 +2,6 @@
     "version":  "1.3.2",
     "htmlUrl":  "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@v1.3.2/index.html",
     "fallbackUrl":  "https://raw.githubusercontent.com/falconsoul/bingo25-ota/v1.3.2/index.html",
-    "notes":  "Visual refinement: Branded logo above the board, custom inline SVGs replacing emojis, and Day Mode visual fixes.",
-    "releasedAt":  "2026-11-26T05:20:40Z"
+    "notes":  "Full remote control: dynamic launcher icons, official BINGO 5-ball logo, SVG icons, and Clean Daylight contrast fix",
+    "releasedAt":  "2026-11-26T07:07:23Z"
 }
