@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#092629" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23092629'/%3E%3Ccircle cx='12' cy='24' r='6' fill='%23f43f5e'/%3E%3Ccircle cx='22' cy='24' r='6' fill='%23f59e0b'/%3E%3Ccircle cx='32' cy='24' r='6' fill='%2310b981'/%3E%3Ccircle cx='42' cy='24' r='6' fill='%230ea5e9'/%3E%3Ccircle cx='52' cy='24' r='6' fill='%236366f1'/%3E%3Crect x='18' y='36' width='28' height='16' rx='8' fill='%23fbbf24'/%3E%3Ctext x='32' y='48' font-family='sans-serif' font-size='11' font-weight='900' text-anchor='middle' fill='%2306181b'%3E25%3C/text%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#1E1052" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fde047'/%3E%3Cstop offset='1' stop-color='%23f59e0b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='%231E1052' stroke='%23ffffff' stroke-width='4'/%3E%3Ccircle cx='32' cy='16' r='8' fill='%238b5cf6' stroke='%23fde68a' stroke-width='2'/%3E%3Ctext x='32' y='19' font-family='sans-serif' font-size='8' font-weight='900' text-anchor='middle' fill='%23fff'%3E25%3C/text%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='15' font-weight='900' text-anchor='middle' fill='url(%23g)' stroke='%23ffffff' stroke-width='2' paint-order='stroke fill'%3EBINGO%3C/text%3E%3Crect x='14' y='46' width='36' height='12' rx='6' fill='%235b21b6' stroke='%23fbbf24' stroke-width='1.5'/%3E%3Ctext x='32' y='55' font-family='sans-serif' font-size='9' font-weight='900' text-anchor='middle' fill='%23fde68a'%3E25%3C/text%3E%3C/svg%3E" />
   <title>B-I-N-G-O | 4-Player Offline &amp; Online Arcade</title>
   <script>
     var OTA_CONFIG = {
       enabled: true,
-      currentVersion: "1.3.2",
+      currentVersion: "1.3.3",
       manifestUrl: "https://cdn.jsdelivr.net/gh/falconsoul/bingo25-ota@main/version.json",
       autoUpdate: true,
       autoApplyOnNextLaunch: true,
@@ -121,7 +121,37 @@
       --admob-banner-height: 0px;
       --font-display: ui-rounded, 'Trebuchet MS', 'Segoe UI', system-ui, -apple-system, sans-serif;
       --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      /* Default Theme: Midnight Emerald */
+      /* Default Theme: Royal Bingo Saga */
+      --bg-app: radial-gradient(circle at 50% 15%, #3B1D8F 0%, #1E1052 55%, #120936 100%);
+      --bg-elevated: #1b0f4a;
+      --surface-card: rgba(34, 18, 88, 0.86);
+      --surface-pill: rgba(255, 255, 255, 0.09);
+      --border-subtle: rgba(255, 215, 102, 0.28);
+      --accent-primary: #F59E0B;
+      --accent-secondary: #EC4899;
+      --text-primary: #F8FAFC;
+      --text-secondary: #DDD6FE;
+      --text-muted: #A78BFA;
+      --tile-bg: #2A166F;
+      --tile-marked: #D97706;
+      --status-bar-hex: #1E1052;
+
+      /* Legacy token aliases */
+      --outer-bg: #120936;
+      --app-bg: var(--bg-app);
+      --surface: var(--surface-card);
+      --surface-solid: var(--bg-elevated);
+      --surface-muted: var(--surface-pill);
+      --text-main: var(--text-primary);
+      --tile-border: rgba(255, 215, 102, 0.42);
+      --tile-shadow: #12073A;
+      --tile-text: var(--text-primary);
+      --tile-hover-bg: rgba(245, 158, 11, 0.24);
+      --tile-hover-border: #FBBF24;
+      --indigo-600: var(--accent-primary);
+    }
+
+    body.theme-emerald {
       --bg-app: radial-gradient(circle at 50% 18%, #114B46 0%, #092629 55%, #06181B 100%);
       --bg-elevated: #0b2d30;
       --surface-card: rgba(6, 24, 27, 0.72);
@@ -135,20 +165,10 @@
       --tile-bg: #10383b;
       --tile-marked: #059669;
       --status-bar-hex: #092629;
-
-      /* Legacy token aliases */
       --outer-bg: #06181b;
-      --app-bg: var(--bg-app);
-      --surface: var(--surface-card);
-      --surface-solid: var(--bg-elevated);
-      --surface-muted: var(--surface-pill);
-      --text-main: var(--text-primary);
       --tile-border: rgba(52, 211, 153, 0.35);
       --tile-shadow: #041517;
-      --tile-text: var(--text-primary);
       --tile-hover-bg: rgba(16, 185, 129, 0.22);
-      --tile-hover-border: var(--accent-secondary);
-      --indigo-600: var(--accent-primary);
     }
 
     body.theme-obsidian {
@@ -841,7 +861,7 @@
       width: 100%;
       height: 100%;
       min-height: 44px;
-      border-radius: 12px;
+      border-radius: 13px;
       border: 2px solid var(--tile-border);
       background: var(--tile-bg);
       color: var(--tile-text);
@@ -852,9 +872,20 @@
       align-items: center;
       justify-content: center;
       cursor: default;
-      box-shadow: 0 3px 0 var(--tile-shadow);
-      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease, border-color 0.15s ease;
+      box-shadow: 0 5px 0 var(--tile-shadow);
+      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease, background-color 0.15s ease, border-color 0.15s ease;
       overflow: hidden;
+    }
+    .thumb-tile::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 6%;
+      right: 6%;
+      height: 36%;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
+      pointer-events: none;
     }
 
     .thumb-tile.clickable {
@@ -862,10 +893,42 @@
     }
 
     .thumb-tile.clickable:active:not(.cut) {
-      transform: translateY(3px) scale(0.93);
-      box-shadow: 0 0 0 var(--tile-shadow);
+      transform: translateY(3px) scale(0.94);
+      box-shadow: 0 2px 0 var(--tile-shadow);
       background: var(--tile-hover-bg);
       border-color: var(--tile-hover-border);
+    }
+
+    .thumb-tile.hot-tile:not(.cut) {
+      border-color: #fbbf24;
+      box-shadow: 0 5px 0 var(--tile-shadow), 0 0 12px rgba(251, 191, 36, 0.55);
+      animation: hotShimmer 1.15s ease-in-out infinite;
+    }
+    @keyframes hotShimmer {
+      0%, 100% { filter: brightness(1); transform: scale(1); }
+      50% { filter: brightness(1.18); transform: scale(1.03); }
+    }
+    @keyframes boardShake {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-3px, 2px); }
+      40% { transform: translate(3px, -2px); }
+      60% { transform: translate(-2px, -2px); }
+      80% { transform: translate(2px, 2px); }
+    }
+    .board-square-box.shaking {
+      animation: boardShake 0.34s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    }
+    .juice-sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+      z-index: 25;
+      animation: juiceBurst 0.68s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes juiceBurst {
+      0% { opacity: 1; transform: translate(0, 0) scale(0.5) rotate(0deg); }
+      100% { opacity: 0; transform: translate(var(--tx, 0px), var(--ty, -36px)) scale(1.3) rotate(160deg); }
     }
 
     .thumb-tile.cut {
@@ -1723,24 +1786,70 @@
       gap: 8px;
       flex-shrink: 0;
     }
+    .saga-sparkles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .saga-sparkles span {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #fde68a;
+      box-shadow: 0 0 8px #fbbf24;
+      opacity: 0.55;
+      animation: starFloat 4.5s ease-in-out infinite;
+    }
+    .saga-sparkles span:nth-child(1) { top: 14%; left: 16%; animation-delay: 0s; }
+    .saga-sparkles span:nth-child(2) { top: 26%; left: 82%; animation-delay: 1.1s; }
+    .saga-sparkles span:nth-child(3) { top: 52%; left: 10%; animation-delay: 2.2s; }
+    .saga-sparkles span:nth-child(4) { top: 68%; left: 88%; animation-delay: 0.7s; }
+    .saga-sparkles span:nth-child(5) { top: 84%; left: 28%; animation-delay: 1.7s; }
+    @keyframes starFloat {
+      0%, 100% { transform: translateY(0) scale(0.8); opacity: 0.35; }
+      50% { transform: translateY(-8px) scale(1.35); opacity: 0.9; }
+    }
+    .bingo-saga-logo {
+      position: relative;
+      z-index: 2;
+      width: min(260px, 82%);
+      height: auto;
+      display: block;
+      margin: 0 auto 2px;
+      filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.38));
+    }
+    .bingo-saga-logo-mini {
+      width: 118px;
+      height: 36px;
+      display: block;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+    }
     .home-play-3d {
       width: 100%;
       border: 1.5px solid #fde68a;
       border-radius: 20px;
       padding: 13px 15px;
-      background: linear-gradient(135deg, #10b981 0%, #047857 58%, #065f46 100%);
-      color: #fffbeb;
+      background: linear-gradient(180deg, #FBBF24 0%, #F59E0B 55%, #D97706 100%);
+      color: #1E1052;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       cursor: pointer;
-      box-shadow: 0 5px 0 #064e3b, 0 12px 24px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 5px 0 #92400E, 0 12px 24px rgba(0, 0, 0, 0.35);
       transition: transform 0.1s ease, box-shadow 0.1s ease;
     }
     .home-play-3d:active {
       transform: translateY(3px);
-      box-shadow: 0 2px 0 #064e3b, 0 6px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 0 #92400E, 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    html[data-theme="daylight"] .home-play-3d {
+      background: linear-gradient(180deg, #0f766e 0%, #065f46 100%);
+      color: #ffffff;
+      border-color: #14b8a6;
+      box-shadow: 0 5px 0 #042f2e, 0 10px 22px rgba(6, 95, 70, 0.25);
     }
     .home-dual-row {
       display: grid;
@@ -2180,6 +2289,7 @@
          HOME SCREEN / MAIN MENU (#home-screen)
          ======================================================================== -->
     <section id="home-screen" class="app-screen active" aria-label="Home Menu">
+      <div class="saga-sparkles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
       <!-- Top Floating Glass Capsule -->
       <div id="home-profile-bar" class="home-profile-bar" onclick="openHomeProfileAction()">
         <div style="display:flex; align-items:center; gap:8px; min-width:0;">
@@ -2211,22 +2321,50 @@
         </div>
       </div>
 
-      <!-- Signature BINGO 25 Tactile Emblem -->
+      <!-- Glossy 3D Die-Cut Sticker BINGO 25 Emblem -->
       <div class="bingo-emblem-card">
         <button type="button" onclick="openRulesSheet()" class="emblem-rules-btn" title="How to Play" aria-label="How to Play">?</button>
         <div class="emblem-lasers" aria-hidden="true">
           <span></span><span></span><span></span><span></span><span></span>
         </div>
-        <div class="home-brand-circles" aria-hidden="true">
-          <span class="brand-orb">B</span>
-          <span class="brand-orb">I</span>
-          <span class="brand-orb">N</span>
-          <span class="brand-orb">G</span>
-          <span class="brand-orb">O</span>
-          <span class="brand-25">25</span>
-        </div>
-        <h1 class="home-title">BINGO 25</h1>
-        <p style="position:relative; z-index:2; font-size:0.71rem; font-weight:700; color:var(--text-secondary); margin-top:3px;">
+        <svg class="bingo-saga-logo" viewBox="0 0 320 116" role="img" aria-label="BINGO 25">
+          <defs>
+            <linearGradient id="sagaGoldGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FFFBEB"/>
+              <stop offset="28%" stop-color="#FDE047"/>
+              <stop offset="72%" stop-color="#F59E0B"/>
+              <stop offset="100%" stop-color="#B45309"/>
+            </linearGradient>
+            <linearGradient id="sagaBallGrad" x1="0.2" y1="0" x2="0.8" y2="1">
+              <stop offset="0%" stop-color="#C084FC"/>
+              <stop offset="55%" stop-color="#7C3AED"/>
+              <stop offset="100%" stop-color="#3B1D8F"/>
+            </linearGradient>
+            <linearGradient id="sagaRibbonGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#3B1D8F"/>
+              <stop offset="50%" stop-color="#6D28D9"/>
+              <stop offset="100%" stop-color="#3B1D8F"/>
+            </linearGradient>
+          </defs>
+          <!-- Die-cut sticker white contour -->
+          <text x="160" y="70" text-anchor="middle" font-family="ui-rounded, Trebuchet MS, sans-serif" font-size="56" font-weight="900" letter-spacing="4" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="14" stroke-linejoin="round">BINGO</text>
+          <!-- Royal purple 3D extrusion -->
+          <text x="160" y="75" text-anchor="middle" font-family="ui-rounded, Trebuchet MS, sans-serif" font-size="56" font-weight="900" letter-spacing="4" fill="#2E1065" stroke="#2E1065" stroke-width="5" stroke-linejoin="round">BINGO</text>
+          <!-- Golden glossy letter face -->
+          <text x="160" y="70" text-anchor="middle" font-family="ui-rounded, Trebuchet MS, sans-serif" font-size="56" font-weight="900" letter-spacing="4" fill="url(#sagaGoldGrad)" stroke="#78350F" stroke-width="1.5">BINGO</text>
+          <!-- Glossy violet 25 bingo ball above the I -->
+          <circle cx="111" cy="21" r="15" fill="#FFFFFF"/>
+          <circle cx="111" cy="21" r="12.5" fill="url(#sagaBallGrad)" stroke="#FDE047" stroke-width="1.8"/>
+          <ellipse cx="107" cy="16" rx="4.5" ry="2.5" fill="rgba(255,255,255,0.55)" transform="rotate(-25 107 16)"/>
+          <text x="111" y="25" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="11" font-weight="900" fill="#FFFBEB">25</text>
+          <!-- Curled royal-purple satin ribbon reading 25 -->
+          <path d="M98 84 L82 97 L98 103 L104 92 Z" fill="#2E1065" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M222 84 L238 97 L222 103 L216 92 Z" fill="#2E1065" stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"/>
+          <rect x="96" y="78" width="128" height="28" rx="14" fill="url(#sagaRibbonGrad)" stroke="#FFFFFF" stroke-width="3"/>
+          <rect x="98" y="80" width="124" height="24" rx="12" fill="none" stroke="#FBBF24" stroke-width="1.5"/>
+          <text x="160" y="97" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="16" font-weight="900" letter-spacing="2" fill="#FDE047">25</text>
+        </svg>
+        <p style="position:relative; z-index:2; font-size:0.71rem; font-weight:700; color:var(--text-secondary); margin-top:1px;">
           5×5 Indian Arcade • Offline &amp; Online
         </p>
 
@@ -2263,10 +2401,10 @@
       <div class="home-modes-stack">
         <button type="button" onclick="openMatchSetup('local')" class="home-play-3d home-hero-cta">
           <div style="text-align:left; min-width:0;">
-            <div style="font-family:var(--font-display); font-size:1.12rem; font-weight:900; letter-spacing:0.03em; color:#ffffff;">PLAY MATCH</div>
-            <div style="font-size:0.7rem; color:rgba(255,255,255,0.88); font-weight:700; margin-top:2px;">2–5 Players • Smart AI, Pass &amp; Play, Online</div>
+            <div style="font-family:var(--font-display); font-size:1.12rem; font-weight:900; letter-spacing:0.03em;">PLAY MATCH</div>
+            <div style="font-size:0.7rem; opacity:0.9; font-weight:700; margin-top:2px;">2–5 Players • Smart AI, Pass &amp; Play, Online</div>
           </div>
-          <svg class="ico-svg" style="width:20px; height:20px; color:#fde68a;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          <svg class="ico-svg" style="width:20px; height:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </button>
 
         <div class="home-dual-row">
@@ -2426,7 +2564,13 @@
     <header class="mobile-hud">
       <div class="hud-brand">
         <button type="button" id="hud-home-logo" onclick="confirmReturnHome()" class="mini-logo" title="Return to Home Menu" aria-label="Return to Home Menu">
-          <span class="brand-orb">B</span><span class="brand-orb">I</span><span class="brand-orb">N</span><span class="brand-orb">G</span><span class="brand-orb">O</span><span class="brand-25">25</span>
+          <svg class="bingo-saga-logo-mini" viewBox="0 0 156 44" aria-hidden="true">
+            <text x="58" y="30" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="25" font-weight="900" letter-spacing="1.5" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-linejoin="round">BINGO</text>
+            <text x="58" y="32" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="25" font-weight="900" letter-spacing="1.5" fill="#2E1065" stroke="#2E1065" stroke-width="2">BINGO</text>
+            <text x="58" y="30" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="25" font-weight="900" letter-spacing="1.5" fill="#FBBF24" stroke="#78350F" stroke-width="0.8">BINGO</text>
+            <rect x="112" y="10" width="38" height="22" rx="11" fill="#5B21B6" stroke="#FFFFFF" stroke-width="2"/>
+            <text x="131" y="25" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="12" font-weight="900" fill="#FDE047">25</text>
+          </svg>
         </button>
         <div id="xp-chip" class="xp-chip">
           <span id="xp-level-label">Lv.1</span>
@@ -2619,6 +2763,7 @@
           Arcade Board Theme
         </label>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;">
+          <button type="button" onclick="setBoardTheme('saga')" class="btn btn-ghost" id="thm-saga" style="grid-column:1 / -1;">Royal Bingo Saga (Default)</button>
           <button type="button" onclick="setBoardTheme('emerald')" class="btn btn-ghost" id="thm-emerald">Midnight Emerald</button>
           <button type="button" onclick="setBoardTheme('obsidian')" class="btn btn-ghost" id="thm-obsidian">Royal Obsidian</button>
           <button type="button" onclick="setBoardTheme('neon')" class="btn btn-ghost" id="thm-neon">Cyber Neon</button>
@@ -2690,9 +2835,13 @@
 
         <div class="terms-spotlight">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px;">
-            <div class="mini-logo" aria-hidden="true">
-              <span class="brand-orb">B</span><span class="brand-orb">I</span><span class="brand-orb">N</span><span class="brand-orb">G</span><span class="brand-orb">O</span><span class="brand-25">25</span>
-            </div>
+            <svg class="bingo-saga-logo-mini" viewBox="0 0 156 44" aria-hidden="true">
+              <text x="58" y="30" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="25" font-weight="900" letter-spacing="1.5" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-linejoin="round">BINGO</text>
+              <text x="58" y="32" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="25" font-weight="900" letter-spacing="1.5" fill="#2E1065" stroke="#2E1065" stroke-width="2">BINGO</text>
+              <text x="58" y="30" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="25" font-weight="900" letter-spacing="1.5" fill="#FBBF24" stroke="#78350F" stroke-width="0.8">BINGO</text>
+              <rect x="112" y="10" width="38" height="22" rx="11" fill="#5B21B6" stroke="#FFFFFF" stroke-width="2"/>
+              <text x="131" y="25" text-anchor="middle" font-family="ui-rounded, sans-serif" font-size="12" font-weight="900" fill="#FDE047">25</text>
+            </svg>
             <span id="terms-version-badge" class="seat-badge live">v1.1.3</span>
           </div>
           <div style="font-size:0.78rem; font-weight:800; color:var(--text-main);">
@@ -3155,7 +3304,7 @@
 
     let state = {
       playMode: 'solo', // 'solo' | 'passplay' | 'online'
-      theme: 'emerald',
+      theme: 'saga',
       botSpeed: 650,
       players: [],
       calledNumbers: [],
@@ -3491,29 +3640,93 @@
       } catch (e) {}
     }
 
+    const BingoAudioFX = {
+      PENTATONIC: [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50],
+      unlockBound: false,
+      initUnlock() {
+        if (this.unlockBound || typeof document === 'undefined') return;
+        this.unlockBound = true;
+        const unlock = () => {
+          const ctx = getAudioCtx();
+          if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
+        };
+        document.addEventListener('pointerdown', unlock, { passive: true });
+      },
+      playDaub(step = 0) {
+        triggerHaptic(18);
+        const freq = this.PENTATONIC[Math.min(this.PENTATONIC.length - 1, Math.max(0, step))];
+        playTone(freq, 'sine', 0.13, 0, 0.16, freq * 1.12);
+        playTone(freq * 1.5, 'triangle', 0.08, 0.02, 0.07);
+      },
+      playHotLineAlert() {
+        playTone(587.33, 'triangle', 0.12, 0.18, 0.12);
+        playTone(880.00, 'sine', 0.18, 0.28, 0.14);
+      },
+      playLineCombo(lineDelta = 1, totalLines = 1) {
+        triggerHaptic([35, 40, 60]);
+        const root = 440 + Math.min(5, totalLines) * 55;
+        playTone(root, 'triangle', 0.16, 0, 0.16);
+        playTone(root * 1.25, 'triangle', 0.18, 0.06, 0.15);
+        playTone(root * 1.5, 'sine', 0.24, 0.12, 0.16);
+        if (lineDelta >= 2) playTone(root * 2, 'sine', 0.28, 0.18, 0.14);
+      },
+      playBingoJackpot() {
+        triggerHaptic([40, 30, 80]);
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+        notes.forEach((n, idx) => playTone(n, 'triangle', 0.3, idx * 0.075, 0.16));
+      }
+    };
+    BingoAudioFX.initUnlock();
+
+    const BingoJuiceEngine = {
+      COMBO_WORDS: ['SWEET!', 'TASTY!', 'DIVINE!', 'UNSTOPPABLE!'],
+      shakeBoard() {
+        const box = document.getElementById('board-square-box');
+        if (!box) return;
+        box.classList.remove('shaking');
+        void box.offsetWidth;
+        box.classList.add('shaking');
+      },
+      burstSparkles() {
+        const box = document.getElementById('board-square-box');
+        if (!box) return;
+        for (let i = 0; i < 12; i++) {
+          const sp = document.createElement('div');
+          sp.className = 'juice-sparkle';
+          const angle = (Math.PI * 2 * i) / 12;
+          const dist = 36 + Math.random() * 44;
+          sp.style.left = `${30 + Math.random() * 40}%`;
+          sp.style.top = `${30 + Math.random() * 40}%`;
+          sp.style.setProperty('--tx', `${Math.round(Math.cos(angle) * dist)}px`);
+          sp.style.setProperty('--ty', `${Math.round(Math.sin(angle) * dist)}px`);
+          sp.innerHTML = '<svg viewBox="0 0 24 24" fill="#FDE047"><path d="M12 2l2.6 6.4L21 9.3l-5 4.4 1.5 6.3L12 16.7 6.5 20 8 13.7 3 9.3l6.4-.9z"/></svg>';
+          box.appendChild(sp);
+          setTimeout(() => sp.remove(), 700);
+        }
+      },
+      triggerLineCombo(delta, totalLines) {
+        this.shakeBoard();
+        this.burstSparkles();
+        if (delta >= 2 || totalLines >= 3) triggerHaptic([40, 30, 80]);
+      }
+    };
+
     function playSoundCall() {
-      triggerHaptic(18);
-      playTone(190, 'sine', 0.1, 0, 0.18, 75);
-      playTone(580, 'triangle', 0.11, 0.03, 0.13, 780);
+      const p = state.players && state.players[state.viewingPlayer || 0];
+      const step = p ? Math.min(5, p.completedLines.length) : 0;
+      BingoAudioFX.playDaub(step);
     }
 
     function playSoundLine(letterRank = 1) {
-      triggerHaptic([35, 45, 55]);
-      const baseFreq = 440 + letterRank * 65;
-      playTone(baseFreq, 'triangle', 0.14, 0, 0.15);
-      playTone(baseFreq * 1.25, 'triangle', 0.16, 0.07, 0.15);
-      playTone(baseFreq * 1.5, 'sine', 0.24, 0.14, 0.16);
+      BingoAudioFX.playLineCombo(1, letterRank);
     }
 
     function playSoundMatchPoint() {
-      playTone(130, 'sine', 0.14, 0.22, 0.2, 95);
-      playTone(145, 'sine', 0.18, 0.38, 0.22, 90);
+      BingoAudioFX.playHotLineAlert();
     }
 
     function playSoundWin() {
-      triggerHaptic([60, 40, 80, 40, 140]);
-      const chord = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
-      chord.forEach((n, idx) => playTone(n, 'triangle', 0.3, idx * 0.08, 0.15));
+      BingoAudioFX.playBingoJackpot();
     }
 
     function showToast(msg, isAchievement = false) {
@@ -3910,17 +4123,18 @@
     }
 
     const THEME_META = {
-      emerald: { className: '', statusBarHex: '#092629', isLight: false },
-      obsidian: { className: 'theme-obsidian', statusBarHex: '#141417', isLight: false },
-      neon: { className: 'theme-neon', statusBarHex: '#0f172a', isLight: false },
-      daylight: { className: 'theme-daylight', statusBarHex: '#eef2ff', isLight: true }
+      saga: { className: '', statusBarHex: '#1E1052', isLight: false, iconKey: 'gold' },
+      emerald: { className: 'theme-emerald', statusBarHex: '#092629', isLight: false, iconKey: 'emerald' },
+      obsidian: { className: 'theme-obsidian', statusBarHex: '#141417', isLight: false, iconKey: 'obsidian' },
+      neon: { className: 'theme-neon', statusBarHex: '#0f172a', isLight: false, iconKey: 'neon' },
+      daylight: { className: 'theme-daylight', statusBarHex: '#F0F4F2', isLight: true, iconKey: 'daylight' }
     };
 
     function normalizeThemeId(themeId) {
       if (themeId === 'classic') return 'daylight';
       if (themeId === 'royal') return 'obsidian';
       if (themeId === 'mint') return 'emerald';
-      return THEME_META[themeId] ? themeId : 'emerald';
+      return THEME_META[themeId] ? themeId : 'saga';
     }
 
     function setBoardTheme(themeId) {
@@ -3944,8 +4158,8 @@
       const activeTheme = normalizeThemeId(state.theme);
       state.theme = activeTheme;
       document.documentElement.setAttribute('data-theme', activeTheme);
-      document.documentElement.classList.remove('theme-obsidian', 'theme-neon', 'theme-daylight');
-      document.body.classList.remove('theme-obsidian', 'theme-neon', 'theme-daylight', 'theme-royal', 'theme-mint');
+      document.documentElement.classList.remove('theme-emerald', 'theme-obsidian', 'theme-neon', 'theme-daylight');
+      document.body.classList.remove('theme-emerald', 'theme-obsidian', 'theme-neon', 'theme-daylight', 'theme-royal', 'theme-mint');
       const meta = THEME_META[activeTheme];
       if (meta && meta.className) {
         document.documentElement.classList.add(meta.className);
@@ -3955,7 +4169,7 @@
       if (themeColorMeta && meta) themeColorMeta.setAttribute('content', meta.statusBarHex);
       try {
         if (window.BingoIconSwitcher && typeof window.BingoIconSwitcher.setIcon === 'function') {
-          window.BingoIconSwitcher.setIcon(activeTheme);
+          window.BingoIconSwitcher.setIcon(meta ? meta.iconKey : activeTheme);
         }
       } catch (e) {}
       try {
@@ -4037,7 +4251,7 @@
       document.getElementById('fourth-dock-ico').textContent = !state.gameStarted ? '🎲' : '👀';
       document.getElementById('fourth-dock-lbl').textContent = !state.gameStarted ? 'Shuffle' : 'All Boards';
 
-      ['emerald', 'obsidian', 'neon', 'daylight'].forEach(t => {
+      ['saga', 'emerald', 'obsidian', 'neon', 'daylight'].forEach(t => {
         const el = document.getElementById(`thm-${t}`);
         if (el) el.style.borderColor = state.theme === t ? 'var(--accent-primary)' : 'var(--border-subtle)';
       });
@@ -4160,10 +4374,10 @@
           for (let k = res.prevCount; k < Math.min(5, res.newCount); k++) newlyStruck.push(k);
 
           const calloutText = res.newCount >= 5
-            ? '👑 B-I-N-G-O!'
+            ? 'BINGO BLAST!'
             : res.delta >= 2
-            ? `⚡ +${res.delta} LINES!`
-            : `✨ ${BINGO_LETTERS[res.newCount - 1]} SLASHED!`;
+            ? (res.delta >= 3 ? 'DIVINE!' : 'DOUBLE STRIKE!')
+            : (BingoJuiceEngine.COMBO_WORDS[(res.newCount - 1) % BingoJuiceEngine.COMBO_WORDS.length] || 'SWEET!');
 
           state.turnEffects[player.id] = { text: calloutText, newlyStruck };
 
@@ -4197,8 +4411,9 @@
       }
 
       if (highestNewLineCount > 0) {
-        playSoundLine(highestNewLineCount);
-        if (someoneHitMatchPoint) playSoundMatchPoint();
+        BingoAudioFX.playLineCombo(1, highestNewLineCount);
+        BingoJuiceEngine.triggerLineCombo(1, highestNewLineCount);
+        if (someoneHitMatchPoint) BingoAudioFX.playHotLineAlert();
       } else {
         playSoundCall();
       }
@@ -4507,6 +4722,21 @@
 
       // 5x5 Oversized Thumb Grid
       const gridEl = document.getElementById('hero-grid');
+      // Detect 4/5 Hot Lines for shimmer tension
+      const hotCells = new Set();
+      if (!state.gameOver) {
+        const checkHot = (coords) => {
+          const marked = coords.filter(([r, c]) => state.calledSet.has(player.grid[r][c]));
+          if (marked.length === 4) coords.forEach(([r, c]) => hotCells.add(`${r},${c}`));
+        };
+        for (let i = 0; i < 5; i++) {
+          checkHot([[i,0],[i,1],[i,2],[i,3],[i,4]]);
+          checkHot([[0,i],[1,i],[2,i],[3,i],[4,i]]);
+        }
+        checkHot([[0,0],[1,1],[2,2],[3,3],[4,4]]);
+        checkHot([[0,4],[1,3],[2,2],[3,1],[4,0]]);
+      }
+
       let cellsHtml = '';
       for (let r = 0; r < 5; r++) {
         for (let c = 0; c < 5; c++) {
@@ -4514,6 +4744,7 @@
           const isCut = state.calledSet.has(num);
           const isJustCalled = state.lastCalled === num;
           const inLine = player.cellsInCompletedLines.has(`${r},${c}`);
+          const isHot = hotCells.has(`${r},${c}`);
           const canClick = isTurn && !player.isBot && !isCut && !state.gameOver && !state.handoffPending &&
             (state.playMode !== 'online' || (state.gameStarted && player.id === online.mySeat && online.pendingCallNum === null));
 
@@ -4522,7 +4753,7 @@
               type="button"
               ${canClick ? `onclick="callNumber(${num}, ${player.id})"` : ''}
               ${!canClick ? 'disabled' : ''}
-              class="thumb-tile ${isCut ? 'cut' : ''} ${inLine ? 'in-line' : ''} ${isJustCalled ? 'just-called' : ''} ${canClick ? 'clickable' : ''}"
+              class="thumb-tile ${isCut ? 'cut' : ''} ${inLine ? 'in-line' : ''} ${isHot ? 'hot-tile' : ''} ${isJustCalled ? 'just-called' : ''} ${canClick ? 'clickable' : ''}"
             >
               <span style="position:relative; z-index:2;">${num}</span>
               <svg class="tile-slash" viewBox="0 0 40 40" fill="none">
